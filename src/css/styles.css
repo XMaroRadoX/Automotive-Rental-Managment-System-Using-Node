@@ -4,6 +4,7 @@
   --primary-color: #f02d3a;
   --secondary-color: #273043;
   --tint-primary: #dd0426;
+  --tint-shadow: #dd042567;
   --grey-main: #333;
   --box-shadow: 0 2.4rem 4.8rem rgb(0 0 0 / 8%);
 }
@@ -27,7 +28,7 @@ body {
 
 *:focus {
   outline: none;
-  box-shadow: 0 0 0 0.35rem #dd042567;
+  box-shadow: 0 0 0 0.35rem var(--tint-shadow);
   border-radius: 9px;
 }
 
@@ -90,6 +91,14 @@ body {
 /* ::-webkit-scrollbar-track {
   background: #9197ae74;
 } */
+
+.bi {
+  transition: transform 0.3s;
+}
+
+.rotate {
+  transform: rotate(180deg);
+}
 
 /* ****************************** */
 /*           Content              */
@@ -192,7 +201,7 @@ body {
 .form-check-input:focus {
   outline: none;
   border: none;
-  box-shadow: 0 0 0 0.35rem #dd042567;
+  box-shadow: 0 0 0 0.35rem var(--tint-shadow);
 }
 
 .region-grp {
@@ -205,7 +214,7 @@ body {
   width: 8rem;
   height: 6rem;
   border-radius: 7px;
-  box-shadow: 0 0 0 0.05rem #dd042567;
+  box-shadow: 0 0 0 0.05rem var(--tint-shadow);
 }
 
 .btn-region {
@@ -223,7 +232,7 @@ body {
 .btn-region:focus {
   outline: none;
   border: none;
-  box-shadow: 0 0 0 0.2rem #dd042567;
+  box-shadow: 0 0 0 0.2rem var(--tint-shadow);
 }
 
 .btn-region::after {
@@ -240,7 +249,7 @@ body {
 .form-select:focus {
   border: none;
   outline: none;
-  box-shadow: 0 0 0 0.2rem #dd042567;
+  box-shadow: 0 0 0 0.2rem var(--tint-shadow);
 }
 
 .form-range {
@@ -304,7 +313,94 @@ input[type="range"]:focus::-webkit-slider-thumb {
   gap: 1.6rem;
 }
 
+.card-title {
+  padding: 1rem;
+}
+
+.card-img-top {
+  width: 28.8rem;
+  height: auto;
+}
+
 .card {
   width: 32rem;
   height: 32rem;
+  border-radius: 9px;
+  border: none;
+  box-shadow: var(--box-shadow);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.card:hover {
+  transform: scale(1.1);
+  z-index: 10;
+  box-shadow: 0 2.4rem 4.8rem rgb(0 0 0 / 15%);
+}
+
+.card-header {
+  background: none;
+  border: none;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  padding: 2.4rem 3.2rem 1.2rem 3.2rem;
+  align-items: center;
+}
+
+.car-name {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.car-type {
+  margin-top: -0.55rem;
+  color: #aaa;
+}
+
+.fav-btn {
+  background: none;
+  border: none;
+}
+
+.fav-btn:focus {
+  box-shadow: none;
+}
+
+.fav-icon {
+  color: var(--primary-color);
+}
+
+.car-icon {
+  font-size: 1.6rem;
+}
+
+.card-body {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  justify-items: center;
+  padding: 0 3.2rem;
+  font-weight: 600;
+  color: #666;
+}
+
+.currency,
+.car-amount {
+  color: #333;
+}
+
+.car-rate {
+  color: #888;
+}
+
+.card-body > div {
+  display: flex;
+  align-items: center;
+}
+
+.car-icon {
+  display: flex;
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-right: 0.8rem;
 }
