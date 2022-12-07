@@ -10,11 +10,11 @@ class FilterView {
   #regionFlag;
   seating = 2;
 
-  initUI(countries, selectHandler) {
+  initUI(countries) {
     this.#renderFilters();
 
     this.#assign();
-    this.#handle(selectHandler);
+    this.#handle();
     this.#render(countries);
   }
 
@@ -26,10 +26,10 @@ class FilterView {
     this.#renderColors();
   }
 
-  #handle(selectHandler) {
+  #handle() {
     this.#countrySelect.addEventListener(
       "change",
-      selectHandler.bind(this.#countrySelect, this.#regionFlag)
+      this.#selectHandler.bind(this)
     );
 
     this.#handleSeating();
@@ -225,13 +225,13 @@ class FilterView {
     const frag = document.createDocumentFragment();
     countries.forEach((country) => {
       const opt = document.createElement("option");
-      opt.value = country.cca3;
+      opt.value = country.cca2;
       opt.textContent = country.name;
       frag.appendChild(opt);
     });
 
     this.#countrySelect.append(frag);
-    this.#countrySelect.value = "EGY";
+    this.#countrySelect.value = "EG";
   }
 
   #renderTransmissions() {
@@ -345,6 +345,10 @@ class FilterView {
       range.value = this.seating;
       seatingLabel.textContent = this.seating + " Persons";
     });
+  }
+
+  #selectHandler() {
+    this.#regionFlag.src = `https://flagicons.lipis.dev/flags/4x3/${this.#countrySelect.value.toLowerCase()}.svg`;
   }
 }
 

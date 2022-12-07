@@ -307,10 +307,10 @@ input[type="range"]:focus::-webkit-slider-thumb {
 .cars {
   overflow-y: scroll;
   height: 100%;
-  /* background-color: red; */
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.6rem;
+  /* margin: 1.6rem 0; */
 }
 
 .card-title {
@@ -322,6 +322,11 @@ input[type="range"]:focus::-webkit-slider-thumb {
   height: auto;
 }
 
+/* prettier-ignore */
+.cars > .card:nth-last-child(-n+4){
+  margin-bottom:6rem;
+}
+
 .card {
   width: 32rem;
   height: 32rem;
@@ -330,12 +335,15 @@ input[type="range"]:focus::-webkit-slider-thumb {
   box-shadow: var(--box-shadow);
   cursor: pointer;
   transition: all 0.3s;
+  overflow: hidden;
 }
 
-.card:hover {
+.card-active {
   transform: scale(1.1);
   z-index: 10;
+  height: 38rem;
   box-shadow: 0 2.4rem 4.8rem rgb(0 0 0 / 15%);
+  transition: all 0.3s;
 }
 
 .card-header {
@@ -357,12 +365,12 @@ input[type="range"]:focus::-webkit-slider-thumb {
   color: #aaa;
 }
 
-.fav-btn {
+.btn-fav {
   background: none;
   border: none;
 }
 
-.fav-btn:focus {
+.btn-fav:focus {
   box-shadow: none;
 }
 
@@ -376,12 +384,13 @@ input[type="range"]:focus::-webkit-slider-thumb {
 
 .card-body {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
   justify-items: center;
-  padding: 0 3.2rem;
+  padding: 1.6rem 3.2rem;
   font-weight: 600;
   color: #666;
+  overflow: hidden;
 }
 
 .currency,
@@ -400,7 +409,35 @@ input[type="range"]:focus::-webkit-slider-thumb {
 
 .car-icon {
   display: flex;
-  font-size: 2rem;
+  font-size: 2.2rem;
   color: var(--primary-color);
   margin-right: 0.8rem;
+}
+
+.hidden {
+  transform: translate(0, 100%);
+}
+
+.btn-view {
+  background-color: var(--primary-color);
+  border: none;
+  color: var(--white-main);
+  padding: 0.8rem 1.6rem;
+  border-radius: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 1.6rem;
+  width: 110%;
+  grid-column: 1/-1;
+  justify-self: center;
+  transition: all 0.3s;
+  letter-spacing: 0.75px;
+}
+
+.btn-view:hover {
+  background-color: var(--tint-primary);
+}
+
+.custom-tooltip {
+  font-size: 1.4rem;
 }
