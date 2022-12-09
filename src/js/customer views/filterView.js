@@ -227,6 +227,8 @@ class FilterView {
       const opt = document.createElement("option");
       opt.value = country.cca2;
       opt.textContent = country.name;
+      opt.dataset.cca3 = country.cca3;
+      opt.dataset.name = country.name;
       frag.appendChild(opt);
     });
 

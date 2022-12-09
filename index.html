@@ -26,7 +26,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="#">Home</a>
+              <a class="nav-link active" href="#">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Reserved</a>
@@ -40,6 +40,7 @@
             <li class="nav-item">
               <a class="nav-link" href="#">Favourites</a>
             </li>
+
             <li class="nav-item dropdown ms-auto">
               <a
                 class="nav-link dropdown-toggle"
@@ -65,14 +66,76 @@
     </nav>
 
     <div class="app-container">
-      <div class="filter-container"></div>
+      <div class="filter-container">
+        <button
+          type="button"
+          class="btn-view btn-res mt-auto mx-auto"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+          data-bs-whatever="@mdo"
+        >
+          apply
+        </button>
+      </div>
 
       <div class="content">
-        <div class="rent-info mb-3">
-          <form></form>
-        </div>
-
         <div class="cars"></div>
+      </div>
+    </div>
+
+    <!-- Res. Details -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="info-col pickup">
+              <h3 class="info-heading mb-3">Pickup Details</h3>
+              <div class="input-group mb-2">
+                <span class="input-group-text" id="basic-addon1">@</span>
+                <input
+                  class="info-input"
+                  type="datetime-local"
+                  id="pickup-date"
+                  name="pickup-date"
+                />
+              </div>
+              <div class="input-group">
+                <span class="input-group-text" id="basic-addon2">@</span>
+                <input
+                  class="info-input"
+                  type="text"
+                  id="pickup-location"
+                  name="pickup-location"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary">Send message</button>
+          </div>
+        </div>
       </div>
     </div>
 

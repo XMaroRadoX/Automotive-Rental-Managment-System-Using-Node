@@ -57,11 +57,24 @@ body {
   display: flex;
 }
 
+.bi {
+  transition: transform 0.3s;
+}
+
+.rotate {
+  transform: rotate(180deg);
+}
+
+.hidden {
+  transform: translate(0, 100%);
+}
+
 /* ****************************** */
 /*           Container            */
 /* ****************************** */
 
 .app-container {
+  background-color: var(--white-main);
   display: grid;
   grid-template-columns: 20fr 80fr;
   gap: 2.4rem;
@@ -92,30 +105,8 @@ body {
   background: #9197ae74;
 } */
 
-.bi {
-  transition: transform 0.3s;
-}
-
-.rotate {
-  transform: rotate(180deg);
-}
-
 /* ****************************** */
-/*           Content              */
-/* ****************************** */
-
-.content {
-  display: grid;
-  grid-template-rows: auto 1fr;
-  height: 90vh;
-}
-
-.content > div {
-  padding: 1.2rem 2.4rem;
-}
-
-/* ****************************** */
-/*           filter               */
+/*           filters              */
 /* ****************************** */
 
 .filter-container {
@@ -123,9 +114,11 @@ body {
   padding: 2.4rem;
   overflow-y: scroll;
   overflow-x: hidden;
-  height: 100%;
   border-radius: 9px;
   border: 2px solid #9197ae39;
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.95rem;
 }
 
 .sub-heading {
@@ -136,6 +129,7 @@ body {
 .filters {
   display: flex;
   flex-direction: column;
+  margin-bottom: 2.4rem;
 }
 
 .btn-filter {
@@ -255,6 +249,7 @@ body {
 .form-range {
   color: var(--primary-color);
 }
+
 input[type="range"] {
   display: flex;
   align-items: center;
@@ -300,9 +295,22 @@ input[type="range"]:focus::-webkit-slider-thumb {
   text-align: center;
 }
 
-.rent-info {
-  background-color: yellow;
+/* ****************************** */
+/*           Content              */
+/* ****************************** */
+
+.content {
+  height: 90vh;
+  background-color: var(--white-main);
 }
+
+.content > div {
+  padding: 1.2rem 2.4rem;
+}
+
+/* ****************************** */
+/*           Cars                 */
+/* ****************************** */
 
 .cars {
   overflow-y: scroll;
@@ -310,21 +318,11 @@ input[type="range"]:focus::-webkit-slider-thumb {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.6rem;
-  /* margin: 1.6rem 0; */
+  background-color: var(--white-main);
 }
 
-.card-title {
-  padding: 1rem;
-}
-
-.card-img-top {
-  width: 28.8rem;
-  height: auto;
-}
-
-/* prettier-ignore */
-.cars > .card:nth-last-child(-n+4){
-  margin-bottom:6rem;
+.card-container {
+  position: relative;
 }
 
 .card {
@@ -336,14 +334,36 @@ input[type="range"]:focus::-webkit-slider-thumb {
   cursor: pointer;
   transition: all 0.3s;
   overflow: hidden;
+  box-shadow: none;
+  display: block;
+  border: 2px solid transparent;
 }
 
 .card-active {
+  position: absolute;
   transform: scale(1.1);
-  z-index: 10;
-  height: 38rem;
-  box-shadow: 0 2.4rem 4.8rem rgb(0 0 0 / 15%);
-  transition: all 0.3s;
+  z-index: 99999;
+  height: auto;
+  box-shadow: 0 0rem 4.8rem rgb(0 0 0 / 15%);
+  border: 1px solid var(--tint-shadow);
+}
+
+.card-title {
+  padding: 1rem;
+}
+
+.img-container {
+  width: 85%;
+  height: 50%;
+}
+
+/* prettier-ignore */
+.cars > .card-container:nth-last-child(-n+4){
+  margin-bottom:7.5rem;
+}
+
+.cars > .card-container:nth-child(-n + 4) {
+  margin-top: 0.75rem;
 }
 
 .card-header {
@@ -414,10 +434,6 @@ input[type="range"]:focus::-webkit-slider-thumb {
   margin-right: 0.8rem;
 }
 
-.hidden {
-  transform: translate(0, 100%);
-}
-
 .btn-view {
   background-color: var(--primary-color);
   border: none;
@@ -440,4 +456,40 @@ input[type="range"]:focus::-webkit-slider-thumb {
 
 .custom-tooltip {
   font-size: 1.4rem;
+}
+
+/* ****************************** */
+/*         Reserve Details        */
+/* ****************************** */
+.rent-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: var(--white-sec);
+}
+
+.info-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group,
+.input-group-text {
+  font-size: 1.6rem;
+}
+
+.info-input {
+  font-family: inherit;
+  color: inherit;
+  padding: 0.4rem 1.2rem;
+  border: none;
+  border-radius: 0.375rem;
+}
+
+.info-heading {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.btn-res {
+  width: 100%;
 }

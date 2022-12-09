@@ -47,7 +47,7 @@ const data = [
     type: "sport",
     seating: "4",
     transmission: "automatic",
-    src: "https://i.postimg.cc/Hnzb2Bj3/1gti-front.webp",
+    src: "https://iili.io/HnM8rdb.webp",
     description: "",
     rate: 400,
     color: "red",
@@ -187,25 +187,30 @@ const frag = document.createDocumentFragment();
 
 data.forEach((car) => {
   const div = document.createElement("div");
-  div.classList = "card";
-  div.dataset.catId = car.id;
-  // TBD
-  div.dataset.region = car.region;
-  //prettier-ignore
+  div.classList = "card-container";
   const html = `
+        <div class = "card" data-car-id ="${car.id}" data-region="${
+    car.region
+  }">
             <div class="card-header">
-              <h3 class="car-name">${car.brand[0].toUpperCase()+car.brand.slice(1).toLowerCase()}</h3>
+              <h3 class="car-name">${
+                car.brand[0].toUpperCase() + car.brand.slice(1).toLowerCase()
+              }</h3>
               <button class="btn-fav">
                 <i class="bi bi-heart"></i>
               </button>
-              <span class="car-type">${car.type[0].toUpperCase()+car.type.slice(1).toLowerCase()}</span>
+              <span class="car-type">${
+                car.type[0].toUpperCase() + car.type.slice(1).toLowerCase()
+              }</span>
             </div>
 
-            <img
-              src="${car.src}"
-              class="card-img-top mx-auto mb-3"
-              alt="${car.description}"
-            />
+            <div class="img-container mx-auto mb-3">
+              <img
+                src="${car.src}"
+                class="card-img-top "
+                alt="${car.description}"
+              />
+            </div>
 
             <div class="card-body mx-2">
               <div class="seating-label">
@@ -232,6 +237,7 @@ data.forEach((car) => {
 
               <button class="btn-view hidden mt-4">View</button>
             </div>
+          </div>
   `;
   div.insertAdjacentHTML("afterbegin", html);
   frag.appendChild(div);
@@ -242,23 +248,43 @@ car.appendChild(frag);
 // document.querySelector(".btn-fav").addEventListener("click", () => {});
 
 [...document.querySelectorAll(".card")].forEach((card) => {
-  card.addEventListener("click", async (e) => {
-    if (
-      e.target.classList.contains("btn-view") ||
-      e.target.classList.contains("bi-heart") ||
-      e.target.classList.contains("btn-fav")
-    )
-      return;
+  card.addEventListener("mouseover", async (e) => {
+    // if (
+    //   e.target.classList.contains("btn-view") ||
+    //   e.target.classList.contains("bi-heart") ||
+    //   e.target.classList.contains("btn-fav")
+    // )
+    //   return;
 
     const active = document.querySelector(".card-active");
+
+    card.querySelector(".btn-view").classList.toggle("hidden");
+    card.classList.toggle("card-active");
 
     if (active && active !== card) {
       active.classList.remove("card-active");
       active.querySelector(".btn-view").classList.add("hidden");
     }
+  });
+
+  card.addEventListener("mouseout", async (e) => {
+    // if (
+    //   e.target.classList.contains("btn-view") ||
+    //   e.target.classList.contains("bi-heart") ||
+    //   e.target.classList.contains("btn-fav")
+    // )
+    //   return;
+
+    const active = document.querySelector(".card-active");
 
     card.querySelector(".btn-view").classList.toggle("hidden");
+    card.querySelector(".btn-view").blur();
     card.classList.toggle("card-active");
+
+    if (active && active !== card) {
+      active.classList.remove("card-active");
+      active.querySelector(".btn-view").classList.add("hidden");
+    }
   });
 });
 
@@ -268,3 +294,32 @@ const tooltipTriggerList = document.querySelectorAll(
 const tooltipList = [...tooltipTriggerList].map(
   (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
 );
+
+// const user = async () => {
+//   try {
+//     const res = await fetch(`https://randomuser.me/api/?results=10`);
+//     const data = (await res.json()).results;
+//     const users = [];
+
+//     console.log(data);
+//     // return;
+//     data.forEach((user, i) => {
+//       users.push({
+//         id: Date.now() + i * 1000,
+//         fname: user.name.first,
+//         lname: user.name.last,
+//         email: user.email,
+//         phone_no: user.phone,
+//         license: user.login.md5.slice(0, 6).toUpperCase(),
+//         profile_photo: user.picture.thumbnail,
+//         region: user.location.country,
+//       });
+//     });
+//     // users.sort((a, b) => a.id.localeCompare(b.id));
+//     console.log(users);
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
+
+// user();
