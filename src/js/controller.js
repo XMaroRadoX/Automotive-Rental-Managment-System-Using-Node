@@ -19,7 +19,7 @@ const data = [
     type: "sport",
     seating: "4",
     transmission: "automatic",
-    src: "https://i.postimg.cc/vTcKFg9r/car.webp",
+    src: "https://cdn.imagin.studio/getImage?customer=egalexandria-university-faculty-of-engineering&make=kia&modelfamily=carens&modelYear=2018&paintId=pspc0020",
     description: "",
     rate: 400,
     color: "red",
@@ -246,54 +246,26 @@ data.forEach((car) => {
 car.appendChild(frag);
 
 // document.querySelector(".btn-fav").addEventListener("click", () => {});
+const clearActive = (active) => {
+  active.classList.remove("card-active");
+  active.querySelector(".btn-view").classList.add("hidden");
+  active.querySelector(".card-img-top").classList.remove("img-active");
+};
+
+const toggleCard = function () {
+  const active = document.querySelector(".card-active");
+
+  this.querySelector(".btn-view").classList.toggle("hidden");
+  this.classList.toggle("card-active");
+  this.querySelector(".card-img-top").classList.toggle("img-active");
+
+  if (active && active !== this) clearActive(active);
+};
 
 [...document.querySelectorAll(".card")].forEach((card) => {
-  card.addEventListener("mouseover", async (e) => {
-    // if (
-    //   e.target.classList.contains("btn-view") ||
-    //   e.target.classList.contains("bi-heart") ||
-    //   e.target.classList.contains("btn-fav")
-    // )
-    //   return;
-
-    const active = document.querySelector(".card-active");
-
-    card.querySelector(".btn-view").classList.toggle("hidden");
-    card.classList.toggle("card-active");
-
-    if (active && active !== card) {
-      active.classList.remove("card-active");
-      active.querySelector(".btn-view").classList.add("hidden");
-    }
-  });
-
-  card.addEventListener("mouseout", async (e) => {
-    // if (
-    //   e.target.classList.contains("btn-view") ||
-    //   e.target.classList.contains("bi-heart") ||
-    //   e.target.classList.contains("btn-fav")
-    // )
-    //   return;
-
-    const active = document.querySelector(".card-active");
-
-    card.querySelector(".btn-view").classList.toggle("hidden");
-    card.querySelector(".btn-view").blur();
-    card.classList.toggle("card-active");
-
-    if (active && active !== card) {
-      active.classList.remove("card-active");
-      active.querySelector(".btn-view").classList.add("hidden");
-    }
-  });
+  card.addEventListener("mouseover", toggleCard.bind(card));
+  card.addEventListener("mouseout", toggleCard.bind(card));
 });
-
-const tooltipTriggerList = document.querySelectorAll(
-  '[data-bs-toggle="tooltip"]'
-);
-const tooltipList = [...tooltipTriggerList].map(
-  (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
-);
 
 // const user = async () => {
 //   try {
@@ -323,3 +295,7 @@ const tooltipList = [...tooltipTriggerList].map(
 // };
 
 // user();
+
+document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((tooltip) => {
+  new bootstrap.Tooltip(tooltip);
+});
