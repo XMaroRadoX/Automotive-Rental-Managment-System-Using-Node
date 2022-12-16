@@ -1,5 +1,7 @@
-CREATE DATABASE system;
-USE system;
+-- Active: 1671200496755@@127.0.0.1@3306@courseregistration
+DROP DATABASE IF EXISTS system;
+CREATE DATABASE IF NOT EXISTS system;
+use system;
 CREATE TABLE customer(
   customer_id int,
   email varchar(320) UNIQUE,
