@@ -87,14 +87,15 @@ body {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 0.75rem;
+  /* width: 0.75rem; */
+  width: 0%;
 }
 
 /* Handle */
-::-webkit-scrollbar-thumb {
-  background: #9197ae95;
-  border-radius: 9px;
-}
+/* ::-webkit-scrollbar-thumb { */
+/* background: #9197ae95; */
+/* border-radius: 9px; */
+/* } */
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
@@ -107,10 +108,10 @@ body {
 } */
 
 /* ****************************** */
-/*           filters              */
+/*           sidebar              */
 /* ****************************** */
 
-.filter-container {
+.sidebar-container {
   background-color: var(--white-sec);
   padding: 2.4rem;
   overflow-y: scroll;
@@ -119,6 +120,9 @@ body {
   border: 2px solid #9197ae39;
   display: flex;
   flex-direction: column;
+}
+
+.filters-container {
   margin-top: 2.15rem;
 }
 
@@ -402,14 +406,32 @@ input[type="range"]:focus::-webkit-slider-thumb {
 .btn-fav {
   background: none;
   border: none;
+  z-index: 20;
+  transition: all 0.3s;
+}
+
+.btn-fav:hover {
+  color: var(--primary-color);
 }
 
 .btn-fav:focus {
   box-shadow: none;
 }
 
-.fav-icon {
+.bi-heart {
+  position: relative;
+}
+
+.bi-heart-fill {
+  left: 0;
+  position: absolute;
+  opacity: 0;
+  transition: all 0.3s;
   color: var(--primary-color);
+}
+
+.bi-heart-fill:hover {
+  opacity: 1;
 }
 
 .car-icon {

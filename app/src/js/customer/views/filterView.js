@@ -1,4 +1,4 @@
-import { TYPES, TRANSMISSIONS, BRANDS, COLORS } from "../config.js";
+import { TYPES, TRANSMISSIONS, BRANDS, COLORS } from "../../config.js";
 
 class FilterView {
   #container = document.querySelector(".app-container");
@@ -186,8 +186,12 @@ class FilterView {
     `;
 
     this.#container
-      .querySelector(".filter-container")
+      .querySelector(".sidebar-container")
       .insertAdjacentHTML("afterbegin", html);
+
+    this.#container
+      .querySelector(".sidebar-container")
+      .classList.add("filters-container");
 
     document
       .querySelectorAll(".btn-filter")

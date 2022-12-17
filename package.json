@@ -4,7 +4,7 @@
   "description": "",
   "default": "index.html",
   "scripts": {
-    "start": "parcel index.html",
+    "start": "parcel app/index.html",
     "build": "parcel build  ./*.html ./src/html/*.html --dist-dir ../Car-Rental-System"
   },
   "author": "",
