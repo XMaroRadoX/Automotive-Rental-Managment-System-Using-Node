@@ -31,23 +31,27 @@
   <body>
     <nav class="navbar navbar-expand-lg mb-3">
       <div class="container-fluid">
-        <a class="navbar-brand mx-auto" href="#">xxx</a>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link active" href="#">Home</a>
+              <button class="nav-btn active" href="#" data-action="home">
+                Home
+              </button>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Reserved</a>
+              <button class="nav-btn" href="#" data-action="reserved">
+                Reserved
+              </button>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Pick-up</a>
+              <button class="nav-btn" href="#" data-action="rented">
+                Rented
+              </button>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Active</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Favourites</a>
+              <button class="nav-btn" href="#" data-action="favourites">
+                Favourites
+              </button>
             </li>
 
             <li class="nav-item dropdown ms-auto">
@@ -76,17 +80,15 @@
 
     <div class="app-container">
       <div class="sidebar-container">
-        <button
-          type="button"
-          class="btn-view btn-res mt-auto mx-auto"
-          data-bs-toggle="modal"
-          data-bs-target="#exampleModal"
-          data-bs-whatever="@mdo"
-        >
-          apply
-        </button>
+        <div class="filter-btns mt-auto mx-auto">
+          <button type="button" class="btn-view btn-reset me-3">reset</button>
+          <button type="button" class="btn-view btn-apply">apply</button>
+        </div>
       </div>
-
+      <!-- 
+       data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+          data-bs-whatever="@mdo" -->
       <div class="content">
         <div class="cars"></div>
       </div>

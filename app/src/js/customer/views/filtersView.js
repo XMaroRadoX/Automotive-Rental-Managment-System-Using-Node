@@ -1,54 +1,69 @@
-import { TYPES, TRANSMISSIONS, BRANDS, COLORS } from "../../config.js";
+import { filterHandler, regionHandler, seatingHandler } from "../controller.js";
 
 class FilterView {
   #container = document.querySelector(".app-container");
-  #typeGroup;
-  #transmissionGroup;
-  #brandGroup;
-  #colorGroup;
   #countrySelect;
   #regionFlag;
-  seating = 2;
+  #range = document.querySelector(".form-range");
+  #incSeats = document.querySelector(".seat-plus");
+  #decSeats = document.querySelector(".seat-minus");
+  #seatingLabel = document.querySelector(".seating-label");
+  #seating = 1;
 
   initUI(countries) {
-    this.#renderFilters();
-
+    this.#renderFilterContainer();
     this.#assign();
-    this.#handle();
-    this.#render(countries);
-  }
 
-  #render(countries) {
-    this.#renderTypes();
     this.#renderCountries(countries);
-    this.#renderTransmissions();
-    this.#renderBrands();
-    this.#renderColors();
-  }
-
-  #handle() {
     this.#countrySelect.addEventListener(
       "change",
       this.#selectHandler.bind(this)
     );
-
-    this.#handleSeating();
+    this.#seatingHandler();
   }
 
   #assign() {
-    this.#typeGroup = document.querySelector(".type-grp");
     this.#countrySelect = document.querySelector(".form-select");
     this.#regionFlag = document.querySelector(".region-flag");
-    this.#transmissionGroup = document.querySelector(".transmission-grp");
-    this.#brandGroup = document.querySelector(".brand-grp");
-    this.#colorGroup = document.querySelector(".color-grp");
+    this.#range = document.querySelector(".form-range");
+    this.#incSeats = document.querySelector(".seat-plus");
+    this.#decSeats = document.querySelector(".seat-minus");
+    this.#seatingLabel = document.querySelector(".seating-label");
   }
 
-  #renderFilters() {
+  renderFilter(data) {
+    const name = data.name;
+    const categories = data.categories;
+    categories.sort((a, b) => a.name.localeCompare(b.name));
+    const container = document.querySelector(`.${name}-grp`);
+    const frag = document.createDocumentFragment();
+
+    categories.forEach((category, i) => {
+      const div = document.createElement("div");
+      if (i > 0) div.classList = "mt-3";
+      div.insertAdjacentHTML(
+        "afterbegin",
+        this.#generateFilterHTML(name, category)
+      );
+      frag.appendChild(div);
+    });
+
+    container.append(frag);
+  }
+
+  addFiltersHandler() {
+    const container = document.querySelector(".filters-container");
+    const btns = container.querySelectorAll(".form-check-input");
+    btns.forEach((btn) => {
+      btn.addEventListener("change", filterHandler.bind(btn));
+    });
+  }
+
+  #renderFilterContainer() {
     const html = `
         <h2 class="sub-heading">Filter by</h2>
         <div class="filters">
-          <div class="filter mt-3">
+          <div class="filter mt-3" data-filter="type">
             <button
               class="btn-filter"
               type="button"
@@ -65,7 +80,7 @@ class FilterView {
             </div>
           </div>
 
-          <div class="filter mt-5">
+          <div class="filter mt-5" data-filter="region">
             <button
               class="btn-filter"
               type="button"
@@ -81,9 +96,9 @@ class FilterView {
             <div class="collapse" id="collapseRegion">
               <div class="collapse-body region-grp mt-2">
                 <img
-                  src="https://flagcdn.com/eg.svg"
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/White_flag_of_surrender.svg/640px-White_flag_of_surrender.svg.png"
                   class="region-flag mb-3"
-                  alt="Uae flag"
+                  alt="Empty flag"
                 />
                 <select
                   class="form-select form-select-lg mb-3"
@@ -93,7 +108,7 @@ class FilterView {
             </div>
           </div>
 
-          <div class="filter mt-5">
+          <div class="filter mt-5" data-filter="transmission">
             <button
               class="btn-filter"
               type="button"
@@ -110,7 +125,7 @@ class FilterView {
             </div>
           </div>
 
-          <div class="filter mt-5">
+          <div class="filter mt-5" data-filter="seating">
             <button
               class="btn-filter"
               type="button"
@@ -131,9 +146,9 @@ class FilterView {
                   <input
                     type="range"
                     class="form-range mx-4"
-                    min="2"
+                    min="1"
                     max="14"
-                    value="2"
+                    value="1"
                     id="seatings"
                   />
                   <button class="btn-seat seat-plus">
@@ -141,13 +156,13 @@ class FilterView {
                   </button>
                 </div>
                 <label for="seatings" class="form-label seating-label"
-                  >2 Persons</label
+                  >Any (2-14)</label
                 >
               </div>
             </div>
           </div>
 
-          <div class="filter mt-5">
+          <div class="filter mt-5" data-filter="brand">
             <button
               class="btn-filter"
               type="button"
@@ -165,7 +180,7 @@ class FilterView {
             </div>
           </div>
 
-          <div class="filter mt-5">
+          <div class="filter mt-5" data-filter="color">
             <button
               class="btn-filter"
               type="button"
@@ -200,29 +215,27 @@ class FilterView {
       );
   }
 
-  #renderTypes() {
-    const frag = document.createDocumentFragment();
+  #generateFilterHTML(type, category) {
+    let name = category.name;
+    name = name
+      .split(" ")
+      .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
 
-    TYPES.sort((a, b) => a.localeCompare(b));
+    if (name === "Cvt") name = name.toUpperCase();
+    if (name.length < 4 && type === "brand") name = name.toUpperCase();
 
-    TYPES.forEach((type, i) => {
-      const name = type[0].toUpperCase() + type.slice(1).toLowerCase();
-      const div = document.createElement("div");
-      if (i > 0) div.classList = "mt-3";
-      const html = `
+    return `
     <input
       class="form-check-input me-2"
       type="checkbox"
-      value="${type}"
-      id="check${name}"
+      value="${category.name}"
+      id="check${category.name}"
     />
-    <label class="form-check-label" for="check${name}">${name}</label>
+    <label class="form-check-label" for="check${category.name}">
+    ${name} (${category.count})
+    </label>
   `;
-      div.insertAdjacentHTML("afterbegin", html);
-      frag.appendChild(div);
-    });
-
-    this.#typeGroup.append(frag);
   }
 
   #renderCountries(countries) {
@@ -237,124 +250,76 @@ class FilterView {
     });
 
     this.#countrySelect.append(frag);
-    this.#countrySelect.value = "EG";
+    const opt = document.createElement("option");
+    opt.value = "-";
+    opt.textContent = "-";
+    this.#countrySelect.insertAdjacentElement("afterbegin", opt);
+    this.#countrySelect.value = "-";
   }
 
-  #renderTransmissions() {
-    TRANSMISSIONS.sort((a, b) => a.localeCompare(b));
-    const frag = document.createDocumentFragment();
-
-    TRANSMISSIONS.forEach((t, i) => {
-      let name = t[0].toUpperCase() + t.slice(1).toLowerCase();
-      if (name === "Cvt") name = name.toUpperCase();
-
-      const div = document.createElement("div");
-      if (i > 0) div.classList = "mt-3";
-      const html = `
-    <input
-      class="form-check-input me-2"
-      type="checkbox"
-      value="${t}"
-      id="check${name}"
-    />
-    <label class="form-check-label" for="check${name}">${name}</label>
-  `;
-      div.insertAdjacentHTML("afterbegin", html);
-      frag.appendChild(div);
-    });
-
-    this.#transmissionGroup.append(frag);
-  }
-
-  #renderBrands() {
-    BRANDS.sort((a, b) => a.localeCompare(b));
-
-    const frag = document.createDocumentFragment();
-
-    BRANDS.forEach((brand, i) => {
-      let name = brand[0].toUpperCase() + brand.slice(1).toLowerCase();
-      if (brand.length < 4) name = name.toUpperCase();
-
-      const div = document.createElement("div");
-      if (i > 0) div.classList = "mt-3";
-      const html = `
-    <input
-      class="form-check-input me-2"
-      type="checkbox"
-      value="${brand}"
-      id="check${name}"
-    />
-    <label class="form-check-label" for="check${name}">${name}</label>
-  `;
-      div.insertAdjacentHTML("afterbegin", html);
-      frag.appendChild(div);
-    });
-
-    this.#brandGroup.append(frag);
-  }
-
-  #renderColors() {
-    COLORS.sort((a, b) => a.localeCompare(b));
-
-    const frag = document.createDocumentFragment();
-
-    COLORS.forEach((color, i) => {
-      let name = color[0].toUpperCase() + color.slice(1).toLowerCase();
-
-      const div = document.createElement("div");
-      if (i > 0) div.classList = "mt-3";
-      const html = `
-    <input
-      class="form-check-input me-2"
-      type="checkbox"
-      value="${color}"
-      id="check${name}"
-    />
-    <label class="form-check-label" for="check${name}">${name}</label>
-  `;
-      div.insertAdjacentHTML("afterbegin", html);
-      frag.appendChild(div);
-    });
-
-    this.#colorGroup.append(frag);
-  }
-
-  // filter handler for btns
-  // this = filter btn
   #filterHandler() {
     this.classList.toggle("open");
     const icon = this.querySelector(".bi");
     icon.classList.toggle("rotate");
   }
 
-  #handleSeating() {
-    const range = document.querySelector(".form-range");
-    const incSeats = document.querySelector(".seat-plus");
-    const decSeats = document.querySelector(".seat-minus");
-    const seatingLabel = document.querySelector(".seating-label");
-
-    range.addEventListener("change", () => {
-      this.seating = +range.value;
-      seatingLabel.textContent = this.seating + " Persons";
+  #seatingHandler() {
+    this.#range.addEventListener("change", () => {
+      this.#seating = +this.#range.value;
+      this.#seatingLabel.textContent =
+        this.#seating > 1 ? this.#seating + " Persons" : "Any (2-14)";
+      seatingHandler(this.#seating);
     });
 
-    incSeats.addEventListener("click", () => {
-      if (this.seating === 14) return;
-      this.seating++;
-      range.value = this.seating;
-      seatingLabel.textContent = this.seating + " Persons";
+    this.#incSeats.addEventListener("click", () => {
+      if (this.#seating === 14) return;
+      this.#seating++;
+      this.#range.value = this.#seating;
+      this.#seatingLabel.textContent = this.#seating + " Persons";
+      seatingHandler(this.#seating);
     });
 
-    decSeats.addEventListener("click", () => {
-      if (this.seating === 2) return;
-      this.seating--;
-      range.value = this.seating;
-      seatingLabel.textContent = this.seating + " Persons";
+    this.#decSeats.addEventListener("click", () => {
+      if (this.#seating === 1) return;
+      this.#seating--;
+      range.value = this.#seating;
+      this.#seatingLabel.textContent =
+        this.#seating > 1 ? this.#seating + " Persons" : "Any (2-14)";
+      seatingHandler(this.#seating);
     });
   }
 
   #selectHandler() {
+    if (this.#countrySelect.value == "-") {
+      this.#regionFlag.alt = "White Flag";
+      this.#regionFlag.src =
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/White_flag_of_surrender.svg/640px-White_flag_of_surrender.svg.png";
+      regionHandler("");
+      return;
+    }
+
     this.#regionFlag.src = `https://flagicons.lipis.dev/flags/4x3/${this.#countrySelect.value.toLowerCase()}.svg`;
+
+    this.#regionFlag.alt =
+      this.#countrySelect.querySelector(
+        `[value = "${this.#countrySelect.value}"]`
+      ).textContent + " Flag";
+
+    regionHandler(this.#countrySelect.value);
+  }
+
+  reset() {
+    this.#container
+      .querySelectorAll(".form-check-input")
+      .forEach((box) => (box.checked = false));
+
+    this.#countrySelect.value = "-";
+    this.#regionFlag.src =
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/White_flag_of_surrender.svg/640px-White_flag_of_surrender.svg.png";
+
+    this.#range.value = 1;
+    this.#seating = 1;
+    this.#seatingLabel.textContent = "Any (2-14)";
   }
 }
 

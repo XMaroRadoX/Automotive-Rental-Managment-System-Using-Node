@@ -51,11 +51,30 @@ body {
   width: 100%;
 }
 
-.navbar-brand {
+.nav-btn {
+  background: none;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  color: #9197aee8;
+}
+
+.active {
+  background-color: var(--primary-color);
+  border-radius: 9px;
+  color: var(--white-main) !important;
+  transition: all 0.3s;
+}
+
+.brand {
   color: var(--primary-color);
   font-size: 2.4rem;
-  display: flex;
+  margin: 0;
+  padding: 0;
 }
+
+/* .container-fluid {
+  align-items: center;
+} */
 
 .bi {
   transition: transform 0.3s;
@@ -300,6 +319,28 @@ input[type="range"]:focus::-webkit-slider-thumb {
   text-align: center;
 }
 
+.filter-btns {
+  display: flex;
+  width: 100%;
+}
+
+.btn-view.btn-reset {
+  background-color: var(--white-sec);
+  color: var(--black-main);
+
+  border: 2px solid #9197ae39;
+}
+
+.btn-view.btn-reset:hover {
+  color: var(--white-main);
+  border-color: var(--primary-color);
+  background-color: var(--primary-color);
+}
+
+.filter-btns > .btn-apply {
+  width: 400%;
+}
+
 /* ****************************** */
 /*           Content              */
 /* ****************************** */
@@ -364,14 +405,14 @@ input[type="range"]:focus::-webkit-slider-thumb {
 }
 
 .img-active {
-  transform: scale(1.45) translateY(-0.85rem) !important;
+  transform: scale(1.35) translateY(-0.85rem) !important;
   transition: all 0.3s;
   margin-bottom: -2.5rem;
   margin-top: -2rem;
 }
 
 .card-img-top {
-  transform: scale(1.4) translateY(-2rem);
+  transform: scale(1.3) translateY(-2rem);
   transition: all 0.3s;
 }
 
@@ -393,7 +434,7 @@ input[type="range"]:focus::-webkit-slider-thumb {
   align-items: center;
 }
 
-.car-name {
+.car-brand {
   font-size: 2rem;
   font-weight: 700;
 }
@@ -426,13 +467,17 @@ input[type="range"]:focus::-webkit-slider-thumb {
   left: 0;
   position: absolute;
   opacity: 0;
-  transition: all 0.3s;
+  transition: all 0.2s;
   color: var(--primary-color);
 }
 
-.bi-heart-fill:hover {
+.fav-active {
   opacity: 1;
 }
+
+/* .bi-heart-fill:hover {
+  opacity: 1;
+} */
 
 .car-icon {
   font-size: 1.6rem;
@@ -526,6 +571,6 @@ input[type="range"]:focus::-webkit-slider-thumb {
   font-weight: 600;
 }
 
-.btn-res {
-  width: 100%;
-}
+/* ****************************** */
+/*         Specific               */
+/* ****************************** */

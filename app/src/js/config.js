@@ -1,3 +1,5 @@
+export const SERVER_PORT = "8000";
+
 export const TYPES = [
   "micro",
   "sedan",

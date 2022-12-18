@@ -136,7 +136,15 @@ const brands = [
   { brand: "kia", families: ["carens", "sportage"] },
   {
     brand: "mercedes",
-    families: ["cls", "sprinter", "e-class", "a-class", "b-class", "s-class"],
+    families: [
+      "cls",
+      "sprinter",
+      "e-class",
+      "a-class",
+      "b-class",
+      "s-class",
+      "g-class",
+    ],
   },
   { brand: "mg", families: ["gs", "hs", "zs"] },
   { brand: "mini", families: ["mini", "coupe"] },
