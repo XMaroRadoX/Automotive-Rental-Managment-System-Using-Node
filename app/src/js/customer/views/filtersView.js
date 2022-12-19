@@ -60,6 +60,7 @@ class FilterView {
   }
 
   #renderFilterContainer() {
+    //prettier-ignore
     const html = `
         <h2 class="sub-heading">Filter by</h2>
         <div class="filters">
@@ -73,7 +74,7 @@ class FilterView {
               aria-controls="collapseType"
             >
               <span class="filter-text">Car Type</span>
-              <i class="bi bi-chevron-down ms-2"></i>
+              <ion-icon class="chevron-down ms-2" name="chevron-down-outline"></ion-icon>
             </button>
             <div class="collapse" id="collapseType">
               <div class="collapse-body type-grp mt-2"></div>
@@ -90,7 +91,7 @@ class FilterView {
               aria-controls="collapseRegion"
             >
               <span class="filter-text">Region</span>
-              <i class="bi bi-chevron-down ms-2"></i>
+              <ion-icon class="chevron-down ms-2" name="chevron-down-outline"></ion-icon>
             </button>
 
             <div class="collapse" id="collapseRegion">
@@ -118,7 +119,7 @@ class FilterView {
               aria-controls="collapseTransmission"
             >
               <span class="filter-text">Transmission</span>
-              <i class="bi bi-chevron-down ms-2"></i>
+              <ion-icon class="chevron-down ms-2" name="chevron-down-outline"></ion-icon>
             </button>
             <div class="collapse" id="collapseTransmission">
               <div class="collapse-body transmission-grp mt-2"></div>
@@ -135,13 +136,13 @@ class FilterView {
               aria-controls="collapsePassengers"
             >
               <span class="filter-text">Seating Capacity</span>
-              <i class="bi bi-chevron-down ms-2"></i>
+              <ion-icon class="chevron-down ms-2" name="chevron-down-outline"></ion-icon>
             </button>
             <div class="collapse" id="collapsePassengers">
               <div class="collapse-body mt-2">
                 <div class="seating-container">
                   <button class="btn-seat seat-minus">
-                    <i class="bi bi-dash"></i>
+                    <ion-icon class="seat-icon" name="remove-outline"></ion-icon>
                   </button>
                   <input
                     type="range"
@@ -152,12 +153,10 @@ class FilterView {
                     id="seatings"
                   />
                   <button class="btn-seat seat-plus">
-                    <i class="bi bi-plus"></i>
+                    <ion-icon class="seat-icon" name="add-outline"></ion-icon>
                   </button>
                 </div>
-                <label for="seatings" class="form-label seating-label"
-                  >Any (2-14)</label
-                >
+                <label for="seatings" class="form-label seating-label">Any (2-14)</label>
               </div>
             </div>
           </div>
@@ -172,7 +171,7 @@ class FilterView {
               aria-controls="collapseBrand"
             >
               <span class="filter-text">Brand</span>
-              <i class="bi bi-chevron-down ms-2"></i>
+              <ion-icon class="chevron-down ms-2" name="chevron-down-outline"></ion-icon>
             </button>
 
             <div class="collapse" id="collapseBrand">
@@ -190,7 +189,7 @@ class FilterView {
               aria-controls="collapseColor"
             >
               <span class="filter-text">Color</span>
-              <i class="bi bi-chevron-down ms-2"></i>
+              <ion-icon class="chevron-down ms-2" name="chevron-down-outline"></ion-icon>
             </button>
 
             <div class="collapse" id="collapseColor">
@@ -259,7 +258,7 @@ class FilterView {
 
   #filterHandler() {
     this.classList.toggle("open");
-    const icon = this.querySelector(".bi");
+    const icon = this.querySelector(".chevron-down");
     icon.classList.toggle("rotate");
   }
 
@@ -282,7 +281,7 @@ class FilterView {
     this.#decSeats.addEventListener("click", () => {
       if (this.#seating === 1) return;
       this.#seating--;
-      range.value = this.#seating;
+      this.#range.value = this.#seating;
       this.#seatingLabel.textContent =
         this.#seating > 1 ? this.#seating + " Persons" : "Any (2-14)";
       seatingHandler(this.#seating);

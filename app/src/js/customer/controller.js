@@ -4,7 +4,13 @@ import * as model from "./model.js";
 import filterView from "./views/filtersView.js";
 import carsView from "./views/carsView.js";
 
-let active, filtered;
+const container = document.querySelector(".app-container");
+const payContainer = document.querySelector(".payment-container");
+
+let active = "home",
+  filtered,
+  activeCar,
+  activePayment;
 
 const init = async () => {
   const countries = await model.getCountries();
@@ -17,12 +23,92 @@ const init = async () => {
 
   document.querySelector(".btn-apply").addEventListener("click", filter.bind());
   document.querySelector(".btn-reset").addEventListener("click", reset.bind());
+
   document
-    .querySelectorAll(".nav-btn")
+    .querySelectorAll(".btn-nav")
     .forEach((btn) => btn.addEventListener("click", navHandler.bind(btn)));
 
-  document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((tooltip) => {
-    new bootstrap.Tooltip(tooltip);
+  const form = document.querySelector(".action-form");
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const flag = form.checkValidity();
+
+    form.classList.add("was-validated");
+
+    if (!flag) {
+      e.stopPropagation();
+      return;
+    }
+
+    const reserveData = {
+      pickDate: form.querySelector("#pickup-date").value,
+      pickLocation: form.querySelector("#pickup-location").value,
+      dropDate: form.querySelector("#drop-off-date").value,
+      dropLocation: form.querySelector("#drop-off-location").value,
+      id: activeCar.id,
+    };
+
+    form.closest(".modal").querySelector(".btn-close-modal").click();
+    reserveHandler(reserveData);
+    form.querySelector("#pickup-date").value =
+      form.querySelector("#pickup-location").value =
+      form.querySelector("#drop-off-date").value =
+      form.querySelector("#drop-off-location").value =
+        "";
+
+    form.classList.remove("was-validated");
+  });
+
+  document
+    .querySelector(".btn-submit-pay")
+    .addEventListener("click", paymentHandler.bind(null));
+
+  document
+    .querySelector(".btn-signout")
+    .addEventListener("click", model.signout.bind(null));
+
+  handleView();
+};
+
+const handleView = function () {
+  document.querySelectorAll(".btn-view").forEach((btn) => {
+    const id = btn.closest(".card").dataset.carId;
+
+    btn.addEventListener("click", () => {
+      carsView.setModal();
+
+      activeCar = getActiveData().filter((c) => c.id === id)[0];
+
+      carsView.renderCarView(activeCar, active);
+
+      if (active === "home")
+        document.querySelector(".btn-reserve").addEventListener("click", () => {
+          let brand = activeCar.brand;
+          brand = brand
+            .split(" ")
+            .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
+            .join(" ");
+          document.querySelector(".action-title").textContent =
+            brand + " " + activeCar.model.toUpperCase();
+        });
+
+      if (active === "reserved") {
+        document
+          .querySelector(".btn-pick-up")
+          .addEventListener("click", pickHandler.bind(null, id));
+
+        document
+          .querySelector(".btn-revoke")
+          .addEventListener("click", revokeHandler.bind(null, id));
+      }
+
+      if (active === "rented")
+        document
+          .querySelector(".btn-return")
+          .addEventListener("click", returnHandler.bind(null, id));
+    });
   });
 };
 
@@ -55,7 +141,7 @@ export const seatingHandler = function (seats) {
 };
 
 export const favouriteHandler = function () {
-  const btn = this.querySelector(".bi-heart-fill");
+  const btn = this.querySelector(".fav-inner");
   btn.classList.toggle("fav-active");
   const id = this.closest(".card").dataset.carId;
 
@@ -117,9 +203,11 @@ const filter = function () {
     }
   });
 
-  if (!flag) carsView.render(data, model.state.favourites);
-  else carsView.render(result, model.state.favourites);
+  if (!flag)
+    carsView.render(data, model.state.favourites, active === "favourites");
+  else carsView.render(result, model.state.favourites, active === "favourites");
   carsView.handle();
+  handleView();
   filtered = true;
 };
 
@@ -145,34 +233,166 @@ const reset = function () {
       .classList.remove("rotate");
   });
 
-  carsView.render(getActiveData(), model.state.favourites);
-  carsView.handle();
+  renderState();
+  handleView();
+
   filtered = false;
+};
+
+const renderState = function () {
+  carsView.clearModal();
+  carsView.render(
+    getActiveData(),
+    model.state.favourites,
+    active === "favourites"
+  );
+  carsView.handle();
+  handleView();
+
+  if (filtered) filter();
 };
 
 const navHandler = function (e) {
   e.preventDefault();
+
   const action = this.dataset.action;
   active = action;
 
+  if (active === "payment") {
+    container.classList.add("hide");
+    if (payContainer.classList.contains("hide"))
+      payContainer.classList.remove("hide");
+    toggleActive.call(this);
+    renderPayments();
+    return;
+  }
+
+  if (container.classList.contains("hide")) container.classList.remove("hide");
+  payContainer.classList.add("hide");
+
+  toggleActive.call(this);
+  renderState();
+};
+
+const toggleActive = function () {
   document.querySelector(".active").classList.remove("active");
   this.classList.add("active");
+};
 
-  if (action === "home")
-    carsView.render(model.state.cars, model.state.favourites);
+const renderPayments = async function () {
+  await model.getPayments();
+  if (!model.state.payments) return;
 
-  if (action === "reserved")
-    carsView.render(model.state.reserved, model.state.favourites);
+  payContainer.innerHTML = "";
 
-  if (action === "rented")
-    carsView.render(model.state.rented, model.state.favourites);
+  model.state.payments.forEach((payment) => {
+    let brand = payment.brand;
+    brand = brand
+      .split(" ")
+      .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
 
-  if (action === "favourites")
-    carsView.render(model.state.favourites, model.state.favourites);
+    if (brand.length < 4) brand = brand.toUpperCase();
 
-  carsView.handle();
+    const html = `
+    <div class="payment ${payment.status ? "paid" : ""}" data-order-id="${
+      payment.orderId
+    }">
+        <div class="pay-car">${brand + " " + payment.model.toUpperCase()}</div>
+        <div class="pay-rate"><span class="pay-sub">rate/day</span>$${
+          payment.rate
+        }</div>
 
-  if (filtered) filter();
+        <div class="pay-status">
+          <ion-icon class="pay-icon ${
+            payment.status ? "hide" : ""
+          }" name="close-outline"></ion-icon>
+          <ion-icon
+            class="pay-icon pay-check ${payment.status ? "" : "hide"}"
+            name="checkmark-outline"
+          ></ion-icon>
+        </div>
+
+        <div class="pay-date">
+          <span class="pay-sub">Order number</span> ${payment.orderId}
+        </div>
+        <div class="pay-total"><span class="pay-sub">Total ${
+          payment.status ? `(${payment.method})` : ""
+        }</span>$${payment.payment}</div>
+
+        <div class="pay-footer">
+          <div class="pay-date">
+            <span class="pay-sub">Pick-up Date</span>${
+              payment.pickup.split("T")[0]
+            }
+          </div>
+          <div class="pay-date">
+            <span class="pay-sub">Drop-off Date</span>${
+              payment.drop.split("T")[0]
+            }
+          </div>
+          <div class="pay-date">
+            <span class="pay-sub">Return Date</span>${
+              payment.return.split("T")[0]
+            }
+          </div>
+          <div class="pay-date">
+            <span class="pay-sub">payment Date</span>${
+              payment.payDate ? `${payment.payDate.split("T")[0]}` : "-"
+            }
+          </div>
+          <div class="pay-date">
+            <span class="pay-sub">Duration</span>${payment.duration}
+            <span class="pay-sub">days</span>
+          </div>
+        </div>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#pay" class="btn btn-primary btn-pay ${
+          payment.status ? "hide" : ""
+        }">pay</button>
+        <button type="button" class="btn btn-primary btn-paid disabled ${
+          payment.status ? "" : "hide"
+        }">
+          paid
+        </button>
+      </div>
+      `;
+
+    payContainer.insertAdjacentHTML("beforeend", html);
+  });
+
+  payContainer.querySelectorAll(".btn-pay").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      activePayment = btn.closest(".payment").dataset.orderId;
+    });
+  });
+};
+
+const paymentHandler = async function () {
+  const method = document.querySelector("#credit-card").checked
+    ? "credit card"
+    : "cash";
+  await model.makePayment(activePayment, method);
+  renderPayments();
+};
+
+const pickHandler = function (id) {
+  model.pickCar(id);
+  renderState();
+};
+
+const revokeHandler = function (id) {
+  model.revokeCar(id);
+  renderState();
+};
+
+const reserveHandler = function (info) {
+  model.reserveCar(info);
+  renderState();
+};
+
+const returnHandler = function (id) {
+  model.returnCar(id);
+  renderState();
 };
 
 init();

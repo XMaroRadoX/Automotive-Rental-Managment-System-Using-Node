@@ -16,6 +16,8 @@ const data = [
     region: "USA",
     cca3: "usa",
     cca2: "us",
+    power: "fuel",
+    status: "active",
   },
   {
     id: "1235",
@@ -31,6 +33,8 @@ const data = [
     region: "Egypt",
     cca3: "egy",
     cca2: "eg",
+    power: "fuel",
+    status: "active",
   },
   {
     id: "1236",
@@ -46,6 +50,8 @@ const data = [
     region: "Egypt",
     cca3: "egy",
     cca2: "eg",
+    power: "fuel",
+    status: "active",
   },
   {
     id: "1237",
@@ -61,6 +67,25 @@ const data = [
     region: "Egypt",
     cca3: "egy",
     cca2: "eg",
+    power: "fuel",
+    status: "active",
+  },
+  {
+    id: "1268",
+    brand: "kia",
+    type: "sport",
+    model: "carens",
+    year: 2020,
+    seating: 2,
+    transmission: "automatic",
+    description: "",
+    rate: 400,
+    color: "blue",
+    region: "Egypt",
+    cca3: "egy",
+    cca2: "eg",
+    power: "fuel",
+    status: "active",
   },
 ];
 
@@ -79,6 +104,8 @@ const favs = [
     region: "Egypt",
     cca3: "egy",
     cca2: "eg",
+    power: "fuel",
+    status: "active",
   },
   {
     id: "1237",
@@ -94,6 +121,8 @@ const favs = [
     region: "Egypt",
     cca3: "egy",
     cca2: "eg",
+    power: "fuel",
+    status: "active",
   },
 ];
 
@@ -112,6 +141,8 @@ const rev = [
     region: "Egypt",
     cca3: "egy",
     cca2: "eg",
+    power: "electric",
+    status: "reserved",
   },
 ];
 
@@ -130,6 +161,55 @@ const ren = [
     region: "Egypt",
     cca3: "egy",
     cca2: "eg",
+    power: "fuel",
+    status: "rented",
+  },
+];
+
+const pays = [
+  {
+    pickup: "2022-12-15T00:00",
+    drop: "2022-12-15T00:00",
+    return: "2022-12-15T00:00",
+    brand: "bmw",
+    model: "x6",
+    carId: "1221",
+    rate: 250,
+    duration: 5,
+    orderId: "12123",
+    payment: 2122,
+    status: false,
+    method: "",
+  },
+  {
+    pickup: "2022-12-15T00:00",
+    drop: "2022-12-15T00:00",
+    return: "2022-12-15T00:00",
+    payDate: "2022-12-15T00:00",
+    brand: "bmw",
+    model: "x6",
+    carId: "1221",
+    rate: 250,
+    duration: 5,
+    method: "cash",
+    orderId: "1212223",
+    payment: 2122,
+    status: true,
+  },
+  {
+    pickup: "2022-12-15T00:00",
+    drop: "2022-12-15T00:00",
+    return: "2022-12-15T00:00",
+    payDate: "2022-12-15T00:00",
+    brand: "bmw",
+    model: "x6",
+    carId: "1221",
+    rate: 250,
+    duration: 5,
+    method: "cash",
+    orderId: "12122212123",
+    payment: 2122,
+    status: false,
   },
 ];
 // Require Express to run server and routes
@@ -163,6 +243,7 @@ app.get("/cars", (req, res) => {
           categories: [
             { name: "coupe", count: 5 },
             { name: "sedan", count: 10 },
+            { name: "sport", count: 1 },
           ],
         },
         {
@@ -194,19 +275,65 @@ app.get("/cars", (req, res) => {
   }
 });
 
+app.get("/payments", (req, res) => res.json(pays));
+
 //  POST Route
-// implement fav and reserved favs
 app.post("/addFavourite", function (req, res) {
   const id = req.body.id;
-  const car = data.findIndex((c) => c.id === id);
-  favs.push(data[car]);
+  let car;
+  if ((car = data.findIndex((c) => c.id === id)) > -1) favs.push(data[car]);
+
+  if ((car = rev.findIndex((c) => c.id === id)) > -1) favs.push(rev[car]);
+
+  if ((car = ren.findIndex((c) => c.id === id)) > -1) favs.push(ren[car]);
+
+  console.log(favs);
   res.sendStatus(200);
 });
 
 app.post("/removeFavourite", function (req, res) {
   const id = req.body.id;
   const car = favs.findIndex((c) => c.id === id);
+
   favs.splice(car, 1);
+  console.log(favs);
+
+  res.sendStatus(200);
+});
+
+app.post("/pickCar", function (req, res) {
+  const id = req.body.id;
+  console.log("reserve pick request", id);
+
+  res.sendStatus(200);
+});
+
+app.post("/revokeCar", function (req, res) {
+  const id = req.body.id;
+  console.log("reserve revoke request", id);
+
+  res.sendStatus(200);
+});
+
+app.post("/reserveCar", function (req, res) {
+  const id = req.body;
+  console.log("reserve request", id);
+
+  res.sendStatus(200);
+});
+
+app.post("/pay", function (req, res) {
+  const id = req.body.id;
+  console.log("pay request", req.body);
+  const index = pays.findIndex((p) => p.orderId === id);
+  if (index == -1) res.sendStatus(404);
+  pays[index].status = true;
+  pays[index].method = req.body.method;
+  res.sendStatus(200);
+});
+
+app.post("/signout", function (req, res) {
+  console.log("signout request", req.body);
   res.sendStatus(200);
 });
 
