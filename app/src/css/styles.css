@@ -711,6 +711,7 @@ input[type="range"]:focus::-webkit-slider-thumb {
 .field {
   justify-self: center;
   display: flex;
+  align-items: center;
   justify-content: center;
   flex-direction: column;
   font-family: inherit;
@@ -724,6 +725,7 @@ input[type="range"]:focus::-webkit-slider-thumb {
   display: flex;
   justify-content: center;
   font-size: 2.2rem;
+  margin-bottom: 0.5rem;
 }
 
 .info-icon > svg {

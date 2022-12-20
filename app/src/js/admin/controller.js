@@ -4,16 +4,22 @@ import * as model from "./model.js";
 import filterView from "./views/filtersView.js";
 import tableView from "./views/tableView.js";
 import searchView from "./views/searchView.js";
-import { CUSTOMER_HEAD, CAR_HEAD, RESERVATIONS_HEAD } from "../config.js";
+import {
+  CUSTOMER_HEAD,
+  CAR_HEAD,
+  RESERVATIONS_HEAD,
+  STATUS_HEAD,
+  PAYMENTS_HEAD,
+} from "../config.js";
 
 let active = "cars",
   filtered,
-  activeCustomers,
+  activeSearch,
   activeCat = "all",
   activeCar,
-  activePayment,
   inputs;
 let filterBtns, searched;
+let formData;
 
 const init = async () => {
   const countries = await model.getCountries();
@@ -50,7 +56,7 @@ const handleView = function () {
     btn.addEventListener("click", () => {
       activeCar = getActiveData().filter((c) => c.carId === id)[0];
 
-      tableView.renderCarView(activeCar);
+      tableView.renderCarView(activeCar, active);
 
       if (active === "cars" || active === "reservations") {
         let btn = document.querySelector(".btn-return");
@@ -87,11 +93,7 @@ const handleCustomer = function () {
   inputs = document.querySelector(".customer-filter").querySelectorAll("input");
 };
 
-const handleReservations = function () {
-  inputs = document
-    .querySelector(".reservations-filter")
-    .querySelectorAll("input");
-
+const handleRange = function () {
   $(function () {
     $('input[name="daterange"]').daterangepicker(
       {
@@ -100,8 +102,14 @@ const handleReservations = function () {
       function (start, end, label) {}
     );
   });
+};
 
-  document.querySelector(`input[name="daterange"]`).value = "";
+const handleReservations = function () {
+  inputs = document
+    .querySelector(".reservations-filter")
+    .querySelectorAll("input");
+
+  handleRange();
 };
 
 const addFilters = () => {
@@ -133,21 +141,35 @@ export const seatingHandler = function (seats) {
 };
 
 const getActiveData = () => {
+  if (
+    (filtered && active === "reservations") ||
+    (searched && active === "reservations")
+  )
+    return activeSearch;
+
   if (active === "cars") {
     if (activeCat === "all") return model.state.cars;
-    if (activeCat === "reserved") return model.state.reserved;
+    if (activeCat === "reserved")
+      return model.state.reserved.filter((c) => c.status === "reserved");
     if (activeCat === "oos")
       return model.state.cars.filter((c) => c.status === "oos");
 
-    return model.state.rented;
+    return model.state.rented.filter((c) => c.status === "rented");
   }
 
   if (active === "customers") return model.state.users;
 
-  if (active === "reservations") return model.state.reserved;
+  if (active === "reservations")
+    return [...model.state.reserved, ...model.state.rented];
+
+  if (active === "status") return model.state.daily;
+
+  if (active === "payments") return model.state.payments;
 };
 
 const filter = function () {
+  filtered = false;
+
   let result = [];
   let flag = false;
   const data = getActiveData();
@@ -191,11 +213,13 @@ const filter = function () {
 
   let head;
   if (active === "cars") head = CAR_HEAD;
+  else if (active === "status") head = STATUS_HEAD;
   else head = RESERVATIONS_HEAD;
 
   if (!flag) tableView.render(data, head, active);
   else tableView.render(result, head, active);
   handleView();
+
   filtered = true;
 };
 
@@ -227,6 +251,7 @@ const reset = function () {
 };
 
 const search = function (head) {
+  searched = false;
   const query = [...inputs]
     .map((input) => {
       if (input.value) return { name: input.id, value: input.value };
@@ -247,7 +272,7 @@ const search = function (head) {
 
   const res = [];
 
-  getActiveData().forEach((u) => {
+  getActiveData()?.forEach((u) => {
     let flag = true;
     query.forEach((q) => {
       if (q.name === "range") {
@@ -263,7 +288,9 @@ const search = function (head) {
   });
 
   tableView.render(res, head, active);
+  handleView();
   active === "customers" && handleCustomer();
+  activeSearch = res;
   searched = true;
 };
 
@@ -275,7 +302,7 @@ const clearSearch = function () {
   renderState();
 };
 
-const renderState = function () {
+const renderState = function (data) {
   if (active === "cars") {
     tableView.render(getActiveData(), CAR_HEAD, active);
     handleView();
@@ -297,13 +324,69 @@ const renderState = function () {
     if (searched) search(RESERVATIONS_HEAD);
     if (filtered) filter(RESERVATIONS_HEAD);
   }
+
+  if (active === "status") {
+    tableView.render(getActiveData(), STATUS_HEAD, active);
+    handleView();
+  }
+
+  if (active === "payments") {
+    tableView.render(getActiveData(), PAYMENTS_HEAD, active);
+    handleRange();
+  }
+
+  if (active === "add") {
+    tableView.renderForm();
+    handleForm();
+  }
+};
+
+const handleForm = function () {
+  const form = document.querySelector(".car-form");
+
+  form.addEventListener(
+    "submit",
+    async (event) => {
+      event.preventDefault();
+      form.classList.add("was-validated");
+
+      if (!form.checkValidity()) {
+        return;
+      }
+
+      formData = new FormData(form);
+
+      const car = {};
+
+      [...formData.entries()].forEach((entry) => (car[entry[0]] = entry[1]));
+
+      await model.addCar(car);
+      active = "cars";
+      tableView.toggle();
+      searchView.toggle();
+      toggleFilters();
+      toggleActive.call(document.querySelector(`[data-action = "cars"]`));
+      handleSearch();
+      renderState();
+    },
+    false
+  );
 };
 
 const navHandler = function (e) {
   e.preventDefault();
 
   const action = this.dataset.action;
-  active === "customers" && toggleFilters();
+
+  if (action === "add" && active === "add") return;
+
+  (active === "customers" || active === "payments") && toggleFilters();
+
+  if (active === "add" || action === "add") {
+    tableView.toggle();
+    searchView.toggle();
+    toggleFilters();
+  }
 
   active = action;
 
@@ -363,6 +446,62 @@ const handleSearch = function () {
       .querySelector(".btn-clear-search")
       .addEventListener("click", clearSearch);
   }
+
+  if (active === "status") {
+    searchView.renderStatusSearch();
+
+    document.querySelector(".btn-search").addEventListener("click", getDate);
+
+    document
+      .querySelector(".btn-clear-search")
+      .addEventListener("click", clearDate);
+  }
+
+  if (active === "payments") {
+    searchView.renderPaymentsSearch();
+
+    document.querySelector(".btn-search").addEventListener("click", getDate);
+
+    document
+      .querySelector(".btn-clear-search")
+      .addEventListener("click", clearDate);
+
+    toggleFilters();
+  }
+};
+
+const getDate = async function () {
+  if (active === "status") {
+    const date = document.querySelector("#status-date").value;
+    if (!date) return;
+    await model.getStatus(date);
+  }
+
+  if (active === "payments") {
+    const period = document.querySelector("#range").value;
+    if (!period) return;
+    await model.getPayments(period);
+  }
+
+  renderState();
+};
+
+const clearDate = function () {
+  if (active === "status") {
+    const date = document.querySelector("#status-date");
+    if (!date) return;
+    date.value = "";
+    model.state.daily = [];
+  }
+
+  if (active === "payments") {
+    const period = document.querySelector("#range");
+    if (!period) return;
+    period.value = "";
+    model.state.payments = [];
+  }
+
+  renderState();
 };
 
 const toggleActive = function () {

@@ -66,16 +66,7 @@ class SearchView {
               />
             </div>
 
-            <div class="input-group">
-              <span class="input-group-text" id="country">Region</span>
-              <input
-                type="text"
-                class="form-control"
-                id="region"
-                aria-describedby="country"
-                placeholder="egypt"
-              />
-            </div>
+        
 
             <div class="input-group">
               <span class="input-group-text" id="pick-date">Pick-up Date</span>
@@ -274,6 +265,72 @@ class SearchView {
     `;
   }
 
+  renderStatusSearch() {
+    this.searchContainer.innerHTML = `
+      <div class="status-filter">
+            <div class="customer-title">
+              Search status by day
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-text" id="status">Date</span>
+              <input
+                type="date"
+                class="form-control"
+                id="status-date"
+                aria-describedby="status"
+              />
+            </div>
+    
+            <button
+              type="button"
+              class="btn btn-outline-primary btn-clear-search"
+            >
+              clear
+            </button>
+
+            <button type="button" class="btn btn-primary btn-search">
+              Search
+            </button>
+          </div>
+    `;
+  }
+
+  renderPaymentsSearch() {
+    this.searchContainer.innerHTML = `
+      <div class="status-filter">
+            <div class="customer-title">
+              Search payments by period
+            </div>
+
+            <div class="input-group range">
+              <span class="input-group-text" id="range-date"
+                >Period</span
+              >
+              <input
+                type="text"
+                class="form-control date-period"
+                name="daterange"
+                id="range"
+                value=""
+                aria-describedby="range-date"
+              />
+            </div>
+    
+            <button
+              type="button"
+              class="btn btn-outline-primary btn-clear-search"
+            >
+              clear
+            </button>
+
+            <button type="button" class="btn btn-primary btn-search">
+              Search
+            </button>
+          </div>
+    `;
+  }
+
   renderCarSearch() {
     this.searchContainer.innerHTML = `
     <div class="car-filter">
@@ -322,6 +379,10 @@ class SearchView {
     document.querySelectorAll(".btn-check").forEach((btn) => {
       btn.addEventListener("change", changeCat.bind(btn));
     });
+  }
+
+  toggle() {
+    this.searchContainer.classList.toggle("hide");
   }
 }
 export default new SearchView();

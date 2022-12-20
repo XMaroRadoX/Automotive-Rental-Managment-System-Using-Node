@@ -53,6 +53,7 @@ body {
 .nav-link {
   /* border: none; */
   /* padding: 0.8rem 1.2rem; */
+  position: relative;
   border-radius: 9px !important;
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
@@ -208,17 +209,6 @@ body {
 
 .hide {
   display: none !important;
-}
-
-.payment-container {
-  height: 90vh;
-  max-width: 90rem;
-  margin: 0 auto;
-  overflow-y: scroll;
-  /* overflow-x: visible; */
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
 }
 
 .app-container {
@@ -716,6 +706,7 @@ input[type="range"]:focus::-webkit-slider-thumb {
 .car-info {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
+  align-items: center;
   justify-content: center;
   column-gap: 2.4rem;
   row-gap: 1.6rem;
@@ -738,6 +729,7 @@ input[type="range"]:focus::-webkit-slider-thumb {
   display: flex;
   justify-content: center;
   font-size: 2.2rem;
+  margin-bottom: 0.5rem;
 }
 
 .info-icon > svg {
@@ -1028,11 +1020,16 @@ input[type="range"]:focus::-webkit-slider-thumb {
   gap: 1.2rem;
 }
 
-.reservations-filter {
+.reservations-filter,
+.status-filter {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   align-items: center;
   gap: 1.6rem;
+}
+
+.status-filter {
+  row-gap: 0;
 }
 
 .customer-filter input {
@@ -1063,10 +1060,16 @@ input[type="range"]:focus::-webkit-slider-thumb {
   grid-column: 4/5;
 }
 
+.status-filter > .btn-search {
+  grid-column: 3 / span 1;
+}
+
+.status-filter > .btn-clear-search {
+  grid-column: 2 / span 1;
+}
+
 .reservations-filter > .btn-clear-search {
-  grid-column: 5/6;
-  grid-row: 3/4;
-  /* grid */
+  grid-row: 4/5;
 }
 
 .gap {
@@ -1078,6 +1081,93 @@ input[type="range"]:focus::-webkit-slider-thumb {
 }
 
 .range {
-  grid-column: 1 / span 4;
+  grid-column: 4 / span 2;
   cursor: pointer;
+}
+
+.status-filter .range {
+  grid-column: 1 / span 1;
+}
+
+.log-out {
+  font-size: 2.4rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.btn-signout {
+  height: 100%;
+}
+.daterangepicker td.active,
+.daterangepicker td.active:hover {
+  background-color: var(--primary-color);
+}
+
+.add-container {
+  /* background-color: red; */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.add-container input {
+  font-size: 1.4rem;
+  box-shadow: none;
+  border-top-right-radius: 9px !important;
+  border-bottom-right-radius: 9px !important;
+}
+
+.add-container .rate {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.end-group {
+  border-top-right-radius: 9px !important;
+  border-bottom-right-radius: 9px !important;
+}
+
+.add-container input:focus {
+  border: 1px solid #ced4da;
+  box-shadow: 0 0 0 0.15rem var(--tint-shadow) inset;
+}
+
+.input-group select {
+  font-size: 1.4rem;
+  box-shadow: none;
+  border: 1px solid #ced4da;
+  border-top-right-radius: 9px !important;
+  border-bottom-right-radius: 9px !important;
+}
+
+.input-group select:focus {
+  border: 1px solid #ced4da;
+  box-shadow: 0 0 0 0.15rem var(--tint-shadow) inset;
+}
+
+.add-container .customer-title {
+  margin-bottom: 0;
+  /* display: grid; */
+  /* grid-template-rows: auto 1fr; */
+}
+
+.car-form {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.6rem;
+}
+
+.car-form .input-group {
+  height: 25%;
+}
+
+.car-form .btn {
+  grid-column: 1/-1;
+}
+
+.invalid-feedback {
+  margin-left: 1rem;
 }

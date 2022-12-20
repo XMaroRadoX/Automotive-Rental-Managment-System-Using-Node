@@ -6,6 +6,8 @@ export const state = {
   rented: [],
   filters: [],
   users: [],
+  daily: [],
+  payments: [],
   userFilters: {
     type: [],
     transmission: [],
@@ -80,7 +82,6 @@ export const revokeCar = async function (id) {
 
     state.reserved[index].status = "active";
     state.cars.push(state.reserved[index]);
-    state.reserved.splice(index, 1);
     sortCars("all");
     sortCars("reserved");
 
@@ -109,7 +110,6 @@ export const returnCar = async function (id) {
 
     state.rented[index].status = "active";
     state.cars.push(state.rented[index]);
-    state.rented.splice(index, 1);
 
     sortCars("all");
     sortCars("rented");
@@ -177,6 +177,59 @@ export const deleteCustomer = async function (id) {
     state.users.splice(index, 1);
 
     console.log(state.users);
+    console.log(res);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getStatus = async function (date) {
+  try {
+    const res = await fetch(`${SERVER_URL}/daily`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ date }),
+    });
+
+    const data = await res.json();
+
+    state.daily = data.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getPayments = async function (period) {
+  try {
+    const res = await fetch(`${SERVER_URL}/dailyPayments`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ period }),
+    });
+
+    const data = await res.json();
+
+    state.payments = data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const addCar = async function (data) {
+  try {
+    const res = await fetch(`${SERVER_URL}/addCar`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    await getData();
     console.log(res);
   } catch (e) {
     console.log(e);

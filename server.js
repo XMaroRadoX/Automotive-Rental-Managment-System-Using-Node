@@ -213,6 +213,30 @@ const rev = [
     drop: "2022-12-15",
     date: "2022-12-15",
   },
+  {
+    carId: "12223422",
+    resId: "12392222",
+    custId: "211221",
+    custName: "Amr Yasser",
+    brand: "audi",
+    model: "a4",
+    type: "coupe",
+    year: 2020,
+    seating: 4,
+    transmission: "automatic",
+    description: "",
+    rate: 400,
+    plateNo: "12141212",
+    color: "black",
+    region: "usa",
+    cca3: "usa",
+    cca2: "us",
+    power: "fuel",
+    status: "active",
+    pickup: "2022-11-15",
+    drop: "2022-12-15",
+    date: "2022-11-15",
+  },
 ];
 
 const ren = [
@@ -397,7 +421,26 @@ app.get("/cars", (req, res) => {
 
 app.get("/payments", (req, res) => res.json(pays));
 
+app.post("/addCar", (req, res) => {
+  console.log(req.body);
+
+  res.sendStatus(200);
+});
+
 //  POST Route
+
+app.post("/dailyPayments", (req, res) => {
+  console.log(req.body);
+  const data = [
+    {
+      date: "2022-12-15",
+      number: 5,
+      total: 1221121,
+    },
+  ];
+  res.json(data);
+});
+
 app.post("/addFavourite", function (req, res) {
   const id = req.body.id;
   let car;
@@ -483,6 +526,17 @@ app.post("/deleteCustomer", function (req, res) {
 app.post("/signout", function (req, res) {
   console.log("signout request", req.body);
   res.sendStatus(200);
+});
+
+app.post("/daily", (req, res) => {
+  console.log(req.body.date);
+  const date = req.body.date;
+  const response = {
+    date,
+    data: data,
+  };
+
+  res.json(response);
 });
 
 // Setup Server

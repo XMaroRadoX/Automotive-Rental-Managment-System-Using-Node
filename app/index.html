@@ -91,17 +91,7 @@
             <button
               class="nav-link btn-nav"
               aria-current="page"
-              data-action="reservations"
-            >
-              reservations/car
-            </button>
-          </li>
-
-          <li class="nav-item">
-            <button
-              class="nav-link btn-nav"
-              aria-current="page"
-              data-action="reservations"
+              data-action="status"
             >
               status/day
             </button>
@@ -118,8 +108,18 @@
           </li>
 
           <li class="nav-item ms-auto">
-            <button type="button" class="btn btn-signout">
-              <ion-icon name="log-out-outline"></ion-icon>
+            <button
+              class="nav-link btn-nav"
+              aria-current="page"
+              data-action="add"
+            >
+              Add car
+            </button>
+          </li>
+
+          <li class="nav-item">
+            <button type="button" class="nav-link btn-signout">
+              <ion-icon class="log-out" name="log-out-outline"></ion-icon>
             </button>
           </li>
         </ul>
@@ -127,10 +127,10 @@
         <div class="table-filter mb-4"></div>
 
         <table class="query-result"></table>
+
+        <div class="add-container hide"></div>
       </div>
     </div>
-
-    <div class="payment-container hide"></div>
 
     <!-- Modal -->
     <div

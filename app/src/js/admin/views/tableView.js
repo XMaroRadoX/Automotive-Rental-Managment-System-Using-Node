@@ -4,6 +4,7 @@ class TableView {
   #infoContainer = document.querySelector(".car-info");
   #footerContainer = document.querySelector(".view-footer");
   #carouselContainer = document.querySelector(".carousel-inner");
+  #addContainer = document.querySelector(".add-container");
   #activeCar;
 
   render(data, head, active = "cars") {
@@ -19,6 +20,14 @@ class TableView {
         data.forEach((car) => {
           const div = document.createElement("tr");
           div.insertAdjacentHTML("afterbegin", this.#generateCarHTML(car));
+          frag.appendChild(div);
+        });
+
+    if (active === "status")
+      if (data)
+        data.forEach((car) => {
+          const div = document.createElement("tr");
+          div.insertAdjacentHTML("afterbegin", this.#generateStatusHTML(car));
           frag.appendChild(div);
         });
 
@@ -44,11 +53,19 @@ class TableView {
           frag.appendChild(div);
         });
 
+    if (active === "payments")
+      if (data)
+        data.forEach((pay) => {
+          const div = document.createElement("tr");
+          div.insertAdjacentHTML("afterbegin", this.#generatePaymentsHTML(pay));
+          frag.appendChild(div);
+        });
+
     this.#table.innerHTML = "";
     this.#table.appendChild(frag);
   }
 
-  renderCarView(car) {
+  renderCarView(car, active) {
     let brand = car.brand;
     brand = brand
       .split(" ")
@@ -64,7 +81,53 @@ class TableView {
         this.#infoContainer.classList.remove("gap");
     } else this.#infoContainer.classList.add("gap");
     //prettier-ignore
-    this.#footerContainer.innerHTML = this.#generateFooterHTML(car);
+
+    if(active !== 'status')
+    this.#footerContainer.innerHTML = this.#generateFooterHTML(car,active);
+  }
+
+  #generatePaymentsHTML(pay) {
+    //prettier-ignore
+    return `
+        <tr class="table-row"">
+            <td class="table-field">${pay.date}</td>
+            <td class="table-field">${pay.number}</td>
+            <td class="table-field">${pay.total}</td>
+          </tr>
+  `;
+  }
+
+  #generateStatusHTML(car) {
+    let brand = car.brand;
+    brand = brand
+      .split(" ")
+      .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+
+    if (brand.length < 4) brand = brand.toUpperCase();
+
+    //prettier-ignore
+    return `
+        <tr class="table-row"">
+            <td class="table-field">${car.carId}</td>
+            <td class="table-field">${brand}</td>
+            <td class="table-field">${car.model.toUpperCase()}</td>
+            <td class="table-field">${car.plateNo.toUpperCase() + car.plateNo.slice(1).toLowerCase()}</td>
+            <td class="table-field">${car.region}</td>
+            <td class="table-field">${car.rate}</td>
+            <td class="table-field">${car.status}</td>
+               <td class="table-field">
+              <button
+                class="btn btn-primary btn-view mx-auto"
+                data-car-id="${car.carId}"
+                data-bs-toggle="modal"
+                data-bs-target="#car-info"
+              >
+                view
+              </button>
+            </td>
+          </tr>
+  `;
   }
 
   #generateCustomerHTML(customer) {
@@ -112,9 +175,11 @@ class TableView {
             <td class="table-field">${car.model.toUpperCase()}</td>
             <td class="table-field">${car.plateNo}</td>
             <td class="table-field">${car.region}</td>
-            <td class="table-field">${car.pickup.split('T')[0]}</td>
-            <td class="table-field">${car.drop.split('T')[0]}</td>
-            <td class="table-field">${car.date.split('T')[0]}</td>
+            <td class="table-field">${car.rate}</td>
+            <td class="table-field">${car.pickup.split("T")[0]}</td>
+            <td class="table-field">${car.drop.split("T")[0]}</td>
+            <td class="table-field">${car.date.split("T")[0]}</td>
+            <td class="table-field">${car.status}</td>
             <td class="table-field">
               <button
                 class="btn btn-primary btn-view mx-auto"
@@ -312,7 +377,12 @@ class TableView {
     `;
   }
 
-  #generateFooterHTML(car) {
+  #generateFooterHTML(car, active) {
+    if (
+      active === "reservations" &&
+      (car.status === "active" || car.status === "oos")
+    )
+      return "";
     let type;
 
     if (car.status === "reserved") type = "revoke";
@@ -372,6 +442,174 @@ class TableView {
                     alt="..."
                   />
                 </div>`;
+  }
+
+  renderForm() {
+    this.#addContainer.innerHTML = `
+     <div class="customer-title">
+            Enter car info <span class="text-sub">(case insensitive)</span>
+          </div>
+          <form class="car-form needs-validation" novalidate>
+            <div class="input-group">
+              <span class="input-group-text" id="brand-addon">Brand</span>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="mercedes"
+                name="brand"
+                aria-describedby="brand-addon"
+                required
+              />
+              <div class="invalid-feedback">
+                Please provide a valid model name.
+              </div>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-text" id="model-addon">Model</span>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="g-class"
+                name="model"
+                aria-describedby="model-addon"
+                required
+              />
+              <div class="invalid-feedback">
+                Please provide a valid model name.
+              </div>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-text" id="type-addon">Type</span>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="sedan"
+                name="type"
+                aria-describedby="type-addon"
+                required
+              />
+              <div class="invalid-feedback">
+                Please provide a valid type name.
+              </div>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-text" id="plate-addon"
+                >Plate Number</span
+              >
+              <input
+                type="text"
+                class="form-control"
+                placeholder="5e4322"
+                name="plateNo"
+                aria-describedby="plate-addon"
+                required
+              />
+              <div class="invalid-feedback">
+                Please provide a valid plate number.
+              </div>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-text" id="year-addon"
+                >Manufacture Year</span
+              >
+              <input
+                type="number"
+                class="form-control"
+                placeholder="2020"
+                name="year"
+                aria-describedby="year-addon"
+                min="1965"
+                max="2023"
+                required
+              />
+              <div class="invalid-feedback">Please provide a valid year.</div>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-text" id="seating-addon">Seating</span>
+              <input
+                type="number"
+                class="form-control"
+                placeholder="2"
+                name="seating"
+                aria-describedby="seating-addon"
+                min="2"
+                max="14"
+                required
+              />
+              <div class="invalid-feedback">
+                Please provide a valid seating.
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label class="input-group-text" for="transmission"
+                >Gear Transmission</label
+              >
+              <select class="form-select" name="transmission" required>
+                <option selected disabled value="">-</option>
+                <option value="automatic">Automatic</option>
+                <option value="manual">Manual</option>
+                <option value="cvt">CVT</option>
+              </select>
+
+              <div class="invalid-feedback">
+                Please choose a valid transmission.
+              </div>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-text" id="rate-addon">Rate/Day</span>
+              <input
+                type="text"
+                class="form-control rate"
+                placeholder="1200"
+                name="rate"
+                aria-describedby="rate-addon"
+                required
+              />
+              <span class="input-group-text end-group">$</span>
+              <div class="invalid-feedback">Please provide a valid rate.</div>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-text" id="region-addon">Region</span>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="egypt"
+                name="region"
+                aria-describedby="region-addon"
+                required
+              />
+              <div class="invalid-feedback">Please provide a valid region.</div>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-text" id="power-addon">Power</span>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="electric"
+                name="power"
+                aria-describedby="power-addon"
+                required
+              />
+              <div class="invalid-feedback">Please provide a valid power.</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-5">submit</button>
+          </form>
+    `;
+  }
+
+  toggle() {
+    this.#table.classList.toggle("hide");
+    this.#addContainer.classList.toggle("hide");
   }
 }
 

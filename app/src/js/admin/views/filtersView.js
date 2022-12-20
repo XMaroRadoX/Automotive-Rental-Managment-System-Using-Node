@@ -1,7 +1,7 @@
 import { filterHandler, regionHandler, seatingHandler } from "../controller.js";
 
 class FilterView {
-  #container = document.querySelector(".app-container");
+  #container = document.querySelector(".sidebar-container");
   #countrySelect;
   #regionFlag;
   #range = document.querySelector(".form-range");
@@ -199,13 +199,9 @@ class FilterView {
         </div>
     `;
 
-    this.#container
-      .querySelector(".sidebar-container")
-      .insertAdjacentHTML("afterbegin", html);
+    this.#container.insertAdjacentHTML("afterbegin", html);
 
-    this.#container
-      .querySelector(".sidebar-container")
-      .classList.add("filters-container");
+    this.#container.classList.add("filters-container");
 
     document
       .querySelectorAll(".btn-filter")
