@@ -54,7 +54,7 @@ const handleView = function () {
     const id = btn.dataset.carId;
 
     btn.addEventListener("click", () => {
-      activeCar = getActiveData().filter((c) => c.carId === id)[0];
+      activeCar = getActiveData().find((c) => c.carId === id);
 
       tableView.renderCarView(activeCar, active);
 
@@ -125,11 +125,22 @@ export const filterHandler = function () {
   const value = this.value;
 
   if (this.checked) {
-    model.state.userFilters[type].push(value);
+    model.state.userFilters[type]?.push(value);
   } else {
-    const index = model.state.userFilters[type].indexOf(value);
-    model.state.userFilters[type].splice(index, 1);
+    const index = model.state.userFilters[type]?.indexOf(value);
+    model.state.userFilters[type]?.splice(index, 1);
   }
+};
+
+export const pricingHandler = function (min, max) {
+  if ((!min && !max) || min > max) {
+    model.state.userFilters.range = [];
+    console.log(model.state.userFilters.range);
+    return;
+  }
+  if (!min) min = 0;
+  if (!max) max = 8000;
+  model.state.userFilters.range = [min, max];
 };
 
 export const regionHandler = function (region) {
@@ -207,6 +218,7 @@ const filter = function () {
       if (flag) result = result.filter((value) => queryRes.includes(value));
       else result.push(...queryRes);
 
+      activeSearch = result;
       flag = true;
     }
   });
@@ -231,9 +243,11 @@ const reset = function () {
     type: [],
     transmission: [],
     brand: [],
+    power: [],
     color: [],
     seating: 1,
     region: "",
+    range: [],
   };
 
   document.querySelectorAll(".open").forEach((btn) => {

@@ -11,9 +11,11 @@ export const state = {
     type: [],
     transmission: [],
     brand: [],
+    power: [],
     color: [],
     seating: 1,
     region: "",
+    range: [],
   },
 };
 
@@ -47,7 +49,6 @@ export const getCars = async () => {
     const res = await fetch(`${SERVER_URL}/cars`);
     const data = await res.json();
 
-    console.log(data);
     state.cars = data.cars;
     state.favourites = data.favs;
     state.rented = data.ren;

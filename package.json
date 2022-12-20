@@ -2,10 +2,10 @@
   "name": "car-rental-system",
   "version": "1.0.0",
   "description": "",
-  "default": "customer.html",
+  "default": "index.html",
   "scripts": {
-    "start": "parcel app/src/html/customer.html",
-    "build": "parcel build  ./*.html ./src/html/*.html --dist-dir ../Car-Rental-System"
+    "start": "parcel app/index.html",
+    "build": "parcel build  ./app/*.html ./app/src/html/*.html --dist-dir ./dist"
   },
   "author": "",
   "license": "ISC",

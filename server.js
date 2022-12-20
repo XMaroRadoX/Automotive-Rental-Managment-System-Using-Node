@@ -338,6 +338,14 @@ app.get("/admin", (req, res) => {
       users,
       filters: [
         {
+          name: "power",
+          categories: [
+            { name: "fuel", count: 5 },
+            { name: "gas", count: 10 },
+            { name: "electric", count: 1 },
+          ],
+        },
+        {
           name: "type",
           categories: [
             { name: "coupe", count: 5 },
@@ -382,6 +390,14 @@ app.get("/cars", (req, res) => {
       rev,
       ren,
       filters: [
+        {
+          name: "power",
+          categories: [
+            { name: "fuel", count: 5 },
+            { name: "gas", count: 10 },
+            { name: "electric", count: 1 },
+          ],
+        },
         {
           name: "type",
           categories: [

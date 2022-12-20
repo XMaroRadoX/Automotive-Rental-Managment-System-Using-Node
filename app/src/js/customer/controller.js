@@ -127,10 +127,10 @@ export const filterHandler = function () {
   const value = this.value;
 
   if (this.checked) {
-    model.state.userFilters[type].push(value);
+    model.state.userFilters[type]?.push(value);
   } else {
-    const index = model.state.userFilters[type].indexOf(value);
-    model.state.userFilters[type].splice(index, 1);
+    const index = model.state.userFilters[type]?.indexOf(value);
+    model.state.userFilters[type]?.splice(index, 1);
   }
 };
 
@@ -140,6 +140,17 @@ export const regionHandler = function (region) {
 
 export const seatingHandler = function (seats) {
   model.state.userFilters["seating"] = seats;
+};
+
+export const pricingHandler = function (min, max) {
+  if ((!min && !max) || min > max) {
+    model.state.userFilters.range = [];
+    console.log(model.state.userFilters.range);
+    return;
+  }
+  if (!min) min = 0;
+  if (!max) max = 8000;
+  model.state.userFilters.range = [min, max];
 };
 
 export const favouriteHandler = async function () {
@@ -192,6 +203,21 @@ const filter = function () {
       return;
     }
 
+    if (filter[0] === "range" && filter[1].length > 0) {
+      const min = filter[1][0];
+      const max = filter[1][1];
+
+      queryRes.push(
+        ...data.filter((car) => +car.rate >= min && +car.rate <= max)
+      );
+
+      if (flag) result = result.filter((value) => queryRes.includes(value));
+      else result.push(...queryRes);
+
+      flag = true;
+      return;
+    }
+
     const opts = filter[1];
     if (opts.length > 0) {
       opts.forEach((opt) => {
@@ -220,9 +246,11 @@ const reset = function () {
     type: [],
     transmission: [],
     brand: [],
+    power: [],
     color: [],
     seating: 1,
     region: "",
+    range: [],
   };
 
   document.querySelectorAll(".open").forEach((btn) => {
