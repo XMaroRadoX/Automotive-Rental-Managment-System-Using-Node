@@ -34,6 +34,7 @@ const user = async () => {
   try {
     const res = await fetch(`https://randomuser.me/api/?results=10`);
     const data = (await res.json()).results;
+    console.log(data);
     const users = [];
     data.forEach((user, i) => {
       users.push({
@@ -48,10 +49,14 @@ const user = async () => {
         region: user.location.country,
       });
     });
+
+    console.log(users);
   } catch (err) {
     console.log(err);
   }
 };
+
+user();
 // ####################### CAR DATA GENERATION ####################
 const transmissions = ["manual", "automatic", "cvt"];
 const colors = [

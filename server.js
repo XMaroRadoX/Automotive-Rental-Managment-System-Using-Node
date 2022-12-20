@@ -1,9 +1,64 @@
 // Setup empty JS object to act as endpoint for all routes
 // projectData = { length: 0 };
 
+const users = [
+  {
+    id: 1671498239235,
+    fname: "Wyatt",
+    lname: "Beck",
+    email: "wyatt.beck@example.com",
+    password: "frank",
+    phone_no: "01-6513-2013",
+    license: "5E4EEF",
+    region: "Australia",
+    ncars: 10,
+    debt: 300,
+    transactions: 1200,
+  },
+  {
+    id: 1671498243235,
+    fname: "Borislav",
+    lname: "Tišma",
+    email: "borislav.tisma@example.com",
+    password: "emmanuel",
+    phone_no: "022-3431-670",
+    license: "D43057",
+    region: "Serbia",
+    ncars: 10,
+    debt: 300,
+    transactions: 1200,
+  },
+  {
+    id: 1671498246235,
+    fname: "Alexandre",
+    lname: "Singh",
+    email: "alexandre.singh@example.com",
+    password: "seven",
+    phone_no: "A64 P41-5741",
+    license: "32CF62",
+    region: "Canada",
+    ncars: 10,
+    debt: 300,
+    transactions: 1200,
+  },
+  {
+    id: 1671498242235,
+    fname: "یاسمن",
+    lname: "صدر",
+    email: "ysmn.sdr@example.com",
+    password: "newman",
+    phone_no: "055-53625106",
+    license: "DD1246",
+    region: "Iran",
+    ncars: 10,
+    debt: 300,
+    transactions: 1200,
+  },
+];
+
 const data = [
   {
-    id: "1234",
+    carId: "1234",
     brand: "bmw",
     model: "x6",
     type: "coupe",
@@ -12,78 +67,83 @@ const data = [
     transmission: "automatic",
     description: "",
     rate: 400,
+    plateNo: "12142",
     color: "red",
-    region: "USA",
+    region: "egypt",
+    cca3: "egy",
+    cca2: "eg",
+    power: "electric",
+    status: "active",
+  },
+  {
+    carId: "123422",
+    brand: "bmw",
+    model: "x6",
+    type: "coupe",
+    year: 2020,
+    seating: 4,
+    transmission: "automatic",
+    description: "",
+    rate: 400,
+    plateNo: "12142",
+    color: "black",
+    region: "usa",
     cca3: "usa",
     cca2: "us",
     power: "fuel",
     status: "active",
   },
   {
-    id: "1235",
-    brand: "aston martin",
-    type: "sedan",
-    model: "db11",
+    carId: "12223422",
+    brand: "audi",
+    model: "a4",
+    type: "coupe",
     year: 2020,
-    seating: 2,
+    seating: 4,
     transmission: "automatic",
     description: "",
     rate: 400,
-    color: "red",
-    region: "Egypt",
-    cca3: "egy",
-    cca2: "eg",
-    power: "fuel",
-    status: "active",
-  },
-  {
-    id: "1236",
-    brand: "mercedes",
-    type: "sedan",
-    model: "e-class",
-    year: 2020,
-    seating: 2,
-    transmission: "automatic",
-    description: "",
-    rate: 400,
+    plateNo: "12141212",
     color: "black",
-    region: "Egypt",
-    cca3: "egy",
-    cca2: "eg",
+    region: "usa",
+    cca3: "usa",
+    cca2: "us",
     power: "fuel",
     status: "active",
   },
   {
-    id: "1237",
+    carId: "123412",
+    brand: "audi",
+    model: "a3",
+    type: "coupe",
+    year: 2020,
+    seating: 4,
+    transmission: "automatic",
+    description: "",
+    rate: 400,
+    plateNo: "12112142",
+    color: "black",
+    region: "usa",
+    cca3: "usa",
+    cca2: "us",
+    power: "electric",
+    status: "oos",
+  },
+  {
+    carId: "1234212112",
     brand: "mercedes",
     type: "sedan",
     model: "g-class",
     year: 2020,
-    seating: 2,
+    seating: 4,
     transmission: "automatic",
     description: "",
     rate: 400,
+    plateNo: "12142",
     color: "black",
-    region: "Egypt",
-    cca3: "egy",
-    cca2: "eg",
-    power: "fuel",
-    status: "active",
-  },
-  {
-    id: "1268",
-    brand: "kia",
-    type: "sport",
-    model: "carens",
-    year: 2020,
-    seating: 2,
-    transmission: "automatic",
-    description: "",
-    rate: 400,
-    color: "blue",
-    region: "Egypt",
-    cca3: "egy",
-    cca2: "eg",
+    region: "usa",
+    cca3: "usa",
+    cca2: "us",
     power: "fuel",
     status: "active",
   },
@@ -91,86 +151,101 @@ const data = [
 
 const favs = [
   {
-    id: "1236",
-    brand: "mercedes",
-    type: "sedan",
-    model: "e-class",
+    carId: "12223422",
+    brand: "audi",
+    model: "a4",
+    type: "coupe",
     year: 2020,
-    seating: 2,
+    seating: 4,
     transmission: "automatic",
     description: "",
     rate: 400,
+    plateNo: "12141212",
     color: "black",
-    region: "Egypt",
-    cca3: "egy",
-    cca2: "eg",
+    region: "usa",
+    cca3: "usa",
+    cca2: "us",
     power: "fuel",
     status: "active",
   },
   {
-    id: "1237",
-    brand: "mercedes",
-    type: "sedan",
-    model: "g-class",
+    carId: "123412",
+    brand: "audi",
+    model: "a3",
+    type: "coupe",
     year: 2020,
-    seating: 2,
+    seating: 4,
     transmission: "automatic",
     description: "",
     rate: 400,
+    plateNo: "12112142",
     color: "black",
-    region: "Egypt",
-    cca3: "egy",
-    cca2: "eg",
-    power: "fuel",
-    status: "active",
+    region: "usa",
+    cca3: "usa",
+    cca2: "us",
+    power: "electric",
+    status: "oos",
   },
 ];
 
 const rev = [
   {
-    id: "1239",
+    carId: "1239",
+    resId: "1239211111",
+    custId: "211221",
+    custName: "Amr Yasser",
     brand: "bentley",
     type: "sedan",
     model: "bentayga",
     year: 2020,
-    seating: 2,
+    seating: 4,
     transmission: "automatic",
     description: "",
     rate: 400,
+    plateNo: "12142",
     color: "black",
-    region: "Egypt",
-    cca3: "egy",
-    cca2: "eg",
-    power: "electric",
+    region: "usa",
+    cca3: "usa",
+    cca2: "us",
+    power: "fuel",
     status: "reserved",
+    pickup: "2022-12-15",
+    drop: "2022-12-15",
+    date: "2022-12-15",
   },
 ];
 
 const ren = [
   {
-    id: "1249",
+    carId: "123219",
+    resId: "12392111122111",
+    custID: "211221",
     brand: "jeep",
     type: "sedan",
     model: "wrangler",
-    year: 2018,
-    seating: 2,
+    year: 2020,
+    seating: 4,
     transmission: "automatic",
     description: "",
     rate: 400,
+    plateNo: "12142",
     color: "black",
-    region: "Egypt",
-    cca3: "egy",
-    cca2: "eg",
+    region: "usa",
+    cca3: "usa",
+    cca2: "us",
     power: "fuel",
     status: "rented",
+    pickup: "2022-12-15",
+    drop: "2022-12-15",
+    date: "2022-12-15",
   },
 ];
 
 const pays = [
   {
-    pickup: "2022-12-15T00:00",
-    drop: "2022-12-15T00:00",
-    return: "2022-12-15T00:00",
+    pickup: "2022-12-15",
+    drop: "2022-12-15",
+    return: "2022-12-15",
     brand: "bmw",
     model: "x6",
     carId: "1221",
@@ -182,10 +257,10 @@ const pays = [
     method: "",
   },
   {
-    pickup: "2022-12-15T00:00",
-    drop: "2022-12-15T00:00",
-    return: "2022-12-15T00:00",
-    payDate: "2022-12-15T00:00",
+    pickup: "2022-12-15",
+    drop: "2022-12-15",
+    return: "2022-12-15",
+    payDate: "2022-12-15",
     brand: "bmw",
     model: "x6",
     carId: "1221",
@@ -197,10 +272,10 @@ const pays = [
     status: true,
   },
   {
-    pickup: "2022-12-15T00:00",
-    drop: "2022-12-15T00:00",
-    return: "2022-12-15T00:00",
-    payDate: "2022-12-15T00:00",
+    pickup: "2022-12-15",
+    drop: "2022-12-15",
+    return: "2022-12-15",
+    payDate: "2022-12-15",
     brand: "bmw",
     model: "x6",
     carId: "1221",
@@ -230,10 +305,55 @@ app.use(cors());
 
 app.get("/", (req, res) => res.json("Hello"));
 
+app.get("/admin", (req, res) => {
+  try {
+    const response = {
+      cars: [...rev, ...ren, ...data],
+      rev,
+      ren,
+      users,
+      filters: [
+        {
+          name: "type",
+          categories: [
+            { name: "coupe", count: 5 },
+            { name: "sedan", count: 10 },
+            { name: "sport", count: 1 },
+          ],
+        },
+        {
+          name: "color",
+          categories: [
+            { name: "red", count: 5 },
+            { name: "black", count: 10 },
+          ],
+        },
+        {
+          name: "brand",
+          categories: [
+            { name: "bmw", count: 5 },
+            { name: "aston martin", count: 11 },
+          ],
+        },
+        {
+          name: "transmission",
+          categories: [
+            { name: "automatic", count: 5 },
+            { name: "cvt", count: 11 },
+          ],
+        },
+      ],
+    };
+    res.json(response);
+  } catch (e) {
+    console.log(e);
+  }
+});
+
 app.get("/cars", (req, res) => {
   try {
     const response = {
-      cars: data,
+      cars: data.filter((c) => c.status !== "oos"),
       favs,
       rev,
       ren,
@@ -315,6 +435,13 @@ app.post("/revokeCar", function (req, res) {
   res.sendStatus(200);
 });
 
+app.post("/returnCar", function (req, res) {
+  const id = req.body.id;
+  console.log("return request", id);
+
+  res.sendStatus(200);
+});
+
 app.post("/reserveCar", function (req, res) {
   const id = req.body;
   console.log("reserve request", id);
@@ -329,6 +456,27 @@ app.post("/pay", function (req, res) {
   if (index == -1) res.sendStatus(404);
   pays[index].status = true;
   pays[index].method = req.body.method;
+  res.sendStatus(200);
+});
+
+app.post("/suspendCar", function (req, res) {
+  const id = req.body;
+  console.log("suspend request", id);
+
+  res.sendStatus(200);
+});
+
+app.post("/activateCar", function (req, res) {
+  const id = req.body;
+  console.log("activate request", id);
+
+  res.sendStatus(200);
+});
+
+app.post("/deleteCustomer", function (req, res) {
+  const id = req.body;
+  console.log("delete customer request", id);
+
   res.sendStatus(200);
 });
 

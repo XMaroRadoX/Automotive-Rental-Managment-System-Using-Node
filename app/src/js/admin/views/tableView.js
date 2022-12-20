@@ -1,179 +1,54 @@
-import { favouriteHandler } from "../controller.js";
-class CarsView {
-  #cars = document.querySelector(".cars");
+class TableView {
+  #table = document.querySelector(".query-result");
   #viewTitle = document.querySelector(".view-title");
   #infoContainer = document.querySelector(".car-info");
   #footerContainer = document.querySelector(".view-footer");
   #carouselContainer = document.querySelector(".carousel-inner");
   #activeCar;
 
-  modal = false;
-  openCard;
-
-  #clearActive = (active) => {
-    active.querySelector(".card-img-top").classList.remove("img-active");
-    active.querySelector(".btn-view").classList.add("hidden");
-    active.classList.remove("card-active");
-  };
-
-  #toggleCard = function (container) {
-    if (this.modal) return;
-
-    const card = container.querySelector(".card");
-    const active = document.querySelector(".card-active");
-
-    card.querySelector(".card-img-top").classList.toggle("img-active");
-    card.querySelector(".btn-view").classList.toggle("hidden");
-    card.classList.toggle("card-active");
-
-    if (active && active !== card) this.#clearActive(active);
-  };
-
-  setModal() {
-    this.modal = true;
-  }
-
-  clearModal() {
-    this.modal = false;
-  }
-
-  #closeModal() {
-    this.modal = false;
-
-    const card = document.querySelector(".card-active");
-
-    if (!card) return;
-    card.querySelector(".card-img-top").classList.toggle("img-active");
-    card.querySelector(".btn-view").classList.toggle("hidden");
-    card.classList.toggle("card-active");
-  }
-
-  handle() {
-    [...document.querySelectorAll(".card-container")].forEach((card) => {
-      card.addEventListener("mouseover", this.#toggleCard.bind(this, card));
-      card.addEventListener("mouseout", this.#toggleCard.bind(this, card));
-    });
-
-    document.querySelectorAll(".btn-fav").forEach((btn) => {
-      btn.addEventListener("click", favouriteHandler.bind(btn));
-    });
-
-    document
-      .querySelectorAll(".btn-close-modal")
-      .forEach((btn) =>
-        btn.addEventListener("click", this.#closeModal.bind(this))
-      );
-  }
-
-  render(data, favs, favFlag = false) {
+  render(data, head, active = "cars") {
     const frag = document.createDocumentFragment();
+    const tr = document.createElement("tr");
+    tr.classList = "table-row table-head";
+    tr.innerHTML = head;
 
-    if (data)
-      data.forEach((car) => {
-        const div = document.createElement("div");
-        div.classList = "card-container";
-        div.insertAdjacentHTML(
-          "afterbegin",
-          this.#generateHTML(
-            car,
-            favs.filter((fCar) => fCar.id == car.id).length > 0,
-            favFlag
-          )
-        );
-        frag.appendChild(div);
-      });
+    frag.appendChild(tr);
 
-    this.#cars.innerHTML = "";
-    this.#cars.appendChild(frag);
+    if (active === "cars")
+      if (data)
+        data.forEach((car) => {
+          const div = document.createElement("tr");
+          div.insertAdjacentHTML("afterbegin", this.#generateCarHTML(car));
+          frag.appendChild(div);
+        });
 
-    document
-      .querySelectorAll('[data-bs-toggle="tooltip"]')
-      .forEach((tooltip) => {
-        new bootstrap.Tooltip(tooltip);
-      });
+    if (active === "customers")
+      if (data)
+        data.forEach((customer) => {
+          const div = document.createElement("tr");
+          div.insertAdjacentHTML(
+            "afterbegin",
+            this.#generateCustomerHTML(customer)
+          );
+          frag.appendChild(div);
+        });
+
+    if (active === "reservations")
+      if (data)
+        data.forEach((car) => {
+          const div = document.createElement("tr");
+          div.insertAdjacentHTML(
+            "afterbegin",
+            this.#generateReservationsHTML(car)
+          );
+          frag.appendChild(div);
+        });
+
+    this.#table.innerHTML = "";
+    this.#table.appendChild(frag);
   }
 
-  #generateHTML(car, flag, favFlag) {
-    let brand = car.brand;
-    brand = brand
-      .split(" ")
-      .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
-      .join(" ");
-
-    if (brand.length < 4) brand = brand.toUpperCase();
-
-    let btn =
-      favFlag &&
-      (car.status === "rented"
-        ? "rented"
-        : car.status === "reserved"
-        ? "reserved"
-        : car.status === "oos"
-        ? "out of service"
-        : "");
-
-    if (!btn) btn = "view";
-    //prettier-ignore
-    return `
-        <div class = "card" data-car-id ="${car.carId}" data-region="${car.region}">
-            <div class="card-header">
-              <h3 class="car-brand">${brand} ${car.model.toUpperCase()}</h3>
-              <button class="btn-fav">
-                <ion-icon class ="fav-icon fav-outer" name="heart-outline">
-                </ion-icon>
-                <ion-icon class ="fav-icon fav-inner ${
-                  flag ? "fav-active" : ""
-                }" name="heart"></ion-icon>
-              </button>
-
-              <span class="car-type">${
-                car.type[0].toUpperCase() + car.type.slice(1).toLowerCase()
-              }</span>
-            </div>
-
-            <div class="img-container mx-auto mb-3">
-              <img
-                src="https://cdn.imagin.studio/getImage?customer=egalexu&target=make&make=${car.brand}&modelFamily=${car.model}&modelYear=${car.year}&paintId=imagin-${car.color}"src="https://cdn.imagin.studio/getImage?customer=egalexu&target=make&make=${car.brand}&modelFamily=${car.model}&modelYear=${car.year}&paintId=imagin-${ car.color }"
-                class="card-img-top "
-                alt="${car.brand} car photo"
-              />
-            </div>
-
-            <div class="card-body mx-2">
-              <div class="seating-label">
-                <ion-icon class="car-icon" name="person"></ion-icon>
-                <span class="car-seating">${car.seating}</span>
-              </div>
-
-              <button class="region-label" data-bs-toggle="tooltip"
-                data-bs-placement="top"
-                data-bs-custom-class="custom-tooltip"
-                data-bs-title="${car.region}" 
-                >
-                <ion-icon 
-                 
-                class="car-icon" name="location-sharp"></ion-icon>
-                <span class="car-region">${car.cca3.toUpperCase()}</span>
-              </button>
-
-              <div class="rate-label">
-                <span class="currency">$</span>
-                <span class="car-amount me-1">${car.rate}</span>
-                <span class="car-rate">/d</span>
-              </div>
-              
-              <button
-               class="btn btn-primary btn-view hidden mt-4 ${btn === 'view'? "": "disabled"}"
-               data-bs-toggle="modal"
-               data-bs-target="#car-info"
-              >${btn}</button>
-            </div>
-          </div>
-  `;
-  }
-
-  renderCarView(car, active, location) {
-    console.log(car);
+  renderCarView(car) {
     let brand = car.brand;
     brand = brand
       .split(" ")
@@ -189,7 +64,108 @@ class CarsView {
         this.#infoContainer.classList.remove("gap");
     } else this.#infoContainer.classList.add("gap");
     //prettier-ignore
-    this.#footerContainer.innerHTML = this.#generateFooterHTML(active,location);
+    this.#footerContainer.innerHTML = this.#generateFooterHTML(car);
+  }
+
+  #generateCustomerHTML(customer) {
+    //prettier-ignore
+    return `
+        <tr class="table-row"">
+            <td class="table-field">${customer.id}</td>
+            <td class="table-field">${customer.fname[0].toUpperCase() + customer.fname.slice(1).toLowerCase()}</td>
+            <td class="table-field">${customer.lname[0].toUpperCase() + customer.lname.slice(1).toLowerCase()}</td>
+            <td class="table-field">${customer.email.toLowerCase()}</td>
+            <td class="table-field">${customer.region[0].toUpperCase() + customer.region.slice(1).toLowerCase()}</td>
+            <td class="table-field">${customer.phone_no}</td>
+            <td class="table-field">${customer.license}</td>
+            <td class="table-field">${customer.ncars}</td>
+            <td class="table-field">${customer.debt}</td>
+            <td class="table-field">${customer.transactions}</td>
+            <td class="table-field">
+              <button
+                class="btn btn-primary btn-delete mx-auto"
+                data-customer-id="${customer.id}"
+              >
+                revoke
+              </button>
+            </td>
+          </tr>`;
+  }
+
+  #generateReservationsHTML(car) {
+    let brand = car.brand;
+    brand = brand
+      .split(" ")
+      .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+
+    if (brand.length < 4) brand = brand.toUpperCase();
+
+    //prettier-ignore
+    return `
+        <tr class="table-row"">
+            <td class="table-field">${car.resId}</td>
+            <td class="table-field">${car.carId}</td>
+            <td class="table-field">${car.custId}</td>
+            <td class="table-field">${car.custName}</td>
+            <td class="table-field">${brand}</td>
+            <td class="table-field">${car.model.toUpperCase()}</td>
+            <td class="table-field">${car.plateNo}</td>
+            <td class="table-field">${car.region}</td>
+            <td class="table-field">${car.pickup.split('T')[0]}</td>
+            <td class="table-field">${car.drop.split('T')[0]}</td>
+            <td class="table-field">${car.date.split('T')[0]}</td>
+            <td class="table-field">
+              <button
+                class="btn btn-primary btn-view mx-auto"
+                data-car-id="${car.carId}"
+                data-bs-toggle="modal"
+                data-bs-target="#car-info"
+              >
+                view
+              </button>
+            </td>
+          </tr>
+  `;
+  }
+
+  #generateCarHTML(car) {
+    let brand = car.brand;
+    brand = brand
+      .split(" ")
+      .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+
+    if (brand.length < 4) brand = brand.toUpperCase();
+
+    //prettier-ignore
+    return `
+        <tr class="table-row"">
+            <td class="table-field">${car.carId}</td>
+            <td class="table-field">${brand}</td>
+            <td class="table-field">${car.model.toUpperCase()}</td>
+            <td class="table-field">${car.plateNo.toUpperCase() + car.plateNo.slice(1).toLowerCase()}</td>
+            <td class="table-field">${car.type[0].toUpperCase() + car.type.slice(1).toLowerCase()}</td>
+            <td class="table-field">${car.year}</td>
+            <td class="table-field">${car.seating}</td>
+            <td class="table-field">${car.transmission}</td>
+            <td class="table-field">${car.rate}</td>
+            <td class="table-field">${car.region}</td>
+            <td class="table-field">${car.power}</td>
+            <td class="table-field">${car.color}</td>
+            <td class="table-field">${car.status}</td>
+            <td class="table-field">
+              <button
+                class="btn btn-primary btn-view mx-auto"
+                data-car-id="${car.carId}"
+                data-bs-toggle="modal"
+                data-bs-target="#car-info"
+              >
+                view
+              </button>
+            </td>
+          </tr>
+  `;
   }
 
   #generateInfoHTML(car, brand) {
@@ -309,7 +285,7 @@ class CarsView {
                   <div class="info-icon">
                     <ion-icon name="calendar-number"></ion-icon>
                   </div>
-                  <div class="info-text"><span class="pay-sub">reserve date</span>${
+                  <div class="info-text"><span class="text-sub">reserve date</span>${
                     car.date.split("T")[0]
                   }</div>
                 </div>
@@ -318,58 +294,38 @@ class CarsView {
                   <div class="info-icon me-3">
                     <ion-icon name="calendar"></ion-icon>
                   </div>
-                  <div class="info-text me-2"><span class="pay-sub">pick-up date</span>${car.pickup.split("T")[0]}</div>
-                  <div class="info-text"><span class="pay-sub">drop-off date</span>${car.drop.split("T")[0]}</div>
+                  <div class="info-text me-2"><span class="text-sub">pick-up date</span>${car.pickup.split("T")[0]}</div>
+                  <div class="info-text"><span class="text-sub">drop-off date</span>${car.drop.split("T")[0]}</div>
                 </div>
 
                 <div class="field info-order">
                   <div class="info-icon me-3">
                     <ion-icon name="cube"></ion-icon>
                   </div>
-                  <div class="info-text me-2"><span class="pay-sub">reservation number</span>${car.resId}</div>
+                  <div class="info-text me-2"><span class="text-sub">reservation number</span>${car.resId}</div>
                 </div>
               `
                    : ""
                }
+
+              ${car.status === "reserved" || car.status === "rented" ? `` : ""}
     `;
   }
 
-  #generateFooterHTML(active) {
+  #generateFooterHTML(car) {
     let type;
 
-    if (active === "home" || active === "favourites") type = "reserve";
+    if (car.status === "reserved") type = "revoke";
 
-    if (active === "reserved") type = "pick-up";
+    if (car.status === "rented") type = "return";
 
-    if (active === "rented") type = "return";
+    if (car.status === "active") type = "suspend";
 
-    // get location for favourites
+    if (car.status === "oos") type = "activate";
 
-    let html = `
-            <button 
-            ${
-              type === "reserve"
-                ? `data-bs-toggle="modal"
-                   data-bs-target="#res-info"
-                   data-bs-dismiss="modal"`
-                : ""
-            } 
+    if (!type) return "";
 
-            ${
-              type === "pick-up" || type === "return"
-                ? `data-bs-dismiss="modal"`
-                : ""
-            }
-            type="button" class="btn btn-primary btn-${type}">${type}</button>`;
-
-    if (type === "pick-up")
-      return (
-        ` <button type="button" data-bs-dismiss="modal" class="btn btn-outline-primary btn-revoke">revoke</button>` +
-        " " +
-        html
-      );
-
-    return html;
+    return `<button type="button" data-bs-dismiss="modal" class="btn btn-primary btn-${type}">${type}</button>`;
   }
 
   #generateCarouselHTML(car) {
@@ -419,4 +375,4 @@ class CarsView {
   }
 }
 
-export default new CarsView();
+export default new TableView();

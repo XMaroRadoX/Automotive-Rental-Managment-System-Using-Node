@@ -13,7 +13,7 @@
       crossorigin="anonymous"
     ></script>
 
-    <script type="module" src="src/js/admin/controller.js"></script>
+    <script type="module" src="../js/customer/controller.js"></script>
     <!-- CSS only -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
@@ -22,30 +22,64 @@
       crossorigin="anonymous"
     />
 
-    <script
-      type="text/javascript"
-      src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
-    ></script>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
-    />
-
     <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
-    <link rel="stylesheet" href="src/css/admin.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
   </head>
-
   <body>
+    <nav class="navbar navbar-expand-lg mb-3">
+      <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item me-4">
+              <a href="http://localhost:8000" class="navbar-brand"> XXX </a>
+            </li>
+
+            <li class="nav-item">
+              <button
+                type="button"
+                class="btn btn-nav active"
+                data-action="home"
+              >
+                Home
+              </button>
+            </li>
+            <li class="nav-item">
+              <button type="button" class="btn btn-nav" data-action="reserved">
+                Reserved
+              </button>
+            </li>
+            <li class="nav-item">
+              <button type="button" class="btn btn-nav" data-action="rented">
+                Rented
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                type="button"
+                class="btn btn-nav"
+                data-action="favourites"
+              >
+                Favourites
+              </button>
+            </li>
+
+            <li class="nav-item">
+              <button type="button" class="btn btn-nav" data-action="payment">
+                Payments
+              </button>
+            </li>
+
+            <li class="nav-item ms-auto">
+              <button type="button" class="btn btn-signout">
+                <ion-icon name="log-out-outline"></ion-icon>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
     <div class="app-container">
       <div class="sidebar-container">
         <div class="filter-btns mt-auto mx-auto">
@@ -57,160 +91,7 @@
       </div>
 
       <div class="content">
-        <ul class="nav nav-tabs mb-4">
-          <li class="nav-item">
-            <button
-              class="nav-link btn-nav active"
-              aria-current="page"
-              data-action="cars"
-            >
-              Cars
-            </button>
-          </li>
-          <li class="nav-item">
-            <button
-              class="nav-link btn-nav"
-              aria-current="page"
-              data-action="customers"
-            >
-              Customers
-            </button>
-          </li>
-
-          <li class="nav-item">
-            <button
-              class="nav-link btn-nav"
-              aria-current="page"
-              data-action="reservations"
-            >
-              reservations
-            </button>
-          </li>
-
-          <li class="nav-item">
-            <button
-              class="nav-link btn-nav"
-              aria-current="page"
-              data-action="payments"
-            >
-              payments
-            </button>
-          </li>
-        </ul>
-
-        <div class="table-filter mb-4"></div>
-
-        <table class="query-result">
-          <!-- <tr class="table-row table-head" data-car-id="1234">
-            <th class="table-field">ID</th>
-            <th class="table-field">Brand</th>
-            <th class="table-field">Model</th>
-            <th class="table-field">Type</th>
-            <th class="table-field">year</th>
-            <th class="table-field">seating</th>
-            <th class="table-field">transmission</th>
-            <th class="table-field">rate/day</th>
-            <th class="table-field">region</th>
-            <th class="table-field">power</th>
-            <th class="table-field">status</th>
-            <th class="table-field"></th>
-          </tr> -->
-
-          <!-- <tr class="table-row" data-car-id="1234">
-            <td class="table-field">ID</td>
-            <td class="table-field">Brand</td>
-            <td class="table-field">Model</td>
-            <td class="table-field">Type</td>
-            <td class="table-field">year</td>
-            <td class="table-field">seating</td>
-            <td class="table-field">transmission</td>
-            <td class="table-field">rate/day</td>
-            <td class="table-field">region</td>
-            <td class="table-field">power</td>
-            <td class="table-field">status</td>
-            <td class="table-field">
-              <button
-                class="btn btn-primary btn-view mx-auto"
-                data-bs-toggle="modal"
-                data-bs-target="#car-info"
-              >
-                view
-              </button>
-            </td>
-          </tr>
-
-          <tr class="table-row" data-car-id="1234">
-            <td class="table-field">ID</td>
-            <td class="table-field">Brand</td>
-            <td class="table-field">Model</td>
-            <td class="table-field">Type</td>
-            <td class="table-field">year</td>
-            <td class="table-field">seating</td>
-            <td class="table-field">transmission</td>
-            <td class="table-field">rate/day</td>
-            <td class="table-field">region</td>
-            <td class="table-field">power</td>
-            <td class="table-field">status</td>
-            <td class="table-field">
-              <button
-                class="btn btn-primary btn-view mx-auto"
-                data-bs-toggle="modal"
-                data-bs-target="#car-info"
-              >
-                view
-              </button>
-            </td>
-          </tr>
-
-          <tr class="table-row" data-car-id="1234">
-            <td class="table-field">ID</td>
-            <td class="table-field">Brand</td>
-            <td class="table-field">Model</td>
-            <td class="table-field">Type</td>
-            <td class="table-field">year</td>
-            <td class="table-field">seating</td>
-            <td class="table-field">transmission</td>
-            <td class="table-field">rate/day</td>
-            <td class="table-field">region</td>
-            <td class="table-field">power</td>
-            <td class="table-field">status</td>
-            <td class="table-field">
-              <button
-                class="btn btn-primary btn-view mx-auto"
-                data-bs-toggle="modal"
-                data-bs-target="#car-info"
-              >
-                view
-              </button>
-            </td>
-          </tr>
-
-          <tr class="table-row" data-car-id="1234">
-            <td class="table-field">ID</td>
-            <td class="table-field">Brand</td>
-            <td class="table-field">Model</td>
-            <td class="table-field">Type</td>
-            <td class="table-field">year</td>
-            <td class="table-field">seating</td>
-            <td class="table-field">transmission</td>
-            <td class="table-field">rate/day</td>
-            <td class="table-field">region</td>
-            <td class="table-field">power</td>
-            <td class="table-field">status</td>
-            <td class="table-field">
-              <button
-                class="btn btn-primary btn-view mx-auto"
-                data-bs-toggle="modal"
-                data-bs-target="#car-info"
-              >
-                view
-              </button>
-            </td>
-          </tr> -->
-        </table>
-
-        <!-- <div class="cars"></div> -->
-        <!-- <div class="cars"></div> -->
+        <div class="cars"></div>
       </div>
     </div>
 
@@ -419,6 +300,64 @@
               type="submit"
             >
               Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="pay"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="pay"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title pay-title" id="pay">
+              Choose a payment method
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body pay-body">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="flexRadioDefault"
+                id="credit-card"
+                checked
+              />
+              <label class="form-check-label me-4" for="credit-card">
+                Credit Card
+              </label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="flexRadioDefault"
+                id="Cash"
+              />
+              <label class="form-check-label" for="cash">Cash</label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              data-bs-dismiss="modal"
+              class="btn btn-primary btn-submit-pay"
+            >
+              pay
             </button>
           </div>
         </div>

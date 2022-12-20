@@ -79,11 +79,11 @@ const handleView = function () {
     btn.addEventListener("click", () => {
       carsView.setModal();
 
-      activeCar = getActiveData().filter((c) => c.id === id)[0];
+      activeCar = getActiveData().filter((c) => c.carId === id)[0];
 
       carsView.renderCarView(activeCar, active);
 
-      if (active === "home")
+      if (active === "home" || active === "favourites") {
         document.querySelector(".btn-reserve").addEventListener("click", () => {
           let brand = activeCar.brand;
           brand = brand
@@ -93,6 +93,7 @@ const handleView = function () {
           document.querySelector(".action-title").textContent =
             brand + " " + activeCar.model.toUpperCase();
         });
+      }
 
       if (active === "reserved") {
         document
@@ -104,10 +105,11 @@ const handleView = function () {
           .addEventListener("click", revokeHandler.bind(null, id));
       }
 
-      if (active === "rented")
+      if (active === "rented") {
         document
           .querySelector(".btn-return")
           .addEventListener("click", returnHandler.bind(null, id));
+      }
     });
   });
 };
@@ -140,13 +142,13 @@ export const seatingHandler = function (seats) {
   model.state.userFilters["seating"] = seats;
 };
 
-export const favouriteHandler = function () {
+export const favouriteHandler = async function () {
   const btn = this.querySelector(".fav-inner");
   btn.classList.toggle("fav-active");
   const id = this.closest(".card").dataset.carId;
 
-  if (btn.classList.contains("fav-active")) model.addFavorite(id);
-  else model.removeFavorite(id);
+  if (btn.classList.contains("fav-active")) await model.addFavorite(id);
+  else await model.removeFavorite(id);
 
   if (active === "favourites") {
     carsView.render(model.state.favourites, model.state.favourites);
@@ -375,23 +377,23 @@ const paymentHandler = async function () {
   renderPayments();
 };
 
-const pickHandler = function (id) {
-  model.pickCar(id);
+const pickHandler = async function (id) {
+  await model.pickCar(id);
   renderState();
 };
 
-const revokeHandler = function (id) {
-  model.revokeCar(id);
+const revokeHandler = async function (id) {
+  await model.revokeCar(id);
   renderState();
 };
 
-const reserveHandler = function (info) {
-  model.reserveCar(info);
+const reserveHandler = async function (info) {
+  await model.reserveCar(info, active === "favourites");
   renderState();
 };
 
-const returnHandler = function (id) {
-  model.returnCar(id);
+const returnHandler = async function (id) {
+  await model.returnCar(id);
   renderState();
 };
 

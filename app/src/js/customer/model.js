@@ -47,6 +47,7 @@ export const getCars = async () => {
     const res = await fetch(`${SERVER_URL}/cars`);
     const data = await res.json();
 
+    console.log(data);
     state.cars = data.cars;
     state.favourites = data.favs;
     state.rented = data.ren;
@@ -63,13 +64,6 @@ export const getCars = async () => {
 };
 
 export const addFavorite = async (id) => {
-  let car = state.cars.find((c) => c.id === id);
-  if (!car) car = state.reserved.find((c) => c.id === id);
-  if (!car) car = state.rented.find((c) => c.id === id);
-
-  state.favourites.push(car);
-  sortCars();
-
   try {
     const res = await fetch(`${SERVER_URL}/addFavourite`, {
       method: "POST",
@@ -78,6 +72,13 @@ export const addFavorite = async (id) => {
       },
       body: JSON.stringify({ id }),
     });
+
+    let car = state.cars.find((c) => c.carId === id);
+    if (!car) car = state.reserved.find((c) => c.carId === id);
+    if (!car) car = state.rented.find((c) => c.carId === id);
+
+    state.favourites.push(car);
+    sortCars();
     console.log(res);
   } catch (e) {
     console.log(e);
@@ -85,10 +86,6 @@ export const addFavorite = async (id) => {
 };
 
 export const removeFavorite = async (id) => {
-  const car = state.favourites.findIndex((c) => c.id === id);
-  state.favourites.splice(car, 1);
-  sortCars();
-
   try {
     const res = await fetch(`${SERVER_URL}/removeFavourite`, {
       method: "POST",
@@ -97,6 +94,10 @@ export const removeFavorite = async (id) => {
       },
       body: JSON.stringify({ id }),
     });
+
+    const car = state.favourites.findIndex((c) => c.carId === id);
+    state.favourites.splice(car, 1);
+    sortCars();
     console.log(res);
   } catch (e) {
     console.log(e);
@@ -104,14 +105,6 @@ export const removeFavorite = async (id) => {
 };
 
 export const pickCar = async function (id) {
-  const index = state.reserved.findIndex((c) => c.id === id);
-  if (index == -1) return;
-  state.reserved[index].status = "rented";
-  state.rented.push(state.reserved[index]);
-  state.reserved.splice(index, 1);
-  sortCars("rented");
-  sortCars("reserved");
-
   try {
     const res = await fetch(`${SERVER_URL}/pickCar`, {
       method: "POST",
@@ -120,6 +113,15 @@ export const pickCar = async function (id) {
       },
       body: JSON.stringify({ id }),
     });
+
+    const index = state.reserved.findIndex((c) => c.carId === id);
+    if (index == -1) return;
+    state.reserved[index].status = "rented";
+    state.rented.push(state.reserved[index]);
+    state.reserved.splice(index, 1);
+    sortCars("rented");
+    sortCars("reserved");
+
     console.log(res);
   } catch (e) {
     console.log(e);
@@ -127,15 +129,6 @@ export const pickCar = async function (id) {
 };
 
 export const revokeCar = async function (id) {
-  const index = state.reserved.findIndex((c) => c.id === id);
-  if (index == -1) return;
-
-  state.reserved[index].status = "active";
-  state.cars.push(state.reserved[index]);
-  state.reserved.splice(index, 1);
-  sortCars("all");
-  sortCars("reserved");
-
   try {
     const res = await fetch(`${SERVER_URL}/revokeCar`, {
       method: "POST",
@@ -144,21 +137,23 @@ export const revokeCar = async function (id) {
       },
       body: JSON.stringify({ id }),
     });
+
+    const index = state.reserved.findIndex((c) => c.carId === id);
+    if (index == -1) return;
+
+    state.reserved[index].status = "active";
+    state.cars.push(state.reserved[index]);
+    state.reserved.splice(index, 1);
+    sortCars("all");
+    sortCars("reserved");
+
     console.log(res);
   } catch (e) {
     console.log(e);
   }
 };
 
-export const reserveCar = async function (data) {
-  const index = state.cars.findIndex((c) => c.id === data.id);
-  if (index == -1) return;
-  state.cars[index].status = "reserved";
-  state.reserved.push(state.cars[index]);
-  state.cars.splice(index, 1);
-  sortCars("all");
-  sortCars("reserved");
-
+export const reserveCar = async function (data, flag) {
   try {
     const res = await fetch(`${SERVER_URL}/reserveCar`, {
       method: "POST",
@@ -167,6 +162,25 @@ export const reserveCar = async function (data) {
       },
       body: JSON.stringify(data),
     });
+
+    const index = state.cars.findIndex((c) => c.carId === data.id);
+    if (index == -1) return;
+    let favIndex;
+    if (flag) favIndex = state.favourites.findIndex((c) => c.carId === data.id);
+
+    state.cars[index].status = "reserved";
+    state.reserved.push(state.cars[index]);
+
+    sortCars("all");
+    sortCars("reserved");
+
+    if (favIndex > -1) {
+      state.favourites.splice(favIndex, 1);
+      state.favourites.push(state.cars[index]);
+      sortCars();
+    }
+
+    state.cars.splice(index, 1);
     console.log(res);
   } catch (e) {
     console.log(e);
@@ -174,15 +188,6 @@ export const reserveCar = async function (data) {
 };
 
 export const returnCar = async function (id) {
-  const index = state.rented.findIndex((c) => c.id === id);
-  if (index == -1) return;
-  state.rented[index].status = "active";
-  state.cars.push(state.rented[index]);
-  state.rented.splice(index, 1);
-
-  sortCars("all");
-  sortCars("rented");
-
   try {
     const res = await fetch(`${SERVER_URL}/returnCar`, {
       method: "POST",
@@ -191,6 +196,15 @@ export const returnCar = async function (id) {
       },
       body: JSON.stringify({ id }),
     });
+
+    const index = state.rented.findIndex((c) => c.carId === id);
+    if (index == -1) return;
+    state.rented[index].status = "active";
+    state.cars.push(state.rented[index]);
+    state.rented.splice(index, 1);
+
+    sortCars("all");
+    sortCars("rented");
     console.log(res);
   } catch (e) {
     console.log(e);
@@ -203,7 +217,6 @@ export const getPayments = async function () {
     const data = await res.json();
 
     state.payments = data;
-    console.log(data);
     console.log(res);
   } catch (e) {
     console.log(e);
@@ -211,9 +224,6 @@ export const getPayments = async function () {
 };
 
 export const makePayment = async function (id, method) {
-  const index = state.payments.findIndex((p) => p.orderId === id);
-  if (index == -1) return;
-
   try {
     const res = await fetch(`${SERVER_URL}/pay`, {
       method: "POST",
