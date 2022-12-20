@@ -35,9 +35,12 @@ const init = async () => {
     .querySelectorAll(".btn-nav")
     .forEach((btn) => btn.addEventListener("click", navHandler.bind(btn)));
 
+  document
+    .querySelector(".btn-signout")
+    .addEventListener("click", model.signout.bind(null));
+
   handleSearch();
   handleView();
-  handleReservations();
 };
 
 const handleView = function () {
@@ -186,14 +189,19 @@ const filter = function () {
     }
   });
 
-  if (!flag) tableView.render(data, CAR_HEAD, active);
-  else tableView.render(result, CAR_HEAD, active);
+  let head;
+  if (active === "cars") head = CAR_HEAD;
+  else head = RESERVATIONS_HEAD;
+
+  if (!flag) tableView.render(data, head, active);
+  else tableView.render(result, head, active);
   handleView();
   filtered = true;
 };
 
 const reset = function () {
   filterView.reset();
+  filtered = false;
 
   model.state.userFilters = {
     type: [],
@@ -216,8 +224,6 @@ const reset = function () {
 
   renderState();
   handleView();
-
-  filtered = false;
 };
 
 const search = function (head) {
@@ -262,10 +268,10 @@ const search = function (head) {
 };
 
 const clearSearch = function () {
+  searched = false;
   [...inputs].forEach((i) => (i.value = ""));
 
   document.querySelector(".btn-clear-search").blur();
-  searched = false;
   renderState();
 };
 
@@ -273,7 +279,7 @@ const renderState = function () {
   if (active === "cars") {
     tableView.render(getActiveData(), CAR_HEAD, active);
     handleView();
-    if (filtered) filter();
+    if (filtered) filter(CAR_HEAD);
   }
 
   if (active === "customers") {
@@ -287,8 +293,9 @@ const renderState = function () {
     tableView.render(getActiveData(), RESERVATIONS_HEAD, active);
     handleReservations();
     handleView();
-    if (filtered) filter();
-    if (searched) search();
+
+    if (searched) search(RESERVATIONS_HEAD);
+    if (filtered) filter(RESERVATIONS_HEAD);
   }
 };
 
