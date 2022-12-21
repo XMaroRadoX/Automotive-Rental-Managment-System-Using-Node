@@ -320,13 +320,13 @@ const express = require("express");
 
 // Start up an instance of app
 const app = express();
-// app.use(
-//   session({
-//     secret: "secret",
-//     resave: true,
-//     saveUninitialized: true,
-//   })
-// );
+app.use(
+  session({
+    secret: "secret",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -343,6 +343,7 @@ app.use(cors());
 app.get("/", function (request, response) {
   // Render login template
   response.sendFile(path.join(__dirname + "/index.html"));
+  // response.send("xxx");
 });
 
 // http://localhost:3000/auth
@@ -350,6 +351,7 @@ app.get("/auth", function (request, response) {
   // Capture the input fields
   request.session.loggedin = true;
 
+  console.log(request.session);
   response.send("authorized");
   // let username = request.body.username;
   // let password = request.body.password;
