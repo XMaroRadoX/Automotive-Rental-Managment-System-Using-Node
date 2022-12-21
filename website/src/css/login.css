@@ -6,6 +6,7 @@ body {
 }
 
 .form-container {
+  z-index: 0;
   background-color: rgb(255, 255, 255);
   box-shadow: 0 1rem 2rem 2rem rgba(120, 83, 83, 0.12);
   width: 25rem;
@@ -62,6 +63,14 @@ body {
   display: hidden !important;
 }
 form.needs-validation.grid.form {
-    position: relative;
-    top: -80px;
+  position: relative;
+  top: -80px;
+}
+.background {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  overflow: hidden;
+  object-fit: fill;
 }

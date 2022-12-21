@@ -19,7 +19,7 @@
     "regenerator-runtime": "^0.13.11"
   },
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.8.0",
+    "@parcel/transformer-sass": "^2.8.2",
     "parcel": "^2.8.0"
   }
 }

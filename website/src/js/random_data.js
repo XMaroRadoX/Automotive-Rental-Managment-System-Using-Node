@@ -164,7 +164,7 @@ const car = async () => {
   const cars_specs = [];
   for (let index = 0; index < 1000; index++) {
     cars_specs.push({
-      id: Date.now() + i * 781,
+      id: Date.now() + index * 781,
       brand: brands[Math.floor(Math.random() * brands.length)].brand,
       model:
         brands[Math.floor(Math.random() * brands.length)].families[
@@ -206,3 +206,5 @@ const rental = async () => {
     console.log(err);
   }
 };
+// ##################### Favourite Data Generation #################
+// ####
