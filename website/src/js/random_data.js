@@ -34,11 +34,14 @@ const user = async () => {
   try {
     const res = await fetch(`https://randomuser.me/api/?results=10`);
     const data = (await res.json()).results;
-    console.log(data);
+
+    // console.log(data);
     const users = [];
-    data.forEach((user, i) => {
+    data.forEach(async (user) => {
+      const idRes = await fetch(`https://www.uuidtools.com/api/generate/v4`);
+      const id = await idRes.json();
       users.push({
-        id: Date.now() + i * 1000,
+        id: id[0].split("-").join(""),
         fname: user.name.first,
         lname: user.name.last,
         email: user.email,
@@ -47,17 +50,23 @@ const user = async () => {
         license: user.login.md5.slice(0, 6).toUpperCase(),
         region: user.location.country,
       });
+      console.log(users);
     });
 
-    console.log(users);
+    return users;
   } catch (err) {
     console.log(err);
   }
 };
 
-user();
+(async function () {
+  const users = await user();
+  console.log(users);
+})();
+
 // ####################### CAR DATA GENERATION ####################
 const transmissions = ["manual", "automatic", "cvt"];
+const power = ["fuel", "gas", "electric"];
 const colors = [
   "white",
   "black",
@@ -159,27 +168,67 @@ const brands = [
   { brand: "tesla", families: ["model-x", "model-s"] },
   { brand: "toyota", families: ["prius"] },
 ];
-const car = async () => {
+
+const attrs = [
+  "id",
+  "brand",
+  "model",
+  "type",
+  "color",
+  "year",
+  "seating",
+  "power",
+  "transmission",
+  "rate",
+  "status",
+];
+
+const generateSQL = function (table, attrs, data) {
+  let attr = "";
+  let values = [];
+  attrs.forEach((at) => {
+    // if()
+    let str;
+    if (!isFinite(data[at])) {
+      str = `"${data[at]}"`;
+    } else {
+      str = data[at];
+    }
+
+    values.push(str);
+  });
+
+  return `insert into ${table}(${attrs.join(",")}) values(${values.join(",")})`;
+};
+
+const car = () => {
   const cars_specs = [];
   for (let index = 0; index < 1000; index++) {
+    const no = Math.floor(Math.random() * brands.length);
     cars_specs.push({
-      id: Date.now() + i * 781,
-      brand: brands[Math.floor(Math.random() * brands.length)].brand,
+      id: Date.now() + index * 781,
+      brand: brands[no].brand,
       model:
-        brands[Math.floor(Math.random() * brands.length)].families[
-          Math.floor(Math.random() * families.length)
+        brands[no].families[
+          Math.floor(Math.random() * brands[no].families.length)
         ],
       type: types[Math.floor(Math.random() * types.length)],
       color: colors[Math.floor(Math.random() * colors.length)],
       year: Math.floor(Math.random() * 30) + 1990,
       seating: Math.floor(Math.random() * 14) + 2,
-      photo: `https:cdn.imagin.studio/getImage?customer=egalexandria-university-faculty-of-engineering&make=${brand}&modelfamily=${model}&paintId=imagin-${color}`,
+      power: power[Math.floor(Math.random() * power.length)],
       transmission:
         transmissions[Math.floor(Math.random() * transmissions.length)],
       rate: Math.floor(Math.random() * 1000) + 200,
+      status: "active",
     });
+    console.log(generateSQL("cars", attrs, cars_specs[index]));
   }
+
+  return cars_specs;
 };
+
+console.log(car());
 
 // ####################### RENTAL DATA GENERATION ####################
 const rental = async () => {
@@ -205,3 +254,5 @@ const rental = async () => {
     console.log(err);
   }
 };
+// ##################### Favourite Data Generation #################
+// ####
