@@ -45,7 +45,6 @@ const user = async () => {
         password: user.login.password,
         phone_no: user.phone,
         license: user.login.md5.slice(0, 6).toUpperCase(),
-        profile_photo: user.picture.thumbnail,
         region: user.location.country,
       });
     });

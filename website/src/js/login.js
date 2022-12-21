@@ -1,6 +1,5 @@
 "use strict";
 
-import * as bootstrap from "bootstrap";
 const form = document.querySelector(".form");
 const modal = document.querySelector(".modal");
 

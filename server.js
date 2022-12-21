@@ -1,6 +1,10 @@
 // Setup empty JS object to act as endpoint for all routes
 // projectData = { length: 0 };
 
+const mysql = require("mysql");
+const session = require("express-session");
+const path = require("path");
+
 const users = [
   {
     id: 1671498239235,
@@ -316,6 +320,13 @@ const express = require("express");
 
 // Start up an instance of app
 const app = express();
+app.use(
+  session({
+    secret: "secret",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -325,9 +336,60 @@ app.use(express.json());
 const cors = require("cors");
 app.use(cors());
 
+app.use(express.static(__dirname + "/app"));
+
 // GET Route
 
-app.get("/", (req, res) => res.json("Hello"));
+app.get("/", function (request, response) {
+  // Render login template
+  response.sendFile(path.join(__dirname + "/index.html"));
+});
+
+// http://localhost:3000/auth
+app.post("/auth", function (request, response) {
+  // Capture the input fields
+  let username = request.body.username;
+  let password = request.body.password;
+  // Ensure the input fields exists and are not empty
+  if (username && password) {
+    // Execute SQL query that'll select the account from the database based on the specified username and password
+    connection.query(
+      "SELECT * FROM accounts WHERE username = ? AND password = ?",
+      [username, password],
+      function (error, results, fields) {
+        // If there is an issue with the query, output the error
+        if (error) throw error;
+        // If the account exists
+        if (results.length > 0) {
+          // Authenticate the user
+          request.session.loggedin = true;
+          request.session.username = username;
+          // Redirect to home page
+          response.redirect("/home");
+        } else {
+          response.send("Incorrect Username and/or Password!");
+        }
+        response.end();
+      }
+    );
+  } else {
+    response.send("Please enter Username and Password!");
+    response.end();
+  }
+});
+
+// http://localhost:3000/home
+app.get("/home", function (request, response) {
+  // If the user is loggedin
+  if (request.session.loggedin) {
+    // Output username
+    response.send("Welcome back, " + request.session.username + "!");
+  } else {
+    // Not logged in
+    response.send("Please login to view this page!");
+  }
+  response.end();
+});
 
 app.get("/admin", (req, res) => {
   try {
@@ -539,7 +601,8 @@ app.post("/deleteCustomer", function (req, res) {
   res.sendStatus(200);
 });
 
-app.post("/signout", function (req, res) {
+app.get("/signout", function (req, res) {
+  if (req.session.loggedin) req.session.loggedin = false;
   console.log("signout request", req.body);
   res.sendStatus(200);
 });
