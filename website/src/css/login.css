@@ -38,12 +38,13 @@ body {
 .btn-primary {
   background-color: #ff0b0b;
   border: none;
-  color: #000;
+  color: white;
   transition: all 0.3s;
 }
 
 .btn-primary:hover {
   background-color: #d30404;
+  color: black;
 }
 
 .form-control:focus {
