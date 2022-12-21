@@ -67,10 +67,12 @@ form.needs-validation.grid.form {
   top: -80px;
 }
 .background {
-  position: fixed;
   width: 100vw;
   height: 100vh;
   z-index: -1;
-  overflow: hidden;
   object-fit: fill;
+  position: fixed;
+  overflow: hidden;
+  filter: brightness(40%);
+  -webkit-filter: brightness(40%);
 }
