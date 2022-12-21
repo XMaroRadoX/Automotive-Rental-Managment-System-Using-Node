@@ -115,9 +115,7 @@ class CarsView {
     if (!btn) btn = "view";
     //prettier-ignore
     return `
-        <div class = "card" data-car-id ="${car.id}" data-region="${
-      car.region
-    }">
+        <div class = "card" data-car-id ="${car.carId}" data-region="${car.region}">
             <div class="card-header">
               <h3 class="car-brand">${brand} ${car.model.toUpperCase()}</h3>
               <button class="btn-fav">
@@ -135,19 +133,9 @@ class CarsView {
 
             <div class="img-container mx-auto mb-3">
               <img
-                src="https://cdn.imagin.studio/getImage?customer=egalexu&target=make&make=${
-                  car.brand
-                }&modelFamily=${car.model}&modelYear=${
-      car.year
-    }&paintId=imagin-${
-      car.color
-    }"src="https://cdn.imagin.studio/getImage?customer=egalexu&target=make&make=${
-      car.brand
-    }&modelFamily=${car.model}&modelYear=${car.year}&paintId=imagin-${
-      car.color
-    }"
+                src="https://cdn.imagin.studio/getImage?customer=egalexu&target=make&make=${car.brand}&modelFamily=${car.model}&modelYear=${car.year}&paintId=imagin-${car.color}"src="https://cdn.imagin.studio/getImage?customer=egalexu&target=make&make=${car.brand}&modelFamily=${car.model}&modelYear=${car.year}&paintId=imagin-${ car.color }"
                 class="card-img-top "
-                alt="${car.description}"
+                alt="${car.brand} car photo"
               />
             </div>
 
@@ -175,22 +163,17 @@ class CarsView {
               </div>
               
               <button
-               class="btn btn-primary btn-view hidden mt-4 ${
-                 btn === 'view'
-                   ? ""
-                   : "disabled"
-               }"
+               class="btn btn-primary btn-view hidden mt-4 ${btn === 'view'? "": "disabled"}"
                data-bs-toggle="modal"
                data-bs-target="#car-info"
-              >${
-                btn
-              }</button>
+              >${btn}</button>
             </div>
           </div>
   `;
   }
 
   renderCarView(car, active, location) {
+    console.log(car);
     let brand = car.brand;
     brand = brand
       .split(" ")
@@ -201,11 +184,16 @@ class CarsView {
     this.#viewTitle.textContent = brand + " " + car.model.toUpperCase();
     this.#carouselContainer.innerHTML = this.#generateCarouselHTML(car);
     this.#infoContainer.innerHTML = this.#generateInfoHTML(car, brand);
+    if (car.status === "rented" || car.status === "reserved") {
+      if (this.#infoContainer.classList.contains("gap"))
+        this.#infoContainer.classList.remove("gap");
+    } else this.#infoContainer.classList.add("gap");
     //prettier-ignore
     this.#footerContainer.innerHTML = this.#generateFooterHTML(active,location);
   }
 
   #generateInfoHTML(car, brand) {
+    //prettier-ignore
     return `
     <div class="field">
                 <div class="info-icon">
@@ -216,7 +204,7 @@ class CarsView {
 
               <div class="field">
                 <div class="info-icon">
-                  <ion-icon name="car-sport"></ion-icon>
+                  <ion-icon name="speedometer"></ion-icon>
                 </div>
                 <div class="info-text">${car.model.toUpperCase()}</div>
               </div>
@@ -230,7 +218,7 @@ class CarsView {
 
               <div class="field">
                 <div class="info-icon">
-                  <ion-icon name="speedometer"></ion-icon>
+                  <ion-icon name="settings"></ion-icon>
                 </div>
                 <div class="info-text">${
                   car.transmission[0].toUpperCase() +
@@ -291,16 +279,58 @@ class CarsView {
                   car.rate
                 }<span class="car-rate">/d</span></div>
               </div>
+             
+               <div class="field 
+              ">
+                <div class="info-icon">
+                  <ion-icon name="car-sport"></ion-icon>
+                </div>
+                <div class="info-text">${car.plateNo}</div>
+              </div>
 
-              <div class="field">
+              <div class="field 
+              ">
                 <div class="info-icon">
                   <ion-icon name="location-sharp"></ion-icon>
                 </div>
                 <div class="info-text">${
-                  car.region[0].toUpperCase() +
-                  car.region.slice(1).toLowerCase()
+                  car.region.length < 4
+                    ? car.region.toUpperCase()
+                    : car.region[0].toUpperCase() +
+                      car.region.slice(1).toLowerCase()
                 }</div>
               </div>
+
+
+               ${
+                 car.status === "reserved" || car.status === "rented"
+                   ? `
+                <div class="field">
+                  <div class="info-icon">
+                    <ion-icon name="calendar-number"></ion-icon>
+                  </div>
+                  <div class="info-text"><span class="pay-sub">reserve date</span>${
+                    car.date.split("T")[0]
+                  }</div>
+                </div>
+
+                <div class="field info-date">
+                  <div class="info-icon me-3">
+                    <ion-icon name="calendar"></ion-icon>
+                  </div>
+                  <div class="info-text me-2"><span class="pay-sub">pick-up date</span>${car.pickup.split("T")[0]}</div>
+                  <div class="info-text"><span class="pay-sub">drop-off date</span>${car.drop.split("T")[0]}</div>
+                </div>
+
+                <div class="field info-order">
+                  <div class="info-icon me-3">
+                    <ion-icon name="cube"></ion-icon>
+                  </div>
+                  <div class="info-text me-2"><span class="pay-sub">reservation number</span>${car.resId}</div>
+                </div>
+              `
+                   : ""
+               }
     `;
   }
 

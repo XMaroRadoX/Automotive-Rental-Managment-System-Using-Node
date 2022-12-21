@@ -1,14 +1,22 @@
-import { filterHandler, regionHandler, seatingHandler } from "../controller.js";
+import {
+  filterHandler,
+  regionHandler,
+  seatingHandler,
+  pricingHandler,
+} from "../controller.js";
 
 class FilterView {
   #container = document.querySelector(".app-container");
   #countrySelect;
   #regionFlag;
-  #range = document.querySelector(".form-range");
+  #range = document.querySelector(".seat-range");
+  #price = document.querySelector(".price-range");
   #incSeats = document.querySelector(".seat-plus");
   #decSeats = document.querySelector(".seat-minus");
   #seatingLabel = document.querySelector(".seating-label");
   #seating = 1;
+  min = 0;
+  max = 0;
 
   initUI(countries) {
     this.#renderFilterContainer();
@@ -20,6 +28,7 @@ class FilterView {
       this.#selectHandler.bind(this)
     );
     this.#seatingHandler();
+    this.#priceHandler();
   }
 
   #assign() {
@@ -126,42 +135,24 @@ class FilterView {
             </div>
           </div>
 
-          <div class="filter mt-5" data-filter="seating">
+          <div class="filter mt-5" data-filter="power">
             <button
               class="btn-filter"
               type="button"
               data-bs-toggle="collapse"
-              data-bs-target="#collapsePassengers"
+              data-bs-target="#collapsePower"
               aria-expanded="false"
-              aria-controls="collapsePassengers"
+              aria-controls="collapsePower"
             >
-              <span class="filter-text">Seating Capacity</span>
+              <span class="filter-text">Power</span>
               <ion-icon class="chevron-down ms-2" name="chevron-down-outline"></ion-icon>
             </button>
-            <div class="collapse" id="collapsePassengers">
-              <div class="collapse-body mt-2">
-                <div class="seating-container">
-                  <button class="btn-seat seat-minus">
-                    <ion-icon class="seat-icon" name="remove-outline"></ion-icon>
-                  </button>
-                  <input
-                    type="range"
-                    class="form-range mx-4"
-                    min="1"
-                    max="14"
-                    value="1"
-                    id="seatings"
-                  />
-                  <button class="btn-seat seat-plus">
-                    <ion-icon class="seat-icon" name="add-outline"></ion-icon>
-                  </button>
-                </div>
-                <label for="seatings" class="form-label seating-label">Any (2-14)</label>
-              </div>
+            <div class="collapse" id="collapsePower">
+              <div class="collapse-body power-grp mt-2"></div>
             </div>
           </div>
 
-          <div class="filter mt-5" data-filter="brand">
+           <div class="filter mt-5" data-filter="brand">
             <button
               class="btn-filter"
               type="button"
@@ -196,6 +187,76 @@ class FilterView {
               <div class="collapse-body color-grp mt-2"></div>
             </div>
           </div>
+
+           <div class="filter mt-5" data-filter="price">
+            <button
+              class="btn-filter"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapsePrice"
+              aria-expanded="false"
+              aria-controls="collapsePrice"
+            >
+              <span class="filter-text">Rate/Day</span>
+              <ion-icon class="chevron-down ms-2" name="chevron-down-outline"></ion-icon>
+            </button>
+            <div class="collapse" id="collapsePrice">
+              <div class="collapse-body mt-2">
+                <div class="pricing-container">
+                  <div>
+                    <label for="price-max">Min</label>
+                    <input type="number" class="price-range" id="price-min" placeholder="50" value="" min="50" max="8000"/>
+                  </div>
+
+                   <div>
+                    <label for="price-max">Max</label>
+                    <input type="number" class="price-range" id="price-max" placeholder="50" value="" min="50" max="8000"/>
+                  </div>
+                </div>
+                <label for="price" class="form-label seating-label">50$ - 8000$</label>
+              </div>
+            </div>
+          </div>
+          
+
+          <div class="filter mt-5" data-filter="seating">
+            <button
+              class="btn-filter"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapsePassengers"
+              aria-expanded="false"
+              aria-controls="collapsePassengers"
+            >
+              <span class="filter-text">Seating Capacity</span>
+              <ion-icon class="chevron-down ms-2" name="chevron-down-outline"></ion-icon>
+            </button>
+            <div class="collapse" id="collapsePassengers">
+              <div class="collapse-body mt-2">
+                <div class="seating-container">
+                  <button class="btn-seat seat-minus">
+                    <ion-icon class="seat-icon" name="remove-outline"></ion-icon>
+                  </button>
+                  <input
+                    type="range"
+                    class="form-range seat-rang mx-4"
+                    min="1"
+                    max="14"
+                    value="1"
+                    id="seatings"
+                  />
+                  <button class="btn-seat seat-plus">
+                    <ion-icon class="seat-icon" name="add-outline"></ion-icon>
+                  </button>
+                </div>
+                <label for="seatings" class="form-label seating-label">Any (2-14)</label>
+              </div>
+            </div>
+          </div>
+
+            
+
+         
         </div>
     `;
 
@@ -307,6 +368,29 @@ class FilterView {
     regionHandler(this.#countrySelect.value);
   }
 
+  #priceHandler() {
+    const pMin = document.querySelector("#price-min");
+    pMin.addEventListener("input", () => {
+      this.min = +pMin.value;
+      if (this.min > 8000) {
+        this.min = 8000;
+        pMin.value = "8000";
+      }
+      pricingHandler(this.min, this.max);
+    });
+
+    const pMax = document.querySelector("#price-max");
+    pMax.addEventListener("input", () => {
+      this.max = +pMax.value;
+
+      if (this.max > 8000) {
+        this.max = 8000;
+        pMax.value = "8000";
+      }
+      pricingHandler(this.min, this.max);
+    });
+  }
+
   reset() {
     this.#container
       .querySelectorAll(".form-check-input")
@@ -319,6 +403,9 @@ class FilterView {
     this.#range.value = 1;
     this.#seating = 1;
     this.#seatingLabel.textContent = "Any (2-14)";
+
+    document.querySelector("#price-min").value = "";
+    document.querySelector("#price-max").value = "";
   }
 }
 

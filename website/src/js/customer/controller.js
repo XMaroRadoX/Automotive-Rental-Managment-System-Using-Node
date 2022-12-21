@@ -79,11 +79,11 @@ const handleView = function () {
     btn.addEventListener("click", () => {
       carsView.setModal();
 
-      activeCar = getActiveData().filter((c) => c.id === id)[0];
+      activeCar = getActiveData().filter((c) => c.carId === id)[0];
 
       carsView.renderCarView(activeCar, active);
 
-      if (active === "home")
+      if (active === "home" || active === "favourites") {
         document.querySelector(".btn-reserve").addEventListener("click", () => {
           let brand = activeCar.brand;
           brand = brand
@@ -93,6 +93,7 @@ const handleView = function () {
           document.querySelector(".action-title").textContent =
             brand + " " + activeCar.model.toUpperCase();
         });
+      }
 
       if (active === "reserved") {
         document
@@ -104,10 +105,11 @@ const handleView = function () {
           .addEventListener("click", revokeHandler.bind(null, id));
       }
 
-      if (active === "rented")
+      if (active === "rented") {
         document
           .querySelector(".btn-return")
           .addEventListener("click", returnHandler.bind(null, id));
+      }
     });
   });
 };
@@ -125,10 +127,10 @@ export const filterHandler = function () {
   const value = this.value;
 
   if (this.checked) {
-    model.state.userFilters[type].push(value);
+    model.state.userFilters[type]?.push(value);
   } else {
-    const index = model.state.userFilters[type].indexOf(value);
-    model.state.userFilters[type].splice(index, 1);
+    const index = model.state.userFilters[type]?.indexOf(value);
+    model.state.userFilters[type]?.splice(index, 1);
   }
 };
 
@@ -140,13 +142,24 @@ export const seatingHandler = function (seats) {
   model.state.userFilters["seating"] = seats;
 };
 
-export const favouriteHandler = function () {
+export const pricingHandler = function (min, max) {
+  if ((!min && !max) || min > max) {
+    model.state.userFilters.range = [];
+    console.log(model.state.userFilters.range);
+    return;
+  }
+  if (!min) min = 0;
+  if (!max) max = 8000;
+  model.state.userFilters.range = [min, max];
+};
+
+export const favouriteHandler = async function () {
   const btn = this.querySelector(".fav-inner");
   btn.classList.toggle("fav-active");
   const id = this.closest(".card").dataset.carId;
 
-  if (btn.classList.contains("fav-active")) model.addFavorite(id);
-  else model.removeFavorite(id);
+  if (btn.classList.contains("fav-active")) await model.addFavorite(id);
+  else await model.removeFavorite(id);
 
   if (active === "favourites") {
     carsView.render(model.state.favourites, model.state.favourites);
@@ -190,6 +203,21 @@ const filter = function () {
       return;
     }
 
+    if (filter[0] === "range" && filter[1].length > 0) {
+      const min = filter[1][0];
+      const max = filter[1][1];
+
+      queryRes.push(
+        ...data.filter((car) => +car.rate >= min && +car.rate <= max)
+      );
+
+      if (flag) result = result.filter((value) => queryRes.includes(value));
+      else result.push(...queryRes);
+
+      flag = true;
+      return;
+    }
+
     const opts = filter[1];
     if (opts.length > 0) {
       opts.forEach((opt) => {
@@ -218,9 +246,11 @@ const reset = function () {
     type: [],
     transmission: [],
     brand: [],
+    power: [],
     color: [],
     seating: 1,
     region: "",
+    range: [],
   };
 
   document.querySelectorAll(".open").forEach((btn) => {
@@ -375,23 +405,23 @@ const paymentHandler = async function () {
   renderPayments();
 };
 
-const pickHandler = function (id) {
-  model.pickCar(id);
+const pickHandler = async function (id) {
+  await model.pickCar(id);
   renderState();
 };
 
-const revokeHandler = function (id) {
-  model.revokeCar(id);
+const revokeHandler = async function (id) {
+  await model.revokeCar(id);
   renderState();
 };
 
-const reserveHandler = function (info) {
-  model.reserveCar(info);
+const reserveHandler = async function (info) {
+  await model.reserveCar(info, active === "favourites");
   renderState();
 };
 
-const returnHandler = function (id) {
-  model.returnCar(id);
+const returnHandler = async function (id) {
+  await model.returnCar(id);
   renderState();
 };
 
