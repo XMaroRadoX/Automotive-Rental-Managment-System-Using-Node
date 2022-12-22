@@ -5,10 +5,20 @@ class CarsView {
   #infoContainer = document.querySelector(".car-info");
   #footerContainer = document.querySelector(".view-footer");
   #carouselContainer = document.querySelector(".carousel-inner");
-  #activeCar;
+  #error = document.querySelector(".error-message");
+  #message = this.#error.querySelector(".message");
 
   modal = false;
   openCard;
+
+  #renderError = function (type) {
+    this.#error.classList.remove("hide");
+    this.#message.textContent = "no cars found";
+  };
+
+  #hideError() {
+    this.#error.classList.add("hide");
+  }
 
   #clearActive = (active) => {
     active.querySelector(".card-img-top").classList.remove("img-active");
@@ -67,8 +77,10 @@ class CarsView {
 
   render(data, favs, favFlag = false) {
     const frag = document.createDocumentFragment();
+    this.#hideError();
+    this.#cars.innerHTML = "";
 
-    if (data)
+    if (data.length > 0) {
       data.forEach((car) => {
         const div = document.createElement("div");
         div.classList = "card-container";
@@ -76,15 +88,16 @@ class CarsView {
           "afterbegin",
           this.#generateHTML(
             car,
-            favs.filter((fCar) => fCar.id == car.id).length > 0,
+            favs.filter((fCar) => fCar.carId == car.carId).length > 0,
             favFlag
           )
         );
         frag.appendChild(div);
       });
-
-    this.#cars.innerHTML = "";
-    this.#cars.appendChild(frag);
+      this.#cars.appendChild(frag);
+    } else {
+      this.#renderError("cars");
+    }
 
     document
       .querySelectorAll('[data-bs-toggle="tooltip"]')
@@ -173,7 +186,6 @@ class CarsView {
   }
 
   renderCarView(car, active, location) {
-    console.log(car);
     let brand = car.brand;
     brand = brand
       .split(" ")
@@ -349,22 +361,17 @@ class CarsView {
             <button 
             ${
               type === "reserve"
-                ? `data-bs-toggle="modal"
-                   data-bs-target="#res-info"
-                   data-bs-dismiss="modal"`
+                ? `form="action"
+                   type="submit"
+                   `
                 : ""
             } 
 
-            ${
-              type === "pick-up" || type === "return"
-                ? `data-bs-dismiss="modal"`
-                : ""
-            }
             type="button" class="btn btn-primary btn-${type}">${type}</button>`;
 
     if (type === "pick-up")
       return (
-        ` <button type="button" data-bs-dismiss="modal" class="btn btn-outline-primary btn-revoke">revoke</button>` +
+        ` <button type="button"  class="btn btn-outline-primary btn-revoke">revoke</button>` +
         " " +
         html
       );

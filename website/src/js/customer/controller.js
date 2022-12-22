@@ -6,6 +6,9 @@ import carsView from "./views/carsView.js";
 
 const container = document.querySelector(".app-container");
 const payContainer = document.querySelector(".payment-container");
+const info = document.querySelector("#car-info");
+const alert = document.querySelector(".alert");
+let confirm;
 
 let active = "home",
   filtered,
@@ -28,9 +31,23 @@ const init = async () => {
     .querySelectorAll(".btn-nav")
     .forEach((btn) => btn.addEventListener("click", navHandler.bind(btn)));
 
+  document
+    .querySelector(".btn-submit-pay")
+    .addEventListener("click", paymentHandler.bind(null));
+
+  document
+    .querySelector(".btn-signout")
+    .addEventListener("click", model.signout.bind(null));
+
+  handleView();
+  handleForm();
+  // showConfirmation();
+};
+
+const handleForm = function () {
   const form = document.querySelector(".action-form");
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const flag = form.checkValidity();
@@ -42,34 +59,86 @@ const init = async () => {
       return;
     }
 
-    const reserveData = {
-      pickDate: form.querySelector("#pickup-date").value,
-      pickLocation: form.querySelector("#pickup-location").value,
-      dropDate: form.querySelector("#drop-off-date").value,
-      dropLocation: form.querySelector("#drop-off-location").value,
-      id: activeCar.id,
-    };
+    const formData = new FormData(form);
 
-    form.closest(".modal").querySelector(".btn-close-modal").click();
-    reserveHandler(reserveData);
-    form.querySelector("#pickup-date").value =
-      form.querySelector("#pickup-location").value =
-      form.querySelector("#drop-off-date").value =
-      form.querySelector("#drop-off-location").value =
-        "";
+    const reserveData = {};
 
-    form.classList.remove("was-validated");
+    [...formData.entries()].forEach(
+      (entry) => (reserveData[entry[0]] = entry[1])
+    );
+    reserveData["carId"] = activeCar.carId;
+
+    info.classList.add("z-n");
+    showConfirmation(
+      "confirm reservation",
+      "Do you want to confirm reserving this car?",
+      "confirm"
+    );
+
+    let res = await confirm.then((ev) => true).catch(() => false);
+
+    if (res) {
+      reserveHandler(reserveData);
+      form.querySelector("#pickup-date").value =
+        form.querySelector("#pickup-location").value =
+        form.querySelector("#drop-off-date").value =
+        form.querySelector("#drop-off-location").value =
+          "";
+
+      form.classList.remove("was-validated");
+      $("#car-info").modal("hide");
+    }
+    info.classList.remove("z-n");
+  });
+};
+
+const showConfirmation = function (title, message, action) {
+  const modal = document.querySelector("#confirm-modal");
+  modal.querySelector(".modal-title").textContent = title;
+  modal.querySelector(".modal-body").textContent = message;
+  document.querySelector(".confirm").innerHTML = "";
+  document.querySelector(".confirm").insertAdjacentHTML(
+    "afterbegin",
+    ` <button
+              type="button"
+              id="cancel"
+              class="btn btn-outline-primary cancel"
+              data-bs-dismiss="modal"
+              data-action=""
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              id="confirm"
+              class="btn btn-primary"
+              data-action=""
+              data-bs-dismiss="modal"
+            >
+              Save changes
+            </button>`
+  );
+
+  document.querySelector("#confirm").textContent = action;
+
+  confirm = new Promise((resolve, reject) => {
+    document.querySelector("#confirm").addEventListener("click", resolve);
+    document.querySelector("#cancel").addEventListener("click", reject);
   });
 
-  document
-    .querySelector(".btn-submit-pay")
-    .addEventListener("click", paymentHandler.bind(null));
+  $("#confirm-modal").modal("show");
+};
 
-  document
-    .querySelector(".btn-signout")
-    .addEventListener("click", model.signout.bind(null));
+const showAlert = async function (message, flag = true) {
+  alert.textContent = message;
+  alert.classList.toggle("alert-hide");
+  alert.classList.toggle(`${flag ? "alert-success" : "alert-danger"}`);
 
-  handleView();
+  setTimeout(() => {
+    alert.classList.toggle("alert-hide");
+    alert.classList.toggle(`${flag ? "alert-success" : "alert-danger"}`);
+    alert.textContent = "";
+  }, 3000);
 };
 
 const handleView = function () {
@@ -77,6 +146,8 @@ const handleView = function () {
     const id = btn.closest(".card").dataset.carId;
 
     btn.addEventListener("click", () => {
+      document.querySelector("#action").classList.add("hide");
+
       carsView.setModal();
 
       activeCar = getActiveData().filter((c) => c.carId === id)[0];
@@ -84,15 +155,33 @@ const handleView = function () {
       carsView.renderCarView(activeCar, active);
 
       if (active === "home" || active === "favourites") {
-        document.querySelector(".btn-reserve").addEventListener("click", () => {
-          let brand = activeCar.brand;
-          brand = brand
-            .split(" ")
-            .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
-            .join(" ");
-          document.querySelector(".action-title").textContent =
-            brand + " " + activeCar.model.toUpperCase();
-        });
+        if (activeCar.status === "active") {
+          const form = document.querySelector("#action");
+          form.classList.remove("hide");
+          form.querySelector("#pickup-date").value =
+            form.querySelector("#pickup-location").value =
+            form.querySelector("#drop-off-date").value =
+            form.querySelector("#drop-off-location").value =
+              "";
+
+          form.classList.remove("was-validated");
+        }
+
+        document
+          .querySelector(".btn-reserve")
+          .addEventListener("click", async () => {
+            let brand = activeCar.brand;
+            brand = brand
+              .split(" ")
+              .map(
+                (word) => word[0].toUpperCase() + word.slice(1).toLowerCase()
+              )
+              .join(" ");
+            document.querySelector(".action-title").textContent =
+              brand + " " + activeCar.model.toUpperCase();
+
+            console.log(info.classList);
+          });
       }
 
       if (active === "reserved") {
@@ -158,8 +247,15 @@ export const favouriteHandler = async function () {
   btn.classList.toggle("fav-active");
   const id = this.closest(".card").dataset.carId;
 
-  if (btn.classList.contains("fav-active")) await model.addFavorite(id);
-  else await model.removeFavorite(id);
+  if (btn.classList.contains("fav-active")) {
+    const res = await model.addFavorite(id);
+    if (res) showAlert("Car added to favourites successfully");
+    else showAlert("Car addition to favourites failed", false);
+  } else {
+    const res = await model.removeFavorite(id);
+    if (res) showAlert("Car removed from favourites successfully");
+    else showAlert("Car removal from favourites failed", false);
+  }
 
   if (active === "favourites") {
     carsView.render(model.state.favourites, model.state.favourites);
@@ -401,28 +497,88 @@ const paymentHandler = async function () {
   const method = document.querySelector("#credit-card").checked
     ? "credit card"
     : "cash";
-  await model.makePayment(activePayment, method);
-  renderPayments();
+
+  info.classList.add("z-n");
+  showConfirmation(
+    "confirm payment",
+    `Do you want to confirm paying for this order by ${method}?`,
+    "confirm"
+  );
+  const res = await confirm.then((ev) => true).catch((e) => false);
+  if (res) {
+    res = await model.makePayment(activePayment, method);
+    if (res) {
+      showAlert("Payment was completed successfully");
+      renderPayments();
+    } else showAlert("Payment failed", false);
+  }
+  info.classList.remove("z-n");
 };
 
 const pickHandler = async function (id) {
-  await model.pickCar(id);
-  renderState();
+  info.classList.add("z-n");
+  showConfirmation(
+    "confirm pick",
+    "Do you want to confirm picking this car?",
+    "confirm"
+  );
+  const res = await confirm.then((ev) => true).catch((e) => false);
+  if (res) {
+    res = await model.pickCar(id);
+    $("#car-info").modal("hide");
+    if (res) {
+      showAlert("Car pick was completed successfully");
+      renderState();
+    } else showAlert("Car pick failed", false);
+  }
+  info.classList.remove("z-n");
 };
 
 const revokeHandler = async function (id) {
-  await model.revokeCar(id);
-  renderState();
+  info.classList.add("z-n");
+  showConfirmation(
+    "confirm revoke",
+    "Do you want to confirm revoking this car?",
+    "confirm"
+  );
+  let res = await confirm.then((ev) => true).catch((e) => false);
+  if (res) {
+    res = await model.revokeCar(id);
+    $("#car-info").modal("hide");
+    if (res) {
+      showAlert("Car revoke was completed successfully");
+      renderState();
+    } else showAlert("Car revoke failed", false);
+  }
+  info.classList.remove("z-n");
 };
 
 const reserveHandler = async function (info) {
-  await model.reserveCar(info, active === "favourites");
-  renderState();
+  let res = await model.reserveCar(info, active === "favourites");
+  $("#car-info").modal("hide");
+  if (res) {
+    showAlert("Car reservation was completed successfully");
+    renderState();
+  } else showAlert("Car reservation failed", false);
 };
 
 const returnHandler = async function (id) {
-  await model.returnCar(id);
-  renderState();
+  info.classList.add("z-n");
+  showConfirmation(
+    "confirm return",
+    "Do you want to confirm returning this car?",
+    "confirm"
+  );
+  let res = await confirm.then((ev) => true).catch((e) => false);
+  if (res) {
+    res = await model.returnCar(id);
+    $("#car-info").modal("hide");
+    if (res) {
+      showAlert("Car return was completed successfully");
+      renderState();
+    } else showAlert("Car return failed", false);
+  }
+  info.classList.remove("z-n");
 };
 
 init();

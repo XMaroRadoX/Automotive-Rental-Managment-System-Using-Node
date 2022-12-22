@@ -13,6 +13,8 @@
       crossorigin="anonymous"
     ></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
     <script type="module" src="../js/customer/controller.js"></script>
     <!-- CSS only -->
     <link
@@ -32,7 +34,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item me-4">
-              <a href="http://localhost:8000" class="navbar-brand">BMA</a>
+              <a href="http://localhost:8000" class="navbar-brand">BAM</a>
             </li>
 
             <li class="nav-item">
@@ -96,6 +98,10 @@
       </div>
 
       <div class="content">
+        <div class="error-message hide">
+          <ion-icon class="error-icon" name="warning-outline"></ion-icon>
+          <div class="message"></div>
+        </div>
         <div class="cars"></div>
       </div>
     </div>
@@ -112,7 +118,7 @@
       aria-labelledby="staticBackdropLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title view-title" id="staticBackdropLabel">
@@ -200,6 +206,70 @@
             </div>
 
             <div class="car-info"></div>
+
+            <form
+              id="action"
+              class="action-form needs-validation hide"
+              novalidate
+            >
+              <div class="action-field">
+                <label for="pickup-date" class="form-label">Pick-up date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="pickup-date"
+                  min="2022-12-15"
+                  name="pickDate"
+                  max=""
+                  required
+                />
+                <div class="invalid-feedback">Please choose a date.</div>
+              </div>
+
+              <div class="action-field">
+                <label for="pickup-location" class="form-label"
+                  >Pick-up location</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="pickup-location"
+                  name="pickLocation"
+                  required
+                />
+                <div class="invalid-feedback">Please choose a location.</div>
+              </div>
+
+              <div class="action-field">
+                <label for="drop-off-date" class="form-label"
+                  >Drop-off date</label
+                >
+                <input
+                  type="date"
+                  class="form-control"
+                  id="drop-off-date"
+                  name="dropDate"
+                  min="2022-12-15"
+                  max=""
+                  required
+                />
+                <div class="invalid-feedback">Please choose a date.</div>
+              </div>
+
+              <div class="action-field">
+                <label for="drop-off-location" class="form-label"
+                  >Drop-off location</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  name="dropLocation"
+                  id="drop-off-location"
+                  required
+                />
+                <div class="invalid-feedback">Please choose a location.</div>
+              </div>
+            </form>
           </div>
           <div class="modal-footer view-footer"></div>
         </div>
@@ -236,7 +306,7 @@
               <div class="action-field">
                 <label for="pickup-date" class="form-label">Pick-up date</label>
                 <input
-                  type="datetime"
+                  type="date"
                   class="form-control"
                   id="pickup-date"
                   min="2022-12-15"
@@ -290,12 +360,7 @@
             </form>
           </div>
           <div class="modal-footer action-footer">
-            <button
-              data-bs-toggle="modal"
-              data-bs-target="#car-info"
-              class="btn btn-outline-primary"
-              type="submit"
-            >
+            <button id="" class="btn btn-outline-primary" type="submit">
               Cancel
             </button>
 
@@ -368,5 +433,36 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="confirm-modal"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title confirm-title" id="staticBackdropLabel">
+              Modal title
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body confirm-body">...</div>
+          <div class="modal-footer confirm"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-hide" role="alert"></div>
   </body>
 </html>
