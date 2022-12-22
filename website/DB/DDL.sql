@@ -36,7 +36,8 @@ CREATE TABLE car_specs(
   year int,
   transmission varchar(40),
   model varchar(32),
-  rate int
+  rate int,
+  PRIMARY KEY(car_id)
 );
 CREATE TABLE reservation(
   reservation_id int,
@@ -59,7 +60,8 @@ CREATE TABLE payments(
   date date,
   reservation_id int,
   car_id int,
-  customer_id int
+  customer_id int,
+  PRIMARY KEY(reservation_id,customer_id,car_id)
 );
 ALTER TABLE car_specs ADD FOREIGN KEY (car_id) REFERENCES car (car_id);
 ALTER TABLE reservation ADD FOREIGN KEY (car_id) REFERENCES car (car_id);
