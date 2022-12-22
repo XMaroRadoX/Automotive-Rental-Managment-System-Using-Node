@@ -3,7 +3,7 @@ import {
   regionHandler,
   seatingHandler,
   pricingHandler,
-} from "./handlers.js";
+} from "./filterHandlers.js";
 
 class FilterView {
   #container = document.querySelector(".app-container");
@@ -213,7 +213,7 @@ class FilterView {
                     <input type="number" class="price-range" id="price-max" placeholder="50" value="" min="50" max="8000"/>
                   </div>
                 </div>
-                <label for="price" class="form-label seating-label">50$ - 8000$</label>
+                <label for="price" class="form-label pricing-label">50$ - 8000$</label>
               </div>
             </div>
           </div>

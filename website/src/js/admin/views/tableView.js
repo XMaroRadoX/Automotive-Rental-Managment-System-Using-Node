@@ -6,63 +6,83 @@ class TableView {
   #carouselContainer = document.querySelector(".carousel-inner");
   #addContainer = document.querySelector(".add-container");
   #activeCar;
+  #error = document.querySelector(".error-message");
+  #message = this.#error.querySelector(".message");
+
+  #renderError = function () {
+    this.#error.classList.remove("hide");
+    this.#message.textContent = "no data found";
+  };
+
+  #hideError() {
+    this.#error.classList.add("hide");
+  }
 
   render(data, head, active = "cars") {
     const frag = document.createDocumentFragment();
     const tr = document.createElement("tr");
-    tr.classList = "table-row table-head";
-    tr.innerHTML = head;
-
-    frag.appendChild(tr);
-
-    if (active === "cars")
-      if (data)
-        data.forEach((car) => {
-          const div = document.createElement("tr");
-          div.insertAdjacentHTML("afterbegin", this.#generateCarHTML(car));
-          frag.appendChild(div);
-        });
-
-    if (active === "status")
-      if (data)
-        data.forEach((car) => {
-          const div = document.createElement("tr");
-          div.insertAdjacentHTML("afterbegin", this.#generateStatusHTML(car));
-          frag.appendChild(div);
-        });
-
-    if (active === "customers")
-      if (data)
-        data.forEach((customer) => {
-          const div = document.createElement("tr");
-          div.insertAdjacentHTML(
-            "afterbegin",
-            this.#generateCustomerHTML(customer)
-          );
-          frag.appendChild(div);
-        });
-
-    if (active === "reservations")
-      if (data)
-        data.forEach((car) => {
-          const div = document.createElement("tr");
-          div.insertAdjacentHTML(
-            "afterbegin",
-            this.#generateReservationsHTML(car)
-          );
-          frag.appendChild(div);
-        });
-
-    if (active === "payments")
-      if (data)
-        data.forEach((pay) => {
-          const div = document.createElement("tr");
-          div.insertAdjacentHTML("afterbegin", this.#generatePaymentsHTML(pay));
-          frag.appendChild(div);
-        });
-
+    this.#hideError();
     this.#table.innerHTML = "";
-    this.#table.appendChild(frag);
+
+    if (data.length > 0) {
+      tr.classList = "table-row table-head";
+      tr.innerHTML = head;
+
+      frag.appendChild(tr);
+
+      if (active === "cars")
+        if (data)
+          data.forEach((car) => {
+            const div = document.createElement("tr");
+            div.insertAdjacentHTML("afterbegin", this.#generateCarHTML(car));
+            frag.appendChild(div);
+          });
+
+      if (active === "status")
+        if (data)
+          data.forEach((car) => {
+            const div = document.createElement("tr");
+            div.insertAdjacentHTML("afterbegin", this.#generateStatusHTML(car));
+            frag.appendChild(div);
+          });
+
+      if (active === "customers")
+        if (data)
+          data.forEach((customer) => {
+            const div = document.createElement("tr");
+            div.insertAdjacentHTML(
+              "afterbegin",
+              this.#generateCustomerHTML(customer)
+            );
+            frag.appendChild(div);
+          });
+
+      if (active === "reservations")
+        if (data)
+          data.forEach((car) => {
+            const div = document.createElement("tr");
+            div.insertAdjacentHTML(
+              "afterbegin",
+              this.#generateReservationsHTML(car)
+            );
+            frag.appendChild(div);
+          });
+
+      if (active === "payments")
+        if (data)
+          data.forEach((pay) => {
+            const div = document.createElement("tr");
+            div.insertAdjacentHTML(
+              "afterbegin",
+              this.#generatePaymentsHTML(pay)
+            );
+            frag.appendChild(div);
+          });
+
+      this.#table.appendChild(frag);
+    } else {
+      this.#renderError();
+    }
   }
 
   renderCarView(car, active) {
@@ -149,7 +169,7 @@ class TableView {
                 class="btn btn-primary btn-delete mx-auto"
                 data-customer-id="${customer.id}"
               >
-                revoke
+                delete
               </button>
             </td>
           </tr>`;
@@ -395,7 +415,7 @@ class TableView {
 
     if (!type) return "";
 
-    return `<button type="button" data-bs-dismiss="modal" class="btn btn-primary btn-${type}">${type}</button>`;
+    return `<button type="button"  class="btn btn-primary btn-${type}">${type}</button>`;
   }
 
   #generateCarouselHTML(car) {

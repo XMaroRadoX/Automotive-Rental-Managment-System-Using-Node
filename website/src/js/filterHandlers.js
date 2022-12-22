@@ -1,3 +1,5 @@
+import * as model from "./model.js";
+
 export const filterHandler = function () {
   const type = this.closest(".filter").dataset.filter;
   const value = this.value;

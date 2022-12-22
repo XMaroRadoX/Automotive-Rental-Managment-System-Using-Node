@@ -1,28 +1,29 @@
-import { SERVER_URL } from "../config.js";
+import { SERVER_URL } from "./config.js";
 
 export const state = {
   cars: [],
-  favourites: [],
   reserved: [],
   rented: [],
   filters: [],
+  users: [],
+  daily: [],
   payments: [],
   userFilters: {
     type: [],
     transmission: [],
     brand: [],
-    power: [],
     color: [],
+    power: [],
     seating: 1,
     region: "",
     range: [],
   },
+  userLimit: 3,
 };
 
 export const getCountries = async () => {
   try {
     const res = await fetch(`https://restcountries.com/v3.1/all`);
-
     if (res.status === 404) throw new Error();
 
     const data = await res.json();
@@ -41,13 +42,215 @@ export const getCountries = async () => {
     countries.sort((a, b) => a.name.localeCompare(b.name));
 
     return countries;
-  } catch (e) {
-    console.error(e);
-    return [];
+  } catch (err) {
+    console.error(err);
   }
 };
 
-export const getCars = async () => {
+export const adminGetData = async () => {
+  try {
+    const res = await fetch(`${SERVER_URL}/admin`);
+    if (res.status === 404) throw new Error();
+
+    const data = await res.json();
+
+    state.cars = data.cars;
+    state.users = data.users;
+    state.rented = data.ren;
+    state.reserved = data.rev;
+    state.filters = data.filters;
+
+    sortCars("all");
+    sortCars("reserved");
+    sortCars("rented");
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const adminRevokeCar = async function (id) {
+  try {
+    const res = await fetch(`${SERVER_URL}/revokeCar`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    });
+    if (res.status === 404) throw new Error();
+
+    let index = state.cars.findIndex((c) => c.carId === id);
+
+    if (index == -1) return;
+    state.cars.splice(index, 1);
+
+    index = state.reserved.findIndex((c) => c.carId === id);
+    if (index == -1) return;
+
+    state.reserved[index].status = "active";
+    state.cars.push(state.reserved[index]);
+    sortCars("all");
+    sortCars("reserved");
+
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+export const adminReturnCar = async function (id) {
+  try {
+    const res = await fetch(`${SERVER_URL}/returnCar`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    });
+    if (res.status === 404) throw new Error();
+
+    let index = state.cars.findIndex((c) => c.carId === id);
+    if (index == -1) return;
+    state.cars.splice(index, 1);
+
+    index = state.rented.findIndex((c) => c.carId === id);
+    if (index == -1) return;
+
+    state.rented[index].status = "active";
+    state.cars.push(state.rented[index]);
+
+    sortCars("all");
+    sortCars("rented");
+
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+export const suspendCar = async function (id) {
+  try {
+    const res = await fetch(`${SERVER_URL}/suspendCar`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    });
+    if (res.status === 404) throw new Error();
+
+    const car = state.cars.find((c) => c.carId === id);
+    if (!car) return;
+
+    car.status = "oos";
+
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+export const activateCar = async function (id) {
+  try {
+    const res = await fetch(`${SERVER_URL}/activateCar`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    });
+    if (res.status === 404) throw new Error();
+
+    const car = state.cars.find((c) => c.carId === id);
+    if (!car) return;
+
+    car.status = "active";
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+export const deleteCustomer = async function (id) {
+  try {
+    const res = await fetch(`${SERVER_URL}/deleteCustomer`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    });
+    if (res.status === 404) throw new Error();
+
+    const index = state.users.findIndex((u) => u.id === +id);
+    if (index === -1) return;
+
+    state.users.splice(index, 1);
+
+    console.log(state.users);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+export const getStatus = async function (date) {
+  try {
+    const res = await fetch(`${SERVER_URL}/daily`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ date }),
+    });
+    if (res.status === 404) throw new Error();
+
+    const data = await res.json();
+
+    state.daily = data.data;
+  } catch (e) {
+    return false;
+  }
+};
+
+export const adminGetPayments = async function (period) {
+  try {
+    const res = await fetch(`${SERVER_URL}/dailyPayments`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ period }),
+    });
+    if (res.status === 404) throw new Error();
+
+    const data = await res.json();
+
+    state.payments = data;
+  } catch (e) {
+    return false;
+  }
+};
+
+export const addCar = async function (data) {
+  try {
+    const res = await fetch(`${SERVER_URL}/addCar`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (res.status === 404) throw new Error();
+
+    await adminGetData();
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+export const getData = async () => {
   try {
     const res = await fetch(`${SERVER_URL}/cars`);
     const data = await res.json();
@@ -59,6 +262,7 @@ export const getCars = async () => {
     state.rented = data.ren;
     state.reserved = data.rev;
     state.filters = data.filters;
+    state.userLimit = data.limit;
 
     sortCars("all");
     sortCars("reserved");
@@ -126,7 +330,6 @@ export const pickCar = async function (id) {
       },
       body: JSON.stringify({ id }),
     });
-
     if (res.status === 404) throw new Error();
 
     const index = state.reserved.findIndex((c) => c.carId === id);
@@ -173,6 +376,8 @@ export const revokeCar = async function (id) {
 
 export const reserveCar = async function (data, flag) {
   try {
+    if (state.userLimit === 0) throw new Error();
+
     const res = await fetch(`${SERVER_URL}/reserveCar`, {
       method: "POST",
       headers: {
@@ -181,10 +386,9 @@ export const reserveCar = async function (data, flag) {
       body: JSON.stringify(data),
     });
 
-    if (res.status === 404) throw new Error();
-
     const index = state.cars.findIndex((c) => c.carId === data.carId);
     if (index == -1) return;
+
     let favIndex;
     if (flag)
       favIndex = state.favourites.findIndex((c) => c.carId === data.carId);
@@ -202,6 +406,8 @@ export const reserveCar = async function (data, flag) {
     }
 
     state.cars.splice(index, 1);
+    state.userLimit--;
+
     return true;
   } catch (e) {
     console.log(e);
@@ -218,8 +424,6 @@ export const returnCar = async function (id) {
       },
       body: JSON.stringify({ id }),
     });
-
-    if (res.status === 404) throw new Error();
 
     const index = state.rented.findIndex((c) => c.carId === id);
     if (index == -1) return;
@@ -239,10 +443,8 @@ export const returnCar = async function (id) {
 export const getPayments = async function () {
   try {
     const res = await fetch(`${SERVER_URL}/payments`);
-
-    if (res.status === 404) throw new Error();
-
     const data = await res.json();
+
     state.payments = data;
     return true;
   } catch (e) {
@@ -260,8 +462,6 @@ export const makePayment = async function (id, method) {
       },
       body: JSON.stringify({ id, method }),
     });
-    if (res.status === 404) throw new Error();
-
     return true;
   } catch (e) {
     console.log(e);
@@ -278,7 +478,6 @@ export const signout = async function () {
 
     return true;
   } catch (e) {
-    console.log(e);
     return false;
   }
 };
@@ -293,7 +492,4 @@ export const sortCars = function (data) {
 
   if ((data = "rented"))
     state.rented && state.rented.sort((a, b) => a.brand.localeCompare(b.brand));
-
-  state.favourites &&
-    state.favourites.sort((a, b) => a.brand.localeCompare(b.brand));
 };

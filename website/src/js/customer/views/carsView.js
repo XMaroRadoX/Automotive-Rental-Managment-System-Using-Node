@@ -11,7 +11,7 @@ class CarsView {
   modal = false;
   openCard;
 
-  #renderError = function (type) {
+  #renderError = function () {
     this.#error.classList.remove("hide");
     this.#message.textContent = "no cars found";
   };
@@ -96,7 +96,7 @@ class CarsView {
       });
       this.#cars.appendChild(frag);
     } else {
-      this.#renderError("cars");
+      this.#renderError();
     }
 
     document

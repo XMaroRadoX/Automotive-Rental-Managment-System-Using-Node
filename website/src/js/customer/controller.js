@@ -1,7 +1,7 @@
 import "core-js/stable"; // polyfill everything
 import "regenerator-runtime/runtime"; // polyfill async/await
-import * as model from "./model.js";
-import filterView from "./views/filtersView.js";
+import * as model from "../model.js";
+import filterView from "../filtersView.js";
 import carsView from "./views/carsView.js";
 
 const container = document.querySelector(".app-container");
@@ -18,7 +18,7 @@ let active = "home",
 const init = async () => {
   const countries = await model.getCountries();
   filterView.initUI(countries);
-  await model.getCars();
+  await model.getData();
 
   carsView.render(model.state.cars, model.state.favourites);
   carsView.handle();
@@ -41,7 +41,6 @@ const init = async () => {
 
   handleView();
   handleForm();
-  // showConfirmation();
 };
 
 const handleForm = function () {
@@ -177,10 +176,6 @@ const handleView = function () {
                 (word) => word[0].toUpperCase() + word.slice(1).toLowerCase()
               )
               .join(" ");
-            document.querySelector(".action-title").textContent =
-              brand + " " + activeCar.model.toUpperCase();
-
-            console.log(info.classList);
           });
       }
 
@@ -211,36 +206,36 @@ const addFilters = () => {
   filterView.addFiltersHandler();
 };
 
-export const filterHandler = function () {
-  const type = this.closest(".filter").dataset.filter;
-  const value = this.value;
+// export const filterHandler = function () {
+//   const type = this.closest(".filter").dataset.filter;
+//   const value = this.value;
 
-  if (this.checked) {
-    model.state.userFilters[type]?.push(value);
-  } else {
-    const index = model.state.userFilters[type]?.indexOf(value);
-    model.state.userFilters[type]?.splice(index, 1);
-  }
-};
+//   if (this.checked) {
+//     model.state.userFilters[type]?.push(value);
+//   } else {
+//     const index = model.state.userFilters[type]?.indexOf(value);
+//     model.state.userFilters[type]?.splice(index, 1);
+//   }
+// };
 
-export const regionHandler = function (region) {
-  model.state.userFilters["region"] = region;
-};
+// export const regionHandler = function (region) {
+//   model.state.userFilters["region"] = region;
+// };
 
-export const seatingHandler = function (seats) {
-  model.state.userFilters["seating"] = seats;
-};
+// export const seatingHandler = function (seats) {
+//   model.state.userFilters["seating"] = seats;
+// };
 
-export const pricingHandler = function (min, max) {
-  if ((!min && !max) || min > max) {
-    model.state.userFilters.range = [];
-    console.log(model.state.userFilters.range);
-    return;
-  }
-  if (!min) min = 0;
-  if (!max) max = 8000;
-  model.state.userFilters.range = [min, max];
-};
+// export const pricingHandler = function (min, max) {
+//   if ((!min && !max) || min > max) {
+//     model.state.userFilters.range = [];
+//     console.log(model.state.userFilters.range);
+//     return;
+//   }
+//   if (!min) min = 0;
+//   if (!max) max = 8000;
+//   model.state.userFilters.range = [min, max];
+// };
 
 export const favouriteHandler = async function () {
   const btn = this.querySelector(".fav-inner");
@@ -332,6 +327,7 @@ const filter = function () {
   else carsView.render(result, model.state.favourites, active === "favourites");
   carsView.handle();
   handleView();
+  if (result.length > 0) showAlert("Showing filter results");
   filtered = true;
 };
 
@@ -504,7 +500,7 @@ const paymentHandler = async function () {
     `Do you want to confirm paying for this order by ${method}?`,
     "confirm"
   );
-  const res = await confirm.then((ev) => true).catch((e) => false);
+  let res = await confirm.then((ev) => true).catch((e) => false);
   if (res) {
     res = await model.makePayment(activePayment, method);
     if (res) {
@@ -522,7 +518,7 @@ const pickHandler = async function (id) {
     "Do you want to confirm picking this car?",
     "confirm"
   );
-  const res = await confirm.then((ev) => true).catch((e) => false);
+  let res = await confirm.then((ev) => true).catch((e) => false);
   if (res) {
     res = await model.pickCar(id);
     $("#car-info").modal("hide");
@@ -569,7 +565,9 @@ const returnHandler = async function (id) {
     "Do you want to confirm returning this car?",
     "confirm"
   );
+
   let res = await confirm.then((ev) => true).catch((e) => false);
+
   if (res) {
     res = await model.returnCar(id);
     $("#car-info").modal("hide");

@@ -1,7 +1,7 @@
 import "core-js/stable"; // polyfill everything
 import "regenerator-runtime/runtime"; // polyfill async/await
-import * as model from "./model.js";
-import filterView from "./views/filtersView.js";
+import * as model from "../model.js";
+import filterView from "../filtersView.js";
 import tableView from "./views/tableView.js";
 import searchView from "./views/searchView.js";
 import {
@@ -21,10 +21,14 @@ let active = "cars",
 let filterBtns, searched;
 let formData;
 
+const info = document.querySelector("#car-info");
+const alert = document.querySelector(".alert");
+let confirm;
+
 const init = async () => {
   const countries = await model.getCountries();
   filterView.initUI(countries);
-  await model.getData();
+  await model.adminGetData();
 
   tableView.render(model.state.cars, CAR_HEAD, active);
 
@@ -120,36 +124,36 @@ const addFilters = () => {
   filterView.addFiltersHandler();
 };
 
-export const filterHandler = function () {
-  const type = this.closest(".filter").dataset.filter;
-  const value = this.value;
+// export const filterHandler = function () {
+//   const type = this.closest(".filter").dataset.filter;
+//   const value = this.value;
 
-  if (this.checked) {
-    model.state.userFilters[type]?.push(value);
-  } else {
-    const index = model.state.userFilters[type]?.indexOf(value);
-    model.state.userFilters[type]?.splice(index, 1);
-  }
-};
+//   if (this.checked) {
+//     model.state.userFilters[type]?.push(value);
+//   } else {
+//     const index = model.state.userFilters[type]?.indexOf(value);
+//     model.state.userFilters[type]?.splice(index, 1);
+//   }
+// };
 
-export const pricingHandler = function (min, max) {
-  if ((!min && !max) || min > max) {
-    model.state.userFilters.range = [];
-    console.log(model.state.userFilters.range);
-    return;
-  }
-  if (!min) min = 0;
-  if (!max) max = 8000;
-  model.state.userFilters.range = [min, max];
-};
+// export const pricingHandler = function (min, max) {
+//   if ((!min && !max) || min > max) {
+//     model.state.userFilters.range = [];
+//     console.log(model.state.userFilters.range);
+//     return;
+//   }
+//   if (!min) min = 0;
+//   if (!max) max = 8000;
+//   model.state.userFilters.range = [min, max];
+// };
 
-export const regionHandler = function (region) {
-  model.state.userFilters["region"] = region;
-};
+// export const regionHandler = function (region) {
+//   model.state.userFilters["region"] = region;
+// };
 
-export const seatingHandler = function (seats) {
-  model.state.userFilters["seating"] = seats;
-};
+// export const seatingHandler = function (seats) {
+//   model.state.userFilters["seating"] = seats;
+// };
 
 const getActiveData = () => {
   if (
@@ -231,6 +235,7 @@ const filter = function () {
   if (!flag) tableView.render(data, head, active);
   else tableView.render(result, head, active);
   handleView();
+  if (result.length > 0) showAlert("Showing filter results");
 
   filtered = true;
 };
@@ -305,6 +310,8 @@ const search = function (head) {
   handleView();
   active === "customers" && handleCustomer();
   activeSearch = res;
+  if (res.length > 0) showAlert("Showing search results");
+
   searched = true;
 };
 
@@ -374,17 +381,72 @@ const handleForm = function () {
 
       [...formData.entries()].forEach((entry) => (car[entry[0]] = entry[1]));
 
-      await model.addCar(car);
-      active = "cars";
-      tableView.toggle();
-      searchView.toggle();
-      toggleFilters();
-      toggleActive.call(document.querySelector(`[data-action = "cars"]`));
-      handleSearch();
-      renderState();
+      const res = await model.addCar(car);
+      if (res) {
+        showAlert("Car added successfully");
+        active = "cars";
+        tableView.toggle();
+        searchView.toggle();
+        toggleFilters();
+        toggleActive.call(document.querySelector(`[data-action = "cars"]`));
+        handleSearch();
+        renderState();
+        return;
+      }
+
+      showAlert("Car addition failed", false);
     },
     false
   );
+};
+
+const showConfirmation = function (title, message, action) {
+  const modal = document.querySelector("#confirm-modal");
+  modal.querySelector(".modal-title").textContent = title;
+  modal.querySelector(".modal-body").textContent = message;
+  document.querySelector(".confirm").innerHTML = "";
+  document.querySelector(".confirm").insertAdjacentHTML(
+    "afterbegin",
+    ` <button
+              type="button"
+              id="cancel"
+              class="btn btn-outline-primary cancel"
+              data-bs-dismiss="modal"
+              data-action=""
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              id="confirm"
+              class="btn btn-primary"
+              data-action=""
+              data-bs-dismiss="modal"
+            >
+              Save changes
+            </button>`
+  );
+
+  document.querySelector("#confirm").textContent = action;
+
+  confirm = new Promise((resolve, reject) => {
+    document.querySelector("#confirm").addEventListener("click", resolve);
+    document.querySelector("#cancel").addEventListener("click", reject);
+  });
+
+  $("#confirm-modal").modal("show");
+};
+
+const showAlert = async function (message, flag = true) {
+  alert.textContent = message;
+  alert.classList.toggle("alert-hide");
+  alert.classList.toggle(`${flag ? "alert-success" : "alert-danger"}`);
+
+  setTimeout(() => {
+    alert.classList.toggle("alert-hide");
+    alert.classList.toggle(`${flag ? "alert-success" : "alert-danger"}`);
+    alert.textContent = "";
+  }, 3000);
 };
 
 const navHandler = function (e) {
@@ -494,7 +556,7 @@ const getDate = async function () {
   if (active === "payments") {
     const period = document.querySelector("#range").value;
     if (!period) return;
-    await model.getPayments(period);
+    await model.adminGetPayments(period);
   }
 
   renderState();
@@ -524,27 +586,112 @@ const toggleActive = function () {
 };
 
 const revokeHandler = async function (id) {
-  await model.revokeCar(id);
-  renderState();
+  info.classList.add("z-n");
+  showConfirmation(
+    "confirm revoke",
+    "Do you want to confirm revoking this car?",
+    "confirm"
+  );
+
+  let res = await confirm.then((ev) => true).catch((e) => false);
+
+  if (res) {
+    res = await model.adminRevokeCar(id);
+
+    $("#car-info").modal("hide");
+    if (res) {
+      showAlert("Car revoke was completed successfully");
+      renderState();
+    } else showAlert("Car revoke failed", false);
+  }
+  info.classList.remove("z-n");
 };
 
 const returnHandler = async function (id) {
-  await model.returnCar(id);
-  renderState();
+  info.classList.add("z-n");
+  showConfirmation(
+    "confirm return",
+    "Do you want to confirm returning this car?",
+    "confirm"
+  );
+
+  let res = await confirm.then((ev) => true).catch((e) => false);
+
+  if (res) {
+    res = await model.adminReturnCar(id);
+
+    $("#car-info").modal("hide");
+    if (res) {
+      showAlert("Car return was completed successfully");
+      renderState();
+    } else showAlert("Car return failed", false);
+  }
+  info.classList.remove("z-n");
 };
 
 const suspendHandler = async function (id) {
-  await model.suspendCar(id);
-  renderState();
+  info.classList.add("z-n");
+  showConfirmation(
+    "confirm revoke",
+    "Do you want to confirm suspending this car?",
+    "confirm"
+  );
+
+  let res = await confirm.then((ev) => true).catch((e) => false);
+
+  if (res) {
+    res = await model.suspendCar(id);
+
+    $("#car-info").modal("hide");
+    if (res) {
+      showAlert("Car suspension was completed successfully");
+      renderState();
+    } else showAlert("Car suspension failed", false);
+  }
+  info.classList.remove("z-n");
 };
 
 const activateHandler = async function (id) {
-  await model.activateCar(id);
-  renderState();
+  info.classList.add("z-n");
+  showConfirmation(
+    "confirm revoke",
+    "Do you want to confirm activating this car?",
+    "confirm"
+  );
+
+  let res = await confirm.then((ev) => true).catch((e) => false);
+
+  if (res) {
+    res = await model.activateCar(id);
+
+    $("#car-info").modal("hide");
+    if (res) {
+      showAlert("Car activation was completed successfully");
+      renderState();
+    } else showAlert("Car activation failed", false);
+  }
+  info.classList.remove("z-n");
 };
 
 const deleteHandler = async function (id) {
-  await model.deleteCustomer(id);
-  renderState();
+  info.classList.add("z-n");
+  showConfirmation(
+    "confirm revoke",
+    "Do you want to confirm deleting this customer?",
+    "confirm"
+  );
+
+  let res = await confirm.then((ev) => true).catch((e) => false);
+
+  if (res) {
+    res = await model.deleteCustomer(id);
+
+    $("#car-info").modal("hide");
+    if (res) {
+      showAlert("Customer deletion was completed successfully");
+      renderState();
+    } else showAlert("Customer deletion failed", false);
+  }
+  info.classList.remove("z-n");
 };
 init();
