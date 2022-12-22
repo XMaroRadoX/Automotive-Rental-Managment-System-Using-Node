@@ -10,9 +10,13 @@ CREATE TABLE customer(
   lname varchar(64),
   phone_no int,
   license_no int UNIQUE,
-  profile_photo varchar(500),
   region varchar(64),
   PRIMARY KEY(customer_id)
+);
+CREATE TABLE favourites(
+  customer_id int,
+  car_id int,
+  PRIMARY KEY(customer_id, car_id)
 );
 CREATE TABLE car(
   car_id int,
@@ -63,3 +67,5 @@ ALTER TABLE reservation ADD FOREIGN KEY (customer_id) REFERENCES customer (custo
 ALTER TABLE payments ADD FOREIGN KEY (customer_id) REFERENCES customer (customer_id);
 ALTER TABLE payments ADD FOREIGN KEY (car_id) REFERENCES car (car_id);
 ALTER TABLE payments ADD FOREIGN KEY (reservation_id) REFERENCES reservation (reservation_id);
+ALTER TABLE favourites ADD FOREIGN KEY (customer_id) REFERENCES customer (customer_id);
+ALTER TABLE favourites ADD FOREIGN KEY (car_id) REFERENCES car (car_id);
