@@ -304,6 +304,8 @@ const filter = function () {
   carsView.handle();
   handleView();
   if (result.length > 0) showAlert("Showing filter results");
+  else showAlert("No data found", false);
+
   filtered = true;
 };
 

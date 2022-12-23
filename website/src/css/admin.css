@@ -331,6 +331,37 @@
   grid-column: 1/-1;
 }
 
+.car-search {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr auto;
+  align-items: center;
+  column-gap: 0.8rem;
+  row-gap: 1.6rem;
+  width: 100%;
+}
+
+.car-search .car-filter-text {
+  margin-right: 2rem;
+}
+
+.car-search .input-group {
+  width: 100%;
+  /* margin-left: -12rem; */
+}
+
+.car-search .btn-search {
+  /* grid-row: 2/3; */
+  grid-column: 4/5;
+  /* width: 35%; */
+  justify-self: flex-start;
+}
+.car-search .btn-clear-search {
+  /* grid-row: 2/3; */
+
+  grid-column: 3/4;
+  /* width: 35%; */
+  justify-self: flex-end;
+}
 /* 
 .range_container {
   display: flex;
@@ -351,3 +382,7 @@
   font-size: 24px;
   color: #635a5a;
 } */
+
+.car-filter-btns .btn-outline-primary {
+  padding: 0.4rem 0.8rem;
+}

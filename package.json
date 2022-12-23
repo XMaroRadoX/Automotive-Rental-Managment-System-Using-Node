@@ -2,9 +2,9 @@
   "name": "car-rental-system",
   "version": "1.0.0",
   "description": "",
-  "default": "index.html",
+  "default": "admin.html",
   "scripts": {
-    "start": "parcel website/src/html/index.html",
+    "start": "parcel website/src/html/admin.html",
     "build": "parcel build  ./website/src/html/*.html --public-url ./ --dist-dir ./app"
   },
   "author": "",

@@ -134,7 +134,7 @@ class TableView {
             <td class="table-field">${car.carId}</td>
             <td class="table-field">${brand}</td>
             <td class="table-field">${car.model.toUpperCase()}</td>
-            <td class="table-field">${car.plateNo.toUpperCase() + car.plateNo.slice(1).toLowerCase()}</td>
+            <td class="table-field">${car.plateNo}</td>
             <td class="table-field">${car.region}</td>
             <td class="table-field">${car.rate}</td>
             <td class="table-field">${car.status}</td>
@@ -231,7 +231,7 @@ class TableView {
             <td class="table-field">${car.carId}</td>
             <td class="table-field">${brand}</td>
             <td class="table-field">${car.model.toUpperCase()}</td>
-            <td class="table-field">${car.plateNo.toUpperCase() + car.plateNo.slice(1).toLowerCase()}</td>
+            <td class="table-field">${car.plateNo}</td>
             <td class="table-field">${car.type[0].toUpperCase() + car.type.slice(1).toLowerCase()}</td>
             <td class="table-field">${car.year}</td>
             <td class="table-field">${car.seating}</td>

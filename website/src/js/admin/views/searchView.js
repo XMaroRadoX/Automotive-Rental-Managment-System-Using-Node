@@ -376,7 +376,37 @@ class SearchView {
               />
               <label class="btn btn-outline-primary" for="oos">out of service</label>
             </div>
-          </div>`;
+          </div>
+          
+          <div class="car-search mt-4">
+            <div class="car-filter-text">
+              Search by
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-text" id="plate-no">Plate Number</span>
+              <input
+                type="test"
+                class="form-control"
+                placeholder="54E222"
+                id="plateNo"
+                aria-describedby="plate-no"
+              />
+            </div>
+    
+            <button
+              type="button"
+              class="btn btn-outline-primary btn-clear-search"
+            >
+              clear
+            </button>
+
+            <button type="button" class="btn btn-primary btn-search">
+              Search
+            </button>
+          </div>
+          </div>
+          `;
 
     document.querySelectorAll(".btn-check").forEach((btn) => {
       btn.addEventListener("change", changeCat.bind(btn));

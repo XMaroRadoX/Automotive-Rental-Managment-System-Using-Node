@@ -282,11 +282,17 @@ body {
   box-shadow: 0 0 0 0.2rem #9197ae39;
 }
 
+.form-control {
+  font-size: 1.4rem;
+  border-top-right-radius: 9px;
+  border-bottom-right-radius: 9px;
+}
+
 .form-select:focus,
 .form-control:focus {
   border: none;
   outline: none;
-  box-shadow: 0 0 0 0.2rem var(--tint-shadow);
+  box-shadow: inset 0 0 0 0.2rem var(--tint-shadow);
 }
 
 .form-range {

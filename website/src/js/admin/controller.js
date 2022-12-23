@@ -56,6 +56,7 @@ const init = async () => {
   });
 
   handleSearch();
+  handleCars();
   handleView();
 };
 
@@ -122,6 +123,11 @@ const handleReservations = function () {
   handleRange();
 };
 
+const handleCars = function () {
+  inputs = document.querySelector(".car-search").querySelectorAll("input");
+  console.log(inputs);
+};
+
 const addFilters = () => {
   model.state.filters.forEach((filter) => {
     filterView.renderFilter(filter);
@@ -138,6 +144,7 @@ const getActiveData = () => {
     return activeSearch;
 
   if (active === "cars") {
+    if (searched) return activeSearch;
     if (activeCat === "all") return model.state.cars;
     if (activeCat === "reserved")
       return model.state.reserved.filter((c) => c.status === "reserved");
@@ -211,6 +218,7 @@ const filter = function () {
   else tableView.render(result, head, active);
   handleView();
   if (result.length > 0) showAlert("Showing filter results");
+  else showAlert("No data found", false);
 
   filtered = true;
 };
@@ -277,7 +285,6 @@ const search = function (head) {
       } else if (`${u[q.name]}`.toLowerCase() !== `${q.value}`.toLowerCase())
         flag = false;
     });
-
     if (flag) res.push(u);
   });
 
@@ -286,6 +293,7 @@ const search = function (head) {
   active === "customers" && handleCustomer();
   activeSearch = res;
   if (res.length > 0) showAlert("Showing search results");
+  else showAlert("No data found", false);
 
   searched = true;
 };
@@ -301,8 +309,11 @@ const clearSearch = function () {
 const renderState = function (data) {
   if (active === "cars") {
     tableView.render(getActiveData(), CAR_HEAD, active);
+    handleCars();
     handleView();
     if (filtered) filter(CAR_HEAD);
+
+    if (searched) search();
   }
 
   if (active === "customers") {
@@ -471,6 +482,13 @@ const handleSearch = function () {
   if (active === "cars") {
     activeCat = "all";
     searchView.renderCarSearch();
+    document
+      .querySelector(".btn-search")
+      .addEventListener("click", search.bind(null, CAR_HEAD));
+
+    document
+      .querySelector(".btn-clear-search")
+      .addEventListener("click", clearSearch.bind());
   }
 
   if (active === "customers") {
