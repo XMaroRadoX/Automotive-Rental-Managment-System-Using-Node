@@ -1,14 +1,9 @@
 "use strict";
 
 import * as model from "./model.js";
+import { SERVER_URL } from "./config.js";
 
 const form = document.querySelector(".form");
-const modal = document.querySelector(".modal");
-const modalMsg = document.querySelector(".modal-body");
-const btnCloseModal = document.querySelector(".modal-btn-close");
-const btnModal = document.querySelector(".modal-btn");
-const labelTitle = document.querySelector(".modal-title");
-const btnClose = document.querySelector(".btn-close");
 const alert = document.querySelector(".alert");
 
 const showAlert = async function (message, flag = true) {
@@ -70,28 +65,10 @@ const showAlert = async function (message, flag = true) {
     );
 
     setTimeout(() => {
-      window.location = "http://localhost:8000/";
+      window.location = `${SERVER_URL}/`;
     }, 3100);
   });
 })();
-
-// const renderError = (msg) => {
-//   if (btnCloseModal.classList.contains("btn-success"))
-//     btnCloseModal.classList.remove("btn-success");
-//   btnCloseModal.classList.add("btn-danger");
-//   modalMsg.textContent = msg;
-//   labelTitle.textContent = "Error";
-//   btnModal.click();
-// };
-
-// const renderSuccess = (msg) => {
-//   if (btnCloseModal.classList.contains("btn-danger"))
-//     btnCloseModal.classList.remove("btn-danger");
-//   btnCloseModal.classList.add("btn-success");
-//   modalMsg.textContent = msg;
-//   labelTitle.textContent = "Congratulations";
-//   btnModal.click();
-// };
 
 const checkMail = async (mail) => {
   const requestOptions = {
@@ -108,27 +85,3 @@ const checkMail = async (mail) => {
 
   return data.status;
 };
-
-// const postData = async (formattedFormData) => {
-//   const res = await fetch("../php/register.php", {
-//     method: "POST",
-//     body: JSON.stringify(formattedFormData),
-//   });
-
-//   const data = await res.json();
-
-//   if (data.success) {
-//     renderSuccess(data.message);
-//   } else {
-//     renderError(data.message);
-//   }
-// };
-
-// const close = () => {
-//   if (btnCloseModal.classList.contains("btn-success")) {
-//     window.location = "../../index.html";
-//   }
-// };
-
-// btnCloseModal.addEventListener("click", close);
-// btnClose.addEventListener("click", close);

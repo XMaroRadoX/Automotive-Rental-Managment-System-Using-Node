@@ -20,6 +20,7 @@
     "regenerator-runtime": "^0.13.11"
   },
   "devDependencies": {
+    "dotenv": "^16.0.3",
     "parcel": "^2.8.0"
   }
 }

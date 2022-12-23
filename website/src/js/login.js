@@ -1,9 +1,9 @@
 "use strict";
 
 import * as model from "./model.js";
+import { SERVER_URL } from "./config.js";
 
 const form = document.querySelector(".form");
-const modal = document.querySelector(".modal");
 const alert = document.querySelector(".alert");
 
 const showAlert = async function (message, flag = true) {
@@ -44,26 +44,10 @@ const showAlert = async function (message, flag = true) {
       return;
     }
 
-    window.location = "http://localhost:8000/home";
+    window.location = `${SERVER_URL}/home`;
   });
 })();
 
 document.querySelector(".sign-up").addEventListener("click", () => {
-  window.location = "http://localhost:8000/createAccount";
+  window.location = `${SERVER_URL}/createAccount`;
 });
-
-// const postData = async (formattedFormData) => {
-//   const res = await fetch("src/php/login.php", {
-//     method: "POST",
-//     body: JSON.stringify(formattedFormData),
-//   });
-
-//   const data = await res.json();
-
-//   if (data.success) {
-//     window.location = `src/php/welcome.php?name=${data["0"].name}`;
-//   } else {
-//     if (form.email.value !== "" && form.password.value !== "")
-//       document.querySelector(".modal-btn").click();
-//   }
-// };

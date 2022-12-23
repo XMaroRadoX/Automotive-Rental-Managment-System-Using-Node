@@ -1,9 +1,7 @@
-// Setup empty JS object to act as endpoint for all routes
-// projectData = { length: 0 };
-
 const mysql = require("mysql");
 const session = require("express-session");
 const path = require("path");
+require("dotenv").config();
 
 const users = [
   {
