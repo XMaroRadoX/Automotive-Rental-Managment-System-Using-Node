@@ -28,29 +28,24 @@ CREATE TABLE
 
 CREATE TABLE
     car(
+        -- car
         car_id int,
         plate_no int UNIQUE,
         region varchar(64),
         reserve_status varchar(64),
         rent_status varchar(64),
         activity_status varchar(64),
-        PRIMARY KEY(car_id)
-    );
-
-CREATE TABLE
-    car_specs(
-        car_id int,
-        photo varchar(500),
+        -- car specs
         seating int,
         brand varchar(64),
         color varchar(32),
-        year int,
         transmission varchar(40),
+        power varchar(64),
+        year int,
         model varchar(32),
         rate int,
         PRIMARY KEY(car_id)
     );
-
 CREATE TABLE
     reservation(
         reservation_id int,
@@ -73,6 +68,7 @@ CREATE TABLE
         drop_date date,
         status varchar(64),
         date date,
+        pay_date date,
         reservation_id int,
         car_id int,
         customer_id int,
