@@ -238,7 +238,7 @@ class TableView {
             <td class="table-field">${car.transmission}</td>
             <td class="table-field">${car.rate}</td>
             <td class="table-field">${car.region}</td>
-            <td class="table-field">${car.power}</td>
+            <td class="table-field">${car.powertrain}</td>
             <td class="table-field">${car.color}</td>
             <td class="table-field">${car.status}</td>
             <td class="table-field">
@@ -314,7 +314,7 @@ class TableView {
                   <ion-icon name="flash"></ion-icon>
                 </div>
                 <div class="info-text">${
-                  car.power[0].toUpperCase() + car.power.slice(1).toLowerCase()
+                  car.powertrain[0].toUpperCase() + car.powertrain.slice(1).toLowerCase()
                 }</div>
               </div>
 
@@ -612,16 +612,16 @@ class TableView {
             </div>
 
             <div class="input-group">
-              <span class="input-group-text" id="power-addon">Power</span>
+              <span class="input-group-text" id="powertrain-addon">Powertrain</span>
               <input
                 type="text"
                 class="form-control"
-                placeholder="electric"
-                name="power"
-                aria-describedby="power-addon"
+                placeholder="fuel"
+                name="powertrain"
+                aria-describedby="powertrain-addon"
                 required
               />
-              <div class="invalid-feedback">Please provide a valid power.</div>
+              <div class="invalid-feedback">Please provide a valid powertrain.</div>
             </div>
 
             <button type="submit" class="btn btn-primary mt-5">submit</button>

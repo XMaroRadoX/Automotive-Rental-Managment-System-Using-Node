@@ -5,6 +5,7 @@ import {
   regionHandler,
   seatingHandler,
   pricingHandler,
+  yearHandler,
 } from "./filterHandlers.js";
 
 class FilterView {
@@ -31,6 +32,7 @@ class FilterView {
     );
     this.#seatingHandler();
     this.#priceHandler();
+    this.#yearHandler();
   }
 
   #assign() {
@@ -137,20 +139,20 @@ class FilterView {
             </div>
           </div>
 
-          <div class="filter mt-5" data-filter="power">
+          <div class="filter mt-5" data-filter="powertrain">
             <button
               class="btn-filter"
               type="button"
               data-bs-toggle="collapse"
-              data-bs-target="#collapsePower"
+              data-bs-target="#collapsePowertrain"
               aria-expanded="false"
-              aria-controls="collapsePower"
+              aria-controls="collapsePowertrain"
             >
-              <span class="filter-text">Power</span>
+              <span class="filter-text">Powertrain</span>
               <ion-icon class="chevron-down ms-2" name="chevron-down-outline"></ion-icon>
             </button>
-            <div class="collapse" id="collapsePower">
-              <div class="collapse-body power-grp mt-2"></div>
+            <div class="collapse" id="collapsePowertrain">
+              <div class="collapse-body powertrain-grp mt-2"></div>
             </div>
           </div>
 
@@ -169,6 +171,28 @@ class FilterView {
 
             <div class="collapse" id="collapseBrand">
               <div class="collapse-body brand-grp mt-2"></div>
+            </div>
+          </div>
+
+           <div class="filter mt-5" data-filter="year">
+            <button
+              class="btn-filter"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseYear"
+              aria-expanded="false"
+              aria-controls="collapseYear"
+            >
+              <span class="filter-text">Model Year</span>
+              <ion-icon class="chevron-down ms-2" name="chevron-down-outline"></ion-icon>
+            </button>
+            <div class="collapse" id="collapseYear">
+              <div class="collapse-body mt-2">
+              <div class="year-container">
+                    <input type="number" class="price-range" id="year" placeholder="2022" value="" min="0" max="2023"/>
+              </div>
+                <label for="price" class="form-label pricing-label">1950 - 2023</label>
+              </div>
             </div>
           </div>
 
@@ -206,7 +230,7 @@ class FilterView {
               <div class="collapse-body mt-2">
                 <div class="pricing-container">
                   <div>
-                    <label for="price-max">Min</label>
+                    <label for="price-min">Min</label>
                     <input type="number" class="price-range" id="price-min" placeholder="50" value="" min="50" max="8000"/>
                   </div>
 
@@ -219,7 +243,6 @@ class FilterView {
               </div>
             </div>
           </div>
-          
 
           <div class="filter mt-5" data-filter="seating">
             <button
@@ -370,6 +393,19 @@ class FilterView {
     regionHandler(this.#countrySelect.value);
   }
 
+  #yearHandler() {
+    const yearField = document.querySelector("#year");
+    yearField.addEventListener("change", () => {
+      let year = +yearField.value;
+      if (year < 1980 || year > 2023) {
+        yearField.value = "";
+        year = "";
+      }
+      console.log(year);
+      yearHandler(year);
+    });
+  }
+
   #priceHandler() {
     const pMin = document.querySelector("#price-min");
     pMin.addEventListener("input", () => {
@@ -408,6 +444,7 @@ class FilterView {
 
     document.querySelector("#price-min").value = "";
     document.querySelector("#price-max").value = "";
+    document.querySelector("#year").value = "";
   }
 }
 

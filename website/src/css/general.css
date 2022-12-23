@@ -571,13 +571,24 @@ input[type="range"]::-webkit-slider-thumb:active {
   border: none;
 }
 
-.pricing-container {
+.pricing-container,
+.year-container {
   display: flex;
   justify-content: center;
   gap: 1.4rem;
   margin-bottom: 1.2rem;
   font-size: 1.6rem;
   text-transform: uppercase;
+}
+
+.year-container > input {
+  width: 100%;
+  text-align: center;
+  /* padding: 0.4rem 0.8rem; */
+}
+
+.price-range {
+  padding: 0.4rem 0.8rem;
 }
 
 .pricing-container > div {
@@ -588,7 +599,7 @@ input[type="range"]::-webkit-slider-thumb:active {
 
 .price-range {
   border-radius: 9px;
-  padding: 0 0.5rem;
+  padding: 0.4rem 0.8rem;
   border: 1px solid #9197aee8;
 }
 

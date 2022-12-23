@@ -32,20 +32,19 @@ CREATE TABLE
         car_id int,
         plate_no int UNIQUE,
         region varchar(64),
-        reserve_status varchar(64),
-        rent_status varchar(64),
-        activity_status varchar(64),
+        status varchar(64),
         -- car specs
         seating int,
         brand varchar(64),
         color varchar(32),
         transmission varchar(40),
-        power varchar(64),
+        powertrain varchar(64),
         year int,
         model varchar(32),
         rate int,
         PRIMARY KEY(car_id)
     );
+
 CREATE TABLE
     reservation(
         reservation_id int,

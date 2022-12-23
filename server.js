@@ -74,7 +74,7 @@ const data = [
     region: "egypt",
     cca3: "egy",
     cca2: "eg",
-    power: "electric",
+    powertrain: "electric",
     status: "active",
   },
   {
@@ -92,7 +92,7 @@ const data = [
     region: "usa",
     cca3: "usa",
     cca2: "us",
-    power: "fuel",
+    powertrain: "fuel",
     status: "active",
   },
   {
@@ -110,7 +110,7 @@ const data = [
     region: "usa",
     cca3: "usa",
     cca2: "us",
-    power: "fuel",
+    powertrain: "fuel",
     status: "active",
   },
   {
@@ -128,7 +128,7 @@ const data = [
     region: "usa",
     cca3: "usa",
     cca2: "us",
-    power: "fuel",
+    powertrain: "fuel",
     status: "active",
   },
   {
@@ -146,7 +146,7 @@ const data = [
     region: "usa",
     cca3: "usa",
     cca2: "us",
-    power: "fuel",
+    powertrain: "fuel",
     status: "active",
   },
 ];
@@ -167,7 +167,7 @@ const favs = [
     region: "usa",
     cca3: "usa",
     cca2: "us",
-    power: "fuel",
+    powertrain: "fuel",
     status: "active",
   },
   {
@@ -185,7 +185,7 @@ const favs = [
     region: "usa",
     cca3: "usa",
     cca2: "us",
-    power: "electric",
+    powertrain: "electric",
     status: "oos",
   },
 ];
@@ -209,7 +209,7 @@ const rev = [
     region: "usa",
     cca3: "usa",
     cca2: "us",
-    power: "fuel",
+    powertrain: "fuel",
     status: "reserved",
     pickup: "2022-12-15",
     drop: "2022-12-15",
@@ -233,7 +233,7 @@ const rev = [
     region: "usa",
     cca3: "usa",
     cca2: "us",
-    power: "fuel",
+    powertrain: "fuel",
     status: "active",
     pickup: "2022-11-15",
     drop: "2022-12-15",
@@ -259,7 +259,7 @@ const ren = [
     region: "usa",
     cca3: "usa",
     cca2: "us",
-    power: "fuel",
+    powertrain: "fuel",
     status: "rented",
     pickup: "2022-12-15",
     drop: "2022-12-15",
@@ -422,7 +422,7 @@ app.get("/admin", (req, res) => {
       users,
       filters: [
         {
-          name: "power",
+          name: "powertrain",
           categories: [
             { name: "fuel", count: 5 },
             { name: "gas", count: 10 },
@@ -475,7 +475,7 @@ app.get("/cars", (req, res) => {
       ren,
       filters: [
         {
-          name: "power",
+          name: "powertrain",
           categories: [
             { name: "fuel", count: 5 },
             { name: "gas", count: 10 },

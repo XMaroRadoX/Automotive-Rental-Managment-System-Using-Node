@@ -278,6 +278,16 @@ const filter = function () {
         ...data.filter((car) => +car.rate >= min && +car.rate <= max)
       );
 
+      if (filter[0] === "year" && filter[1] > 0) {
+        queryRes.push(...data.filter((car) => car.year === filter[1]));
+
+        if (flag) result = result.filter((value) => queryRes.includes(value));
+        else result.push(...queryRes);
+
+        flag = true;
+        return;
+      }
+
       if (flag) result = result.filter((value) => queryRes.includes(value));
       else result.push(...queryRes);
 
@@ -316,11 +326,12 @@ const reset = function () {
     type: [],
     transmission: [],
     brand: [],
-    power: [],
+    powertrain: [],
     color: [],
     seating: 1,
     region: "",
     range: [],
+    year: 0,
   };
 
   document.querySelectorAll(".open").forEach((btn) => {

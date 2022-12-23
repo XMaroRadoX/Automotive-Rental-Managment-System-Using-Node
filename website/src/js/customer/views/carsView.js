@@ -265,7 +265,7 @@ class CarsView {
                   <ion-icon name="flash"></ion-icon>
                 </div>
                 <div class="info-text">${
-                  car.power[0].toUpperCase() + car.power.slice(1).toLowerCase()
+                  car.powertrain[0].toUpperCase() + car.powertrain.slice(1).toLowerCase()
                 }</div>
               </div>
 

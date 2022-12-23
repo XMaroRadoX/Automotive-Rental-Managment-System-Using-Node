@@ -31,3 +31,11 @@ export const pricingHandler = function (min, max) {
   if (!max) max = 8000;
   model.state.userFilters.range = [min, max];
 };
+
+export const yearHandler = function (year) {
+  if (!year) {
+    model.state.userFilters.year = 0;
+    return;
+  }
+  model.state.userFilters.year = year;
+};

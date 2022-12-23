@@ -13,10 +13,11 @@ export const state = {
     transmission: [],
     brand: [],
     color: [],
-    power: [],
+    powertrain: [],
     seating: 1,
     region: "",
     range: [],
+    year: 0,
   },
   userLimit: 3,
 };
