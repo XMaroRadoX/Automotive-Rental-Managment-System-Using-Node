@@ -26,6 +26,17 @@ body {
   height: 100vh;
 }
 
+main {
+  height: 100vh;
+}
+
+footer {
+  text-align: center;
+  font-size: 1.4rem;
+  border: 2px solid #9197ae39;
+  padding: 3.6rem 0;
+}
+
 *:focus {
   outline: none;
   box-shadow: 0 0 0 0.35rem var(--tint-shadow);
@@ -286,6 +297,7 @@ body {
   font-size: 1.4rem;
   border-top-right-radius: 9px;
   border-bottom-right-radius: 9px;
+  padding: 0.4rem 0.75rem;
 }
 
 .form-select:focus,

@@ -85,3 +85,11 @@ const checkMail = async (mail) => {
 
   return data.status;
 };
+
+document.querySelector("footer").innerHTML = `
+      Copyrights &copy; ${new Date().getFullYear()} Amr Yasser, Marwan Khaled, and Begad Wael
+`;
+
+document
+  .querySelector(".btn-outline-primary")
+  .addEventListener("click", () => (window.location = `${SERVER_URL}/`));

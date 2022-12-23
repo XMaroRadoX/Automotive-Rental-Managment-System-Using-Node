@@ -386,3 +386,7 @@
 .car-filter-btns .btn-outline-primary {
   padding: 0.4rem 0.8rem;
 }
+
+.plateNo {
+  border-radius: 9px;
+}

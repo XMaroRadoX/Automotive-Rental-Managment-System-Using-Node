@@ -48,238 +48,242 @@
   </head>
 
   <body>
-    <div class="app-container">
-      <div class="sidebar-container">
-        <div class="filter-btns mt-auto mx-auto">
-          <button
-            type="button"
-            class="btn btn-outline-primary btn-reset me-3 mb-3"
-          >
-            reset
-          </button>
-          <button type="button" class="btn btn-primary btn-apply mb-3">
-            Apply
-          </button>
+    <main>
+      <div class="app-container">
+        <div class="sidebar-container">
+          <div class="filter-btns mt-auto mx-auto">
+            <button
+              type="button"
+              class="btn btn-outline-primary btn-reset me-3 mb-3"
+            >
+              reset
+            </button>
+            <button type="button" class="btn btn-primary btn-apply mb-3">
+              Apply
+            </button>
+          </div>
+        </div>
+
+        <div class="content">
+          <ul class="nav nav-tabs mb-4">
+            <li class="nav-item">
+              <button
+                class="nav-link btn-nav active"
+                aria-current="page"
+                data-action="cars"
+              >
+                Cars
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                class="nav-link btn-nav"
+                aria-current="page"
+                data-action="customers"
+              >
+                Customers
+              </button>
+            </li>
+
+            <li class="nav-item">
+              <button
+                class="nav-link btn-nav"
+                aria-current="page"
+                data-action="reservations"
+              >
+                reservations
+              </button>
+            </li>
+
+            <li class="nav-item">
+              <button
+                class="nav-link btn-nav"
+                aria-current="page"
+                data-action="status"
+              >
+                status/day
+              </button>
+            </li>
+
+            <li class="nav-item">
+              <button
+                class="nav-link btn-nav"
+                aria-current="page"
+                data-action="payments"
+              >
+                Daily payments
+              </button>
+            </li>
+
+            <li class="nav-item ms-auto">
+              <button
+                class="nav-link btn-nav"
+                aria-current="page"
+                data-action="add"
+              >
+                Add car
+              </button>
+            </li>
+
+            <li class="nav-item">
+              <button type="button" class="nav-link btn-signout">
+                <ion-icon class="log-out" name="log-out-outline"></ion-icon>
+              </button>
+            </li>
+          </ul>
+
+          <div class="table-filter mb-4"></div>
+
+          <table class="query-result">
+            <div class="error-message hide">
+              <ion-icon class="error-icon" name="warning-outline"></ion-icon>
+              <div class="message"></div>
+            </div>
+          </table>
+
+          <div class="add-container hide"></div>
         </div>
       </div>
 
-      <div class="content">
-        <ul class="nav nav-tabs mb-4">
-          <li class="nav-item">
-            <button
-              class="nav-link btn-nav active"
-              aria-current="page"
-              data-action="cars"
-            >
-              Cars
-            </button>
-          </li>
-          <li class="nav-item">
-            <button
-              class="nav-link btn-nav"
-              aria-current="page"
-              data-action="customers"
-            >
-              Customers
-            </button>
-          </li>
-
-          <li class="nav-item">
-            <button
-              class="nav-link btn-nav"
-              aria-current="page"
-              data-action="reservations"
-            >
-              reservations
-            </button>
-          </li>
-
-          <li class="nav-item">
-            <button
-              class="nav-link btn-nav"
-              aria-current="page"
-              data-action="status"
-            >
-              status/day
-            </button>
-          </li>
-
-          <li class="nav-item">
-            <button
-              class="nav-link btn-nav"
-              aria-current="page"
-              data-action="payments"
-            >
-              Daily payments
-            </button>
-          </li>
-
-          <li class="nav-item ms-auto">
-            <button
-              class="nav-link btn-nav"
-              aria-current="page"
-              data-action="add"
-            >
-              Add car
-            </button>
-          </li>
-
-          <li class="nav-item">
-            <button type="button" class="nav-link btn-signout">
-              <ion-icon class="log-out" name="log-out-outline"></ion-icon>
-            </button>
-          </li>
-        </ul>
-
-        <div class="table-filter mb-4"></div>
-
-        <table class="query-result">
-          <div class="error-message hide">
-            <ion-icon class="error-icon" name="warning-outline"></ion-icon>
-            <div class="message"></div>
-          </div>
-        </table>
-
-        <div class="add-container hide"></div>
-      </div>
-    </div>
-
-    <!-- Modal -->
-    <div
-      class="modal fade"
-      id="car-info"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-labelledby="staticBackdropLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title view-title" id="staticBackdropLabel">
-              BMW X6
-            </h1>
-            <button
-              type="button"
-              class="btn btn-close-modal"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            >
-              <ion-icon class="close-icon" name="close"></ion-icon>
-            </button>
-          </div>
-
-          <div class="modal-body">
-            <div
-              id="carouselExampleIndicators"
-              class="carousel slide mb-4"
-              data-bs-ride="true"
-            >
-              <div class="carousel-indicators">
-                <button
-                  type="button"
-                  data-bs-target="#carouselExampleIndicators"
-                  data-bs-slide-to="0"
-                  class="active"
-                  aria-current="true"
-                  aria-label="Slide 1"
-                ></button>
-                <button
-                  type="button"
-                  data-bs-target="#carouselExampleIndicators"
-                  data-bs-slide-to="1"
-                  aria-label="Slide 2"
-                ></button>
-                <button
-                  type="button"
-                  data-bs-target="#carouselExampleIndicators"
-                  data-bs-slide-to="2"
-                  aria-label="Slide 3"
-                ></button>
-                <button
-                  type="button"
-                  data-bs-target="#carouselExampleIndicators"
-                  data-bs-slide-to="3"
-                  aria-label="Slide 4"
-                ></button>
-                <button
-                  type="button"
-                  data-bs-target="#carouselExampleIndicators"
-                  data-bs-slide-to="4"
-                  aria-label="Slide 5"
-                ></button>
-                <button
-                  type="button"
-                  data-bs-target="#carouselExampleIndicators"
-                  data-bs-slide-to="5"
-                  aria-label="Slide 6"
-                ></button>
-              </div>
-              <div class="carousel-inner"></div>
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="car-info"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title view-title" id="staticBackdropLabel">
+                BMW X6
+              </h1>
               <button
-                class="carousel-control-prev"
                 type="button"
-                data-bs-target="#carouselExampleIndicators"
-                data-bs-slide="prev"
+                class="btn btn-close-modal"
+                data-bs-dismiss="modal"
+                aria-label="Close"
               >
-                <span class="carousel-prev-icon" aria-hidden="true">
-                  <ion-icon name="chevron-back-outline"></ion-icon>
-                </span>
-                <span class="visually-hidden">Previous</span>
-              </button>
-              <button
-                class="carousel-control-next"
-                type="button"
-                data-bs-target="#carouselExampleIndicators"
-                data-bs-slide="next"
-              >
-                <span class="carousel-next-icon" aria-hidden="true">
-                  <ion-icon name="chevron-forward-outline"></ion-icon>
-                </span>
-                <span class="visually-hidden">Next</span>
+                <ion-icon class="close-icon" name="close"></ion-icon>
               </button>
             </div>
 
-            <div class="car-info"></div>
+            <div class="modal-body">
+              <div
+                id="carouselExampleIndicators"
+                class="carousel slide mb-4"
+                data-bs-ride="true"
+              >
+                <div class="carousel-indicators">
+                  <button
+                    type="button"
+                    data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide-to="0"
+                    class="active"
+                    aria-current="true"
+                    aria-label="Slide 1"
+                  ></button>
+                  <button
+                    type="button"
+                    data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide-to="1"
+                    aria-label="Slide 2"
+                  ></button>
+                  <button
+                    type="button"
+                    data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide-to="2"
+                    aria-label="Slide 3"
+                  ></button>
+                  <button
+                    type="button"
+                    data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide-to="3"
+                    aria-label="Slide 4"
+                  ></button>
+                  <button
+                    type="button"
+                    data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide-to="4"
+                    aria-label="Slide 5"
+                  ></button>
+                  <button
+                    type="button"
+                    data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide-to="5"
+                    aria-label="Slide 6"
+                  ></button>
+                </div>
+                <div class="carousel-inner"></div>
+                <button
+                  class="carousel-control-prev"
+                  type="button"
+                  data-bs-target="#carouselExampleIndicators"
+                  data-bs-slide="prev"
+                >
+                  <span class="carousel-prev-icon" aria-hidden="true">
+                    <ion-icon name="chevron-back-outline"></ion-icon>
+                  </span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button
+                  class="carousel-control-next"
+                  type="button"
+                  data-bs-target="#carouselExampleIndicators"
+                  data-bs-slide="next"
+                >
+                  <span class="carousel-next-icon" aria-hidden="true">
+                    <ion-icon name="chevron-forward-outline"></ion-icon>
+                  </span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+
+              <div class="car-info"></div>
+            </div>
+            <div class="modal-footer view-footer"></div>
           </div>
-          <div class="modal-footer view-footer"></div>
         </div>
       </div>
-    </div>
 
-    <!-- Modal -->
-    <div
-      class="modal fade"
-      id="confirm-modal"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-labelledby="staticBackdropLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title confirm-title" id="staticBackdropLabel">
-              Modal title
-            </h1>
-            <button
-              type="button"
-              id="close-confirm"
-              class="btn btn-close-modal"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            >
-              <ion-icon class="close-icon" name="close"></ion-icon>
-            </button>
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="confirm-modal"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title confirm-title" id="staticBackdropLabel">
+                Modal title
+              </h1>
+              <button
+                type="button"
+                id="close-confirm"
+                class="btn btn-close-modal"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              >
+                <ion-icon class="close-icon" name="close"></ion-icon>
+              </button>
+            </div>
+            <div class="modal-body confirm-body">...</div>
+            <div class="modal-footer confirm"></div>
           </div>
-          <div class="modal-body confirm-body">...</div>
-          <div class="modal-footer confirm"></div>
         </div>
       </div>
-    </div>
 
-    <div class="alert alert-hide" role="alert"></div>
+      <div class="alert alert-hide" role="alert"></div>
+    </main>
+
+    <footer></footer>
   </body>
 </html>

@@ -380,20 +380,20 @@ class SearchView {
           
           <div class="car-search mt-4">
             <div class="car-filter-text">
-              Search by
+              Search by plate number <span class="text-sub">(case insensitive)</span>
             </div>
 
             <div class="input-group">
-              <span class="input-group-text" id="plate-no">Plate Number</span>
               <input
                 type="test"
-                class="form-control"
+                class="form-control plateNo"
                 placeholder="54E222"
                 id="plateNo"
                 aria-describedby="plate-no"
               />
             </div>
     
+            <div class="ms-5">
             <button
               type="button"
               class="btn btn-outline-primary btn-clear-search"
@@ -404,6 +404,7 @@ class SearchView {
             <button type="button" class="btn btn-primary btn-search">
               Search
             </button>
+          </div>
           </div>
           </div>
           `;

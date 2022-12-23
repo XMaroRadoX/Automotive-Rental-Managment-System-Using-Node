@@ -25,7 +25,6 @@ export const seatingHandler = function (seats) {
 export const pricingHandler = function (min, max) {
   if ((!min && !max) || min > max) {
     model.state.userFilters.range = [];
-    console.log(model.state.userFilters.range);
     return;
   }
   if (!min) min = 0;

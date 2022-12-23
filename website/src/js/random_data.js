@@ -30,27 +30,89 @@ const cont = async () => {
 };
 
 // ###################### USER DATA GENERATION ##################
-const user = async () => {
-  try {
-    const res = await fetch(`https://randomuser.me/api/?results=10`);
-    const data = (await res.json()).results;
+const attrs = [
+  "id",
+  "brand",
+  "model",
+  "type",
+  "color",
+  "year",
+  "seating",
+  "power",
+  "transmission",
+  "rate",
+  "status",
+];
 
-    // console.log(data);
+const custs = [
+  "id",
+  "email",
+  "password",
+  "fname",
+  "lname",
+  "phone_no",
+  "license_no",
+  "region",
+];
+
+const generateSQL = function (table, attrs, data) {
+  let attr = "";
+  let values = [];
+  attrs.forEach((at) => {
+    // if()
+    let str;
+    if (!isFinite(data[at])) {
+      str = `"${data[at]}"`;
+    } else {
+      str = data[at];
+    }
+
+    values.push(str);
+  });
+
+  return `insert into ${table}(${attrs.join(",")}) values(${values.join(",")})`;
+};
+
+const getID = new Promise((resolve, reject) => {
+  fetch(`https://www.uuidtools.com/api/generate/v4`)
+    .then((res) => resolve(res.json()))
+    .catch((e) => reject(e));
+});
+
+const getIDs = async function (n) {
+  const ids = [];
+  for (i = 0; i < n; i++) {
+    let getID = new Promise((resolve, reject) => {
+      fetch(`https://www.uuidtools.com/api/generate/v4`)
+        .then((res) => resolve(res.json()))
+        .catch((e) => reject(e));
+    });
+
+    const id = await getID
+      .then((r) => r[0].split("-").join(""))
+      .catch((e) => console.log(e));
+    ids.push(id);
+  }
+  return ids;
+};
+
+const user = async (n) => {
+  try {
+    const res = await fetch(`https://randomuser.me/api/?results=${n}`);
+    const data = (await res.json()).results;
+    const id = await getIDs(n);
     const users = [];
-    data.forEach(async (user) => {
-      const idRes = await fetch(`https://www.uuidtools.com/api/generate/v4`);
-      const id = await idRes.json();
+    await data.forEach((user, i) => {
       users.push({
-        id: id[0].split("-").join(""),
+        id: id[i],
         fname: user.name.first,
         lname: user.name.last,
         email: user.email,
         password: user.login.password,
         phone_no: user.phone,
-        license: user.login.md5.slice(0, 6).toUpperCase(),
+        license_no: user.login.md5.slice(0, 6).toUpperCase(),
         region: user.location.country,
       });
-      console.log(users);
     });
 
     return users;
@@ -58,11 +120,6 @@ const user = async () => {
     console.log(err);
   }
 };
-
-(async function () {
-  const users = await user();
-  console.log(users);
-})();
 
 // ####################### CAR DATA GENERATION ####################
 const transmissions = ["manual", "automatic", "cvt"];
@@ -169,44 +226,13 @@ const brands = [
   { brand: "toyota", families: ["prius"] },
 ];
 
-const attrs = [
-  "id",
-  "brand",
-  "model",
-  "type",
-  "color",
-  "year",
-  "seating",
-  "power",
-  "transmission",
-  "rate",
-  "status",
-];
-
-const generateSQL = function (table, attrs, data) {
-  let attr = "";
-  let values = [];
-  attrs.forEach((at) => {
-    // if()
-    let str;
-    if (!isFinite(data[at])) {
-      str = `"${data[at]}"`;
-    } else {
-      str = data[at];
-    }
-
-    values.push(str);
-  });
-
-  return `insert into ${table}(${attrs.join(",")}) values(${values.join(",")})`;
-};
-
-const car = () => {
+const car = async (n) => {
+  const ids = await getIDs(n);
   const cars_specs = [];
-  for (let index = 0; index < 1000; index++) {
+  for (let index = 0; index < n; index++) {
     const no = Math.floor(Math.random() * brands.length);
     cars_specs.push({
-      id: Date.now() + index * 781,
+      id: ids[index],
       brand: brands[no].brand,
       model:
         brands[no].families[
@@ -228,8 +254,15 @@ const car = () => {
   return cars_specs;
 };
 
-console.log(car());
+// console.log(car());
+(async function () {
+  let queries = "";
+  await car(20).then((r) =>
+    r.forEach((user) => (queries += generateSQL("car", attrs, user) + "\n"))
+  );
 
+  console.log(queries);
+})();
 // ####################### RENTAL DATA GENERATION ####################
 const rental = async () => {
   try {

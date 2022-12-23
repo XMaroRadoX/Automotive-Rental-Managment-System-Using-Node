@@ -51,3 +51,7 @@ const showAlert = async function (message, flag = true) {
 document.querySelector(".sign-up").addEventListener("click", () => {
   window.location = `${SERVER_URL}/createAccount`;
 });
+
+document.querySelector("footer").innerHTML = `
+      Copyrights &copy; ${new Date().getFullYear()} Amr Yasser, Marwan Khaled, and Begad Wael
+`;

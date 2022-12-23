@@ -558,4 +558,8 @@ const returnHandler = async function (id) {
   info.classList.remove("z-n");
 };
 
+document.querySelector("footer").innerHTML = `
+      Copyrights &copy; ${new Date().getFullYear()} Amr Yasser, Marwan Khaled, and Begad Wael
+`;
+
 init();

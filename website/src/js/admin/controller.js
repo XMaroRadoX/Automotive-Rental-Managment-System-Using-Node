@@ -125,7 +125,6 @@ const handleReservations = function () {
 
 const handleCars = function () {
   inputs = document.querySelector(".car-search").querySelectorAll("input");
-  console.log(inputs);
 };
 
 const addFilters = () => {
@@ -186,6 +185,21 @@ const filter = function () {
     if (filter[0] === "region" && filter[1] && filter[1] != "-") {
       queryRes.push(
         ...data.filter((car) => car.cca2 === filter[1].toLowerCase())
+      );
+
+      if (flag) result = result.filter((value) => queryRes.includes(value));
+      else result.push(...queryRes);
+
+      flag = true;
+      return;
+    }
+
+    if (filter[0] === "range" && filter[1].length > 0) {
+      const min = filter[1][0];
+      const max = filter[1][1];
+
+      queryRes.push(
+        ...data.filter((car) => +car.rate >= min && +car.rate <= max)
       );
 
       if (flag) result = result.filter((value) => queryRes.includes(value));
@@ -688,4 +702,9 @@ const deleteHandler = async function (id) {
   }
   info.classList.remove("z-n");
 };
+
+document.querySelector("footer").innerHTML = `
+      Copyrights &copy; ${new Date().getFullYear()} Amr Yasser, Marwan Khaled, and Begad Wael
+`;
+
 init();
