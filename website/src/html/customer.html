@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Car Rental System</title>
+    <title>BAM - HOME</title>
     <!-- JavaScript Bundle with Popper -->
     <script
       defer
@@ -285,7 +285,7 @@
       aria-labelledby="pay"
       aria-hidden="true"
     >
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title pay-title" id="pay">
@@ -293,10 +293,12 @@
             </h1>
             <button
               type="button"
-              class="btn-close"
+              class="btn btn-close-modal"
               data-bs-dismiss="modal"
               aria-label="Close"
-            ></button>
+            >
+              <ion-icon class="close-icon" name="close"></ion-icon>
+            </button>
           </div>
           <div class="modal-body pay-body">
             <div class="form-check">
@@ -322,11 +324,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              data-bs-dismiss="modal"
-              class="btn btn-primary btn-submit-pay"
-            >
+            <button type="button" class="btn btn-primary btn-submit-pay">
               pay
             </button>
           </div>
@@ -344,7 +342,7 @@
       aria-labelledby="staticBackdropLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title confirm-title" id="staticBackdropLabel">
@@ -352,10 +350,11 @@
             </h1>
             <button
               type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+              id="close-confirm"
+              class="btn btn-close-modal"
+            >
+              <ion-icon class="close-icon" name="close"></ion-icon>
+            </button>
           </div>
           <div class="modal-body confirm-body">...</div>
           <div class="modal-footer confirm"></div>

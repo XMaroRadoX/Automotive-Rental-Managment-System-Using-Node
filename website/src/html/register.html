@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>BAM</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -12,79 +12,52 @@
       crossorigin="anonymous"
     />
 
-    <link rel="stylesheet" href="../css/login.css" />
-    <link rel="stylesheet" href="../css/registerStyles.css" />
-    <script defer src="../js/reg.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+      crossorigin="anonymous"
+    ></script>
+
+    <link rel="stylesheet" href="../css/register.css" />
+    <script type="module" src="../js/register.js"></script>
   </head>
   <body>
-    <!-- Button trigger modal -->
-    <button
-      type="button"
-      class="modal-btn"
-      style="display: none"
-      data-bs-toggle="modal"
-      data-bs-target="#exampleModal"
-    >
-      Launch demo modal
-    </button>
-
-    <!-- Modal -->
-    <div
-      class="modal fade"
-      id="exampleModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">
-              Congratulations!
-            </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body"></div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn modal-btn-close"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="background">
       <img src="../imgs/car.webp" alt="car background" />
     </div>
     <div class="form-container">
-      <img src="../imgs/fac.webp" alt="ALU FOE LOGO" class="logo" />
+      <!-- <img src="../imgs/fac.webp" alt="ALU FOE LOGO" class="logo" /> -->
 
-      <form class="needs-validation grid form" novalidate>
-        <div class="input-group mb-3">
-          <span class="input-group-text" id="basic-addon1">Username</span>
+      <form class="needs-validation form" novalidate>
+        <div class="input-group">
+          <span class="input-group-text" id="basic-addon1">First name</span>
           <input
             type="text"
-            name="username"
+            name="fname"
             id="username"
             class="form-control"
-            placeholder="username"
+            placeholder="Amr"
             aria-label="name"
             required
           />
-          <div class="invalid-feedback">Please enter your name</div>
+          <div class="invalid-feedback">Enter a valid first Name</div>
         </div>
 
-        <div class="input-group mb-3">
+        <div class="input-group">
+          <span class="input-group-text" id="basic-addon5">Last Name</span>
+          <input
+            type="text"
+            name="lname"
+            id="lname"
+            class="form-control"
+            placeholder="Yasser"
+            aria-label="name"
+            required
+          />
+          <div class="invalid-feedback">Enter a valid last name</div>
+        </div>
+
+        <div class="input-group">
           <span class="input-group-text" id="basic-addon2">Email</span>
           <input
             type="email"
@@ -96,10 +69,54 @@
             aria-describedby="emailHelp"
             required
           />
-          <div class="invalid-feedback">Please enter your email</div>
+          <div class="invalid-feedback">Enter a valid email</div>
         </div>
 
-        <div class="input-group mb-3">
+        <div class="input-group">
+          <span class="input-group-text" id="basic-addon5">Region</span>
+          <input
+            type="text"
+            name="region"
+            id="region"
+            class="form-control"
+            placeholder="Egypt"
+            aria-label="name"
+            required
+          />
+          <div class="invalid-feedback">Enter a valid region</div>
+        </div>
+
+        <div class="input-group">
+          <span class="input-group-text" id="basic-addon5">Phone Number</span>
+          <input
+            type="text"
+            name="phone_no"
+            id="phone"
+            class="form-control"
+            placeholder="+201234568789"
+            aria-label="name"
+            required
+          />
+          <div class="invalid-feedback">Enter a valid phone number</div>
+        </div>
+
+        <div class="input-group">
+          <span class="input-group-text" id="basic-addon5"
+            >Driving License Number</span
+          >
+          <input
+            type="text"
+            name="license_no"
+            id="license"
+            class="form-control"
+            placeholder="5E43EE"
+            aria-label="name"
+            required
+          />
+          <div class="invalid-feedback">Enter a valid license number</div>
+        </div>
+
+        <div class="input-group">
           <span class="input-group-text" id="basic-addon3">Password</span>
           <input
             type="password"
@@ -108,7 +125,7 @@
             id="password"
             required
           />
-          <div class="invalid-feedback">Please enter your password</div>
+          <div class="invalid-feedback">Enter a valid password</div>
         </div>
 
         <div class="input-group">
@@ -122,18 +139,16 @@
             id="confirmPassword"
             required
           />
-          <div class="invalid-feedback">Please retype your password</div>
+          <div class="invalid-feedback">Retype your password</div>
         </div>
 
         <div class="mt-1"></div>
-        <button type="submit" class="btn btn-primary mt-3">Sign up</button>
+        <button type="submit" class="btn btn-primary mt-3 width">
+          Sign up
+        </button>
       </form>
     </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-      crossorigin="anonymous"
-    ></script>
+    <div class="alert alert-hide" role="alert"></div>
   </body>
 </html>

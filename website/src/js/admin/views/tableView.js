@@ -1,3 +1,5 @@
+"use strict";
+
 class TableView {
   #table = document.querySelector(".query-result");
   #viewTitle = document.querySelector(".view-title");

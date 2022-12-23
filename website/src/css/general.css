@@ -282,7 +282,8 @@ body {
   box-shadow: 0 0 0 0.2rem #9197ae39;
 }
 
-.form-select:focus {
+.form-select:focus,
+.form-control:focus {
   border: none;
   outline: none;
   box-shadow: 0 0 0 0.2rem var(--tint-shadow);
@@ -658,6 +659,7 @@ input[type="number"]::-webkit-inner-spin-button {
   color: #635a5a;
 }
 
-.invalid-feedback {
+.invalid-feedback,
+.form-label {
   margin-left: 1rem;
 }

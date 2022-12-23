@@ -1,3 +1,5 @@
+"use strict";
+
 import { changeCat } from "../controller.js";
 
 class SearchView {

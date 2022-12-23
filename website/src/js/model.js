@@ -24,7 +24,7 @@ export const state = {
 export const getCountries = async () => {
   try {
     const res = await fetch(`https://restcountries.com/v3.1/all`);
-    if (res.status === 404) throw new Error();
+    if (!res.ok) throw new Error();
 
     const data = await res.json();
 
@@ -50,7 +50,7 @@ export const getCountries = async () => {
 export const adminGetData = async () => {
   try {
     const res = await fetch(`${SERVER_URL}/admin`);
-    if (res.status === 404) throw new Error();
+    if (!res.ok) throw new Error();
 
     const data = await res.json();
 
@@ -77,7 +77,7 @@ export const adminRevokeCar = async function (id) {
       },
       body: JSON.stringify({ id }),
     });
-    if (res.status === 404) throw new Error();
+    if (!res.ok) throw new Error();
 
     let index = state.cars.findIndex((c) => c.carId === id);
 
@@ -107,7 +107,7 @@ export const adminReturnCar = async function (id) {
       },
       body: JSON.stringify({ id }),
     });
-    if (res.status === 404) throw new Error();
+    if (!res.ok) throw new Error();
 
     let index = state.cars.findIndex((c) => c.carId === id);
     if (index == -1) return;
@@ -137,7 +137,7 @@ export const suspendCar = async function (id) {
       },
       body: JSON.stringify({ id }),
     });
-    if (res.status === 404) throw new Error();
+    if (!res.ok) throw new Error();
 
     const car = state.cars.find((c) => c.carId === id);
     if (!car) return;
@@ -159,7 +159,7 @@ export const activateCar = async function (id) {
       },
       body: JSON.stringify({ id }),
     });
-    if (res.status === 404) throw new Error();
+    if (!res.ok) throw new Error();
 
     const car = state.cars.find((c) => c.carId === id);
     if (!car) return;
@@ -180,7 +180,7 @@ export const deleteCustomer = async function (id) {
       },
       body: JSON.stringify({ id }),
     });
-    if (res.status === 404) throw new Error();
+    if (!res.ok) throw new Error();
 
     const index = state.users.findIndex((u) => u.id === +id);
     if (index === -1) return;
@@ -203,7 +203,7 @@ export const getStatus = async function (date) {
       },
       body: JSON.stringify({ date }),
     });
-    if (res.status === 404) throw new Error();
+    if (!res.ok) throw new Error();
 
     const data = await res.json();
 
@@ -222,7 +222,7 @@ export const adminGetPayments = async function (period) {
       },
       body: JSON.stringify({ period }),
     });
-    if (res.status === 404) throw new Error();
+    if (!res.ok) throw new Error();
 
     const data = await res.json();
 
@@ -241,7 +241,7 @@ export const addCar = async function (data) {
       },
       body: JSON.stringify(data),
     });
-    if (res.status === 404) throw new Error();
+    if (!res.ok) throw new Error();
 
     await adminGetData();
     return true;
@@ -255,7 +255,7 @@ export const getData = async () => {
     const res = await fetch(`${SERVER_URL}/cars`);
     const data = await res.json();
 
-    if (res.status === 404) throw new Error();
+    if (!res.ok) throw new Error();
 
     state.cars = data.cars;
     state.favourites = data.favs;
@@ -284,7 +284,7 @@ export const addFavorite = async (id) => {
       body: JSON.stringify({ id }),
     });
 
-    if (res.status === 404) throw new Error();
+    if (!res.ok) throw new Error();
 
     let car = state.cars.find((c) => c.carId === id);
     if (!car) car = state.reserved.find((c) => c.carId === id);
@@ -309,7 +309,7 @@ export const removeFavorite = async (id) => {
       body: JSON.stringify({ id }),
     });
 
-    if (res.status === 404) throw new Error();
+    if (!res.ok) throw new Error();
 
     const car = state.favourites.findIndex((c) => c.carId === id);
     state.favourites.splice(car, 1);
@@ -330,7 +330,7 @@ export const pickCar = async function (id) {
       },
       body: JSON.stringify({ id }),
     });
-    if (res.status === 404) throw new Error();
+    if (!res.ok) throw new Error();
 
     const index = state.reserved.findIndex((c) => c.carId === id);
     if (index == -1) return;
@@ -356,7 +356,7 @@ export const revokeCar = async function (id) {
       body: JSON.stringify({ id }),
     });
 
-    if (res.status === 404) throw new Error();
+    if (!res.ok) throw new Error();
 
     const index = state.reserved.findIndex((c) => c.carId === id);
     if (index == -1) return;
@@ -469,12 +469,44 @@ export const makePayment = async function (id, method) {
   }
 };
 
-export const signout = async function () {
+export const signIn = async function (data) {
   try {
-    const res = await fetch(`${SERVER_URL}/signout`, {
+    const res = await fetch(`${SERVER_URL}/signIn`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error();
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+export const register = async function (data) {
+  try {
+    const res = await fetch(`${SERVER_URL}/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error();
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+export const signOut = async function () {
+  try {
+    const res = await fetch(`${SERVER_URL}/signOut`, {
       method: "POST",
     });
-    if (res.status === 404) throw new Error();
+    if (!res.ok) throw new Error();
 
     return true;
   } catch (e) {

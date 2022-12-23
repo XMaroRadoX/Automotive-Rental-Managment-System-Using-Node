@@ -1,3 +1,5 @@
+"use strict";
+
 import {
   filterHandler,
   regionHandler,

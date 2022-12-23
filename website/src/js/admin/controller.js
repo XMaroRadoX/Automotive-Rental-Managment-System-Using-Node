@@ -1,3 +1,5 @@
+"use strict";
+
 import "core-js/stable"; // polyfill everything
 import "regenerator-runtime/runtime"; // polyfill async/await
 import * as model from "../model.js";
@@ -47,7 +49,11 @@ const init = async () => {
 
   document
     .querySelector(".btn-signout")
-    .addEventListener("click", model.signout.bind(null));
+    .addEventListener("click", model.signOut.bind(null));
+
+  document.querySelector("#close-confirm").addEventListener("click", () => {
+    $("#confirm-modal").modal("toggle");
+  });
 
   handleSearch();
   handleView();
@@ -432,6 +438,7 @@ const showConfirmation = function (title, message, action) {
   confirm = new Promise((resolve, reject) => {
     document.querySelector("#confirm").addEventListener("click", resolve);
     document.querySelector("#cancel").addEventListener("click", reject);
+    document.querySelector("#close-confirm").addEventListener("click", reject);
   });
 
   $("#confirm-modal").modal("show");

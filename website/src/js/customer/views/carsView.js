@@ -1,3 +1,5 @@
+"use strict";
+
 import { favouriteHandler } from "../controller.js";
 class CarsView {
   #cars = document.querySelector(".cars");

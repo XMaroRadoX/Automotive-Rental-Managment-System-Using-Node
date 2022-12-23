@@ -12,63 +12,39 @@ body {
   box-shadow: 0 1rem 2rem 2rem rgba(120, 83, 83, 0.12);
   width: auto;
   height: auto;
-  padding: 1.2rem 2.4rem;
+  padding: 2.4rem;
   border-radius: 9px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  transition: all 0.3s;
+  transform: scale(1.4);
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.2rem;
-  align-items: center;
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 100%;
+  font-size: 1.4rem;
+}
+
+.form-control {
+  font-size: 1.4rem;
+  border-radius: 9px;
+  border: 0.2rem solid #9197ae39;
+}
+
+.form-control:focus {
+  border: 0.2rem solid #9197ae39;
 }
 
 .logo {
   width: 50%;
-  margin-bottom: 4.8rem;
-  /* height: 100%; */
-  /* position: relative; */
-  /* top: -20px; */
-  /* align-self: center; */
+  transform: scale(1.3);
 }
 
-.btn-primary {
-  background-color: #ff0b0b;
-  border: none;
-  color: white;
-  transition: all 0.3s;
-}
-
-.btn-primary:hover {
-  background-color: #d30404;
-  color: white;
-}
-
-.form-control:focus {
-  box-shadow: 0 0 0 0.3rem rgba(251, 102, 102, 0.5);
-}
-
-.btn.btn-primary:focus {
-  box-shadow: 0 0 0 0.3rem rgba(211, 4, 4, 0.5);
-  background-color: #d30404;
-}
-
-.modal.fade.show {
-  box-shadow: 0 100vh 100vh rgba(0, 0, 0, 0.3);
-}
-
-.hidden {
-  display: hidden !important;
-}
-form.needs-validation.grid.form {
-  position: relative;
-  top: -80px;
-}
 .background {
   width: 100vw;
   height: 100vh;
@@ -76,6 +52,10 @@ form.needs-validation.grid.form {
   object-fit: fill;
   position: fixed;
   overflow: hidden;
-  filter: brightness(40%);
   -webkit-filter: brightness(40%);
+  filter: brightness(40%);
+}
+
+.btn-outline-secondary {
+  border-color: transparent;
 }

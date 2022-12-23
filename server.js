@@ -336,23 +336,31 @@ app.use(express.json());
 const cors = require("cors");
 app.use(cors());
 
-// app.use(express.static(__dirname + "/app"));
+app.use(express.static(__dirname + "/app"));
 
 // GET Route
 
 app.get("/", function (request, response) {
   // Render login template
-  response.sendFile(path.join(__dirname + "/index.html"));
+  response.sendFile(path.join(__dirname + "/app/index.html"));
   // response.send("xxx");
 });
 
+app.get("/createAccount", function (request, response) {
+  // Render login template
+  response.sendFile(path.join(__dirname + "/app/register.html"));
+  // response.send("xxx");
+});
 // http://localhost:3000/auth
-app.get("/auth", function (request, response) {
+app.post("/signIn", function (request, response) {
   // Capture the input fields
-  request.session.loggedin = true;
-
-  console.log(request.session);
-  response.send("authorized");
+  const data = request.body;
+  if (data.email === "amr@a" && data.password === "12") {
+    request.session.loggedin = true;
+    response.sendStatus(200);
+  } else {
+    response.sendStatus(404);
+  }
   // let username = request.body.username;
   // let password = request.body.password;
   // // Ensure the input fields exists and are not empty
@@ -382,17 +390,29 @@ app.get("/auth", function (request, response) {
   // }
 });
 
+app.post("/register", function (req, res) {
+  console.log("register request", req.body);
+  res.sendStatus(200);
+});
+
+app.post("/signOut", function (req, res) {
+  if (req.session.loggedin) req.session.loggedin = false;
+  console.log("signout request", req.body);
+  res.sendStatus(200);
+});
+
 // http://localhost:3000/home
 app.get("/home", function (request, response) {
   // If the user is loggedin
   if (request.session.loggedin) {
     // Output username
-    response.send("Welcome back, " + request.session.username + "!");
+    console.log("sss");
+    response.sendFile(path.join(__dirname + "/app/customer.html"));
   } else {
     // Not logged in
     response.send("Please login to view this page!");
   }
-  response.end();
+  // response.end();
 });
 
 app.get("/admin", (req, res) => {
@@ -605,11 +625,10 @@ app.post("/deleteCustomer", function (req, res) {
   res.sendStatus(200);
 });
 
-app.get("/signout", function (req, res) {
-  if (req.session.loggedin) req.session.loggedin = false;
-  console.log("signout request", req.body);
-  res.sendStatus(200);
-});
+// app.post("/signIn", function (req, res) {
+//   console.log("signin request", req.body);
+//   res.sendStatus(200);
+// });
 
 app.post("/daily", (req, res) => {
   console.log(req.body.date);

@@ -1,3 +1,5 @@
+"use strict";
+
 import "core-js/stable"; // polyfill everything
 import "regenerator-runtime/runtime"; // polyfill async/await
 import * as model from "../model.js";
@@ -37,7 +39,7 @@ const init = async () => {
 
   document
     .querySelector(".btn-signout")
-    .addEventListener("click", model.signout.bind(null));
+    .addEventListener("click", model.signOut.bind(null));
 
   handleView();
   handleForm();
@@ -123,6 +125,11 @@ const showConfirmation = function (title, message, action) {
   confirm = new Promise((resolve, reject) => {
     document.querySelector("#confirm").addEventListener("click", resolve);
     document.querySelector("#cancel").addEventListener("click", reject);
+    document.querySelector("#close-confirm").addEventListener("click", reject);
+  });
+
+  document.querySelector("#close-confirm").addEventListener("click", () => {
+    $("#confirm-modal").modal("toggle");
   });
 
   $("#confirm-modal").modal("show");
@@ -494,7 +501,7 @@ const paymentHandler = async function () {
     ? "credit card"
     : "cash";
 
-  info.classList.add("z-n");
+  document.querySelector("#pay").classList.add("z-n");
   showConfirmation(
     "confirm payment",
     `Do you want to confirm paying for this order by ${method}?`,
@@ -505,10 +512,11 @@ const paymentHandler = async function () {
     res = await model.makePayment(activePayment, method);
     if (res) {
       showAlert("Payment was completed successfully");
+      $("#pay").modal("hide");
       renderPayments();
     } else showAlert("Payment failed", false);
   }
-  info.classList.remove("z-n");
+  document.querySelector("#pay").classList.remove("z-n");
 };
 
 const pickHandler = async function (id) {
