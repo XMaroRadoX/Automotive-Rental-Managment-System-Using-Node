@@ -8,40 +8,41 @@ use system;
 
 CREATE TABLE
     customer(
-        customer_id int,
+        id char(10),
         email varchar(320) UNIQUE,
-        pass varchar(128),
+        password varchar(128),
         fname varchar(64),
         lname varchar(64),
         phone_no int,
-        license_no int UNIQUE,
+        license_no varchar(16) UNIQUE,
         region varchar(64),
-        PRIMARY KEY(customer_id)
+        PRIMARY KEY(id)
     );
 
 CREATE TABLE
     favourites(
-        customer_id int,
-        car_id int,
-        PRIMARY KEY(customer_id, car_id)
+        customer_id char(10),
+        car_id char(10),
+        PRIMARY KEY(id, car_id)
     );
 
 CREATE TABLE
     car(
         -- car
-        car_id int,
+        id char(10),
+        brand varchar(64),
+        model varchar(32),
+        type varchar(16),
+        color varchar(32),
+        year int,
+        seating int,
+        powertrain varchar(64),
+        transmission varchar(40),
+        rate int,
+        status varchar(64),
+        -- not mentioned in sqlv2
         plate_no int UNIQUE,
         region varchar(64),
-        status varchar(64),
-        -- car specs
-        seating int,
-        brand varchar(64),
-        color varchar(32),
-        transmission varchar(40),
-        powertrain varchar(64),
-        year int,
-        model varchar(32),
-        rate int,
         PRIMARY KEY(car_id)
     );
 
@@ -55,7 +56,7 @@ CREATE TABLE
         pick_date date,
         return_date date,
         car_id int,
-        customer_id int,
+        id int,
         PRIMARY KEY(reservation_id)
     );
 
@@ -70,33 +71,33 @@ CREATE TABLE
         pay_date date,
         reservation_id int,
         car_id int,
-        customer_id int,
+        id int,
         PRIMARY KEY(
             reservation_id,
-            customer_id,
+            id,
             car_id
         )
     );
 
 ALTER TABLE car_specs
 ADD
-    FOREIGN KEY (car_id) REFERENCES car (car_id);
+    FOREIGN KEY (car_id) REFERENCES car (id);
 
 ALTER TABLE reservation
 ADD
-    FOREIGN KEY (car_id) REFERENCES car (car_id);
+    FOREIGN KEY (car_id) REFERENCES car (id);
 
 ALTER TABLE reservation
 ADD
-    FOREIGN KEY (customer_id) REFERENCES customer (customer_id);
+    FOREIGN KEY (id) REFERENCES customer (id);
 
 ALTER TABLE payments
 ADD
-    FOREIGN KEY (customer_id) REFERENCES customer (customer_id);
+    FOREIGN KEY (id) REFERENCES customer (id);
 
 ALTER TABLE payments
 ADD
-    FOREIGN KEY (car_id) REFERENCES car (car_id);
+    FOREIGN KEY (car_id) REFERENCES car (id);
 
 ALTER TABLE payments
 ADD
@@ -104,8 +105,8 @@ ADD
 
 ALTER TABLE favourites
 ADD
-    FOREIGN KEY (customer_id) REFERENCES customer (customer_id);
+    FOREIGN KEY (customer_id) REFERENCES customer (id);
 
 ALTER TABLE favourites
 ADD
-    FOREIGN KEY (car_id) REFERENCES car (car_id);
+    FOREIGN KEY (car_id) REFERENCES car (id);
