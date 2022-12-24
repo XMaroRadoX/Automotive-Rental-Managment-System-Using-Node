@@ -10,6 +10,7 @@ class TableView {
   #activeCar;
   #error = document.querySelector(".error-message");
   #message = this.#error.querySelector(".message");
+  #num = document.querySelector(".num-rows");
 
   #renderError = function () {
     this.#error.classList.remove("hide");
@@ -27,6 +28,11 @@ class TableView {
     this.#table.innerHTML = "";
 
     if (data.length > 0) {
+      this.#num.classList.contains("hide") &&
+        this.#num.classList.remove("hide");
+      this.#num.textContent = `showing ${data.length} row${
+        data.length > 1 ? "s" : ""
+      }`;
       tr.classList = "table-row table-head";
       tr.innerHTML = head;
 
@@ -34,49 +40,55 @@ class TableView {
 
       if (active === "cars")
         if (data)
-          data.forEach((car) => {
+          data.forEach((car, i) => {
             const div = document.createElement("tr");
-            div.insertAdjacentHTML("afterbegin", this.#generateCarHTML(car));
+            div.insertAdjacentHTML(
+              "afterbegin",
+              this.#generateCarHTML(car, i + 1)
+            );
             frag.appendChild(div);
           });
 
       if (active === "status")
         if (data)
-          data.forEach((car) => {
+          data.forEach((car, i) => {
             const div = document.createElement("tr");
-            div.insertAdjacentHTML("afterbegin", this.#generateStatusHTML(car));
+            div.insertAdjacentHTML(
+              "afterbegin",
+              this.#generateStatusHTML(car, i + 1)
+            );
             frag.appendChild(div);
           });
 
       if (active === "customers")
         if (data)
-          data.forEach((customer) => {
+          data.forEach((customer, i) => {
             const div = document.createElement("tr");
             div.insertAdjacentHTML(
               "afterbegin",
-              this.#generateCustomerHTML(customer)
+              this.#generateCustomerHTML(customer, i + 1)
             );
             frag.appendChild(div);
           });
 
       if (active === "reservations")
         if (data)
-          data.forEach((car) => {
+          data.forEach((car, i) => {
             const div = document.createElement("tr");
             div.insertAdjacentHTML(
               "afterbegin",
-              this.#generateReservationsHTML(car)
+              this.#generateReservationsHTML(car, i + 1)
             );
             frag.appendChild(div);
           });
 
       if (active === "payments")
         if (data)
-          data.forEach((pay) => {
+          data.forEach((pay, i) => {
             const div = document.createElement("tr");
             div.insertAdjacentHTML(
               "afterbegin",
-              this.#generatePaymentsHTML(pay)
+              this.#generatePaymentsHTML(pay, i + 1)
             );
             frag.appendChild(div);
           });
@@ -84,6 +96,7 @@ class TableView {
       this.#table.appendChild(frag);
     } else {
       this.#renderError();
+      this.#num.classList.add("hide");
     }
   }
 
@@ -108,10 +121,11 @@ class TableView {
     this.#footerContainer.innerHTML = this.#generateFooterHTML(car,active);
   }
 
-  #generatePaymentsHTML(pay) {
+  #generatePaymentsHTML(pay, i) {
     //prettier-ignore
     return `
         <tr class="table-row"">
+            <td class="table-field">${i}</td>
             <td class="table-field">${pay.date}</td>
             <td class="table-field">${pay.number}</td>
             <td class="table-field">${pay.total}</td>
@@ -119,7 +133,7 @@ class TableView {
   `;
   }
 
-  #generateStatusHTML(car) {
+  #generateStatusHTML(car, i) {
     let brand = car.brand;
     brand = brand
       .split(" ")
@@ -131,6 +145,7 @@ class TableView {
     //prettier-ignore
     return `
         <tr class="table-row"">
+            <td class="table-field">${i}</td>
             <td class="table-field">${car.carId}</td>
             <td class="table-field">${brand}</td>
             <td class="table-field">${car.model.toUpperCase()}</td>
@@ -152,10 +167,11 @@ class TableView {
   `;
   }
 
-  #generateCustomerHTML(customer) {
+  #generateCustomerHTML(customer, i) {
     //prettier-ignore
     return `
         <tr class="table-row"">
+            <td class="table-field">${i}</td>
             <td class="table-field">${customer.id}</td>
             <td class="table-field">${customer.fname[0].toUpperCase() + customer.fname.slice(1).toLowerCase()}</td>
             <td class="table-field">${customer.lname[0].toUpperCase() + customer.lname.slice(1).toLowerCase()}</td>
@@ -177,7 +193,7 @@ class TableView {
           </tr>`;
   }
 
-  #generateReservationsHTML(car) {
+  #generateReservationsHTML(car, i) {
     let brand = car.brand;
     brand = brand
       .split(" ")
@@ -189,6 +205,7 @@ class TableView {
     //prettier-ignore
     return `
         <tr class="table-row"">
+            <td class="table-field">${i}</td>
             <td class="table-field">${car.resId}</td>
             <td class="table-field">${car.carId}</td>
             <td class="table-field">${car.custId}</td>
@@ -216,7 +233,7 @@ class TableView {
   `;
   }
 
-  #generateCarHTML(car) {
+  #generateCarHTML(car, i) {
     let brand = car.brand;
     brand = brand
       .split(" ")
@@ -228,6 +245,7 @@ class TableView {
     //prettier-ignore
     return `
         <tr class="table-row"">
+            <td class="table-field">${i}</td>
             <td class="table-field">${car.carId}</td>
             <td class="table-field">${brand}</td>
             <td class="table-field">${car.model.toUpperCase()}</td>
@@ -467,6 +485,7 @@ class TableView {
   }
 
   renderForm() {
+    this.#num.classList.add("hide");
     this.#addContainer.innerHTML = `
      <div class="customer-title">
             Enter car info <span class="text-sub">(case insensitive)</span>

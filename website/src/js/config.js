@@ -1,6 +1,7 @@
 export const SERVER_URL = "http://localhost:8000";
 
 export const CAR_HEAD = `
+            <th class="table-field">#</th>
             <th class="table-field">ID</th>
             <th class="table-field">Brand</th>
             <th class="table-field">Model</th>
@@ -18,6 +19,7 @@ export const CAR_HEAD = `
           `;
 
 export const CUSTOMER_HEAD = `
+            <th class="table-field">#</th>
             <th class="table-field">ID</th>
             <th class="table-field">first name</th>
             <th class="table-field">last name</th>
@@ -32,6 +34,7 @@ export const CUSTOMER_HEAD = `
           `;
 
 export const RESERVATIONS_HEAD = `
+            <th class="table-field">#</th>
             <th class="table-field">order number</th>
             <th class="table-field">car id</th>
             <th class="table-field">customer id</th>
@@ -49,6 +52,7 @@ export const RESERVATIONS_HEAD = `
           `;
 
 export const STATUS_HEAD = `
+            <th class="table-field">#</th>
             <th class="table-field">car id</th>
             <th class="table-field">brand</th>
             <th class="table-field">model</th>
@@ -59,6 +63,7 @@ export const STATUS_HEAD = `
             <th class="table-field">info</th>
           `;
 export const PAYMENTS_HEAD = `
+            <th class="table-field">#</th>
             <th class="table-field">Date</th>
             <th class="table-field">number of transactions</th>
             <th class="table-field">total amount</th>

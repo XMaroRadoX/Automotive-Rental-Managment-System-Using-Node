@@ -61,7 +61,7 @@ const generateSQL = function (table, attrs, data) {
   attrs.forEach((at) => {
     // if()
     let str;
-    if (!isFinite(data[at])) {
+    if (!isFinite(data[at]) || at === "phone_no") {
       str = `"${data[at]}"`;
     } else {
       str = data[at];
@@ -104,7 +104,7 @@ const user = async (n) => {
     const users = [];
     await data.forEach((user, i) => {
       users.push({
-        id: id[i],
+        id: id[i].slice(0, 10),
         fname: user.name.first,
         lname: user.name.last,
         email: user.email,
@@ -120,6 +120,17 @@ const user = async (n) => {
     console.log(err);
   }
 };
+
+(async function () {
+  let queries = "";
+  await user(40).then((r) =>
+    r.forEach(
+      (user) => (queries += generateSQL("customer", custs, user) + "\n")
+    )
+  );
+
+  console.log(queries);
+})();
 
 // ####################### CAR DATA GENERATION ####################
 const transmissions = ["manual", "automatic", "cvt"];
@@ -550,7 +561,7 @@ const car = async (n) => {
     const car =
       brand.families[Math.floor(Math.random() * brand.families.length)];
     cars_specs.push({
-      id: ids[i],
+      id: ids[i].slice(0, 10),
       brand: brand.brand,
       model: car.model,
       type: car.type,
@@ -570,14 +581,7 @@ const car = async (n) => {
 };
 
 // console.log(car());
-(async function () {
-  let queries = "";
-  await car(40).then((r) =>
-    r.forEach((user) => (queries += generateSQL("car", attrs, user) + "\n"))
-  );
 
-  console.log(queries);
-})();
 // ####################### RENTAL DATA GENERATION ####################
 const rental = async () => {
   try {

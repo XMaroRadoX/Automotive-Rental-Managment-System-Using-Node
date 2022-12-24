@@ -34,9 +34,29 @@
 /* ****************************** */
 /*           Content              */
 /* ****************************** */
-
 .content {
+  display: grid;
+  grid-template-rows: auto auto auto 1fr;
+}
+
+.query-result {
+  position: relative;
+}
+
+.table-container {
   overflow-y: scroll;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  padding: 1.2rem 0 !important;
+}
+
+.num-rows {
+  padding: 0 2.4rem !important;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: 500;
 }
 
 /* ****************************** */
@@ -88,7 +108,8 @@
 .btn-revoke,
 .btn-return,
 .btn-reserve,
-.btn-suspend {
+.btn-suspend,
+.btn-activate {
   width: 100%;
   grid-column: 1/-1;
 }
@@ -346,7 +367,6 @@
 
 .car-search .input-group {
   width: 100%;
-  /* margin-left: -12rem; */
 }
 
 .car-search .btn-search {
@@ -354,34 +374,12 @@
   grid-column: 4/5;
   /* width: 35%; */
   justify-self: flex-start;
+  margin-left: 0.5rem;
 }
 .car-search .btn-clear-search {
-  /* grid-row: 2/3; */
-
   grid-column: 3/4;
-  /* width: 35%; */
   justify-self: flex-end;
 }
-/* 
-.range_container {
-  display: flex;
-  flex-direction: column;
-  width: 80%;
-  margin: 35% auto;
-}
-
-.sliders_control {
-  position: relative;
-  min-height: 50px;
-}
-
-.form_control {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  font-size: 24px;
-  color: #635a5a;
-} */
 
 .car-filter-btns .btn-outline-primary {
   padding: 0.4rem 0.8rem;

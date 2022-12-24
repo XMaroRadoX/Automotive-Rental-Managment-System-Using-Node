@@ -350,7 +350,7 @@ footer {
 .content {
   height: 90vh;
   background-color: var(--white-main);
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
   position: relative;
 }
 
