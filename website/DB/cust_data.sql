@@ -1,43 +1,40 @@
-
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("addce702c3","betsy.verhaag@example.com","rainman","Betsy","Verhaag","(0861) 292026","70EF94","Netherlands")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("7118a430b7","bekir.weidner@example.com","interacial","Bekir","Weidner","0092-4864335","0FB9B5","Germany")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("17c295f1ab","alfredo.brown@example.com","airwolf","Alfredo","Brown","071-225-7930","C1C0AD","Ireland")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("048fb73212","reginald.james@example.com","babe","Reginald","James","06-0905-4035","889F58","Australia")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("e1e699d4f8","liam.perez@example.com","bombay","Liam","Perez","02-93-87-52-99","4F98F0","France")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("fcb92ebb6d","hilde.vanvik@example.com","treasure","Hilde","Vanvik","35468118","0C09CB","Norway")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("2219f8eb69","silvija.pekovic@example.com","bella","Silvija","Peković","029-0069-181","57F767","Serbia")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("91e2381699","batur.cevik@example.com","list","Batur","Çevik","(575)-998-8167","BDA790","Turkey")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("389bee4601","abdelkarim.ruijters@example.com","slider","Abdelkarim","Ruijters","(033) 9240902","E97D19","Netherlands")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("0178e833d7","ivan.mills@example.com","lesbean","Ivan","Mills","(204) 651-5101",007501,"United States")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("60fffab66e","harley.singh@example.com","sawyer","Harley","Singh","(755)-025-4736","66805F","New Zealand")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("10705a91ef","tom.sveum@example.com","tigger2","Tom","Sveum","54445378","C93370","Norway")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("5a41128b4b","femme.vandelinde@example.com","33333333","Femme","Van de Linde","(005) 5782702","118B5A","Netherlands")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("131a9edea4","annie.ferguson@example.com","burning","Annie","Ferguson","08-1061-2844","3F8222","Australia")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("dd72c05a88","violetta.baklan@example.com","1111111","Violetta","Baklan","(066) H44-5062","236ADD","Ukraine")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("6cb5949891","amy.dasilva@example.com","watch","Amy","Da Silva","076 640 84 55","E5E6C9","Switzerland")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("c6dfe2548e","bobby.holmes@example.com","phoebe","Bobby","Holmes","(888) 287-7129","7615F4","United States")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("b5bfb34c85","namitha.mugeraya@example.com","vgirl","Namitha","Mugeraya","8073013744","655AFD","India")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("a636c4275c","cord.wendland@example.com","sooners","Cord","Wendland","0053-8230052","FCD3CD","Germany")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("bb73cef2f1","alexander.nielsen@example.com","magpie","Alexander","Nielsen","76015219","52EF99","Denmark")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("9e5ddd8dd8","erin.riley@example.com","peanut1","Erin","Riley","061-922-2696","11E18C","Ireland")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values(3472051931,"svobodana.gvozdeckiy@example.com","punch","Svobodana","Gvozdeckiy","(098) Q54-9851","56AABC","Ukraine")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("6b2f4e3a26","hunter.evans@example.com","bell","Hunter","Evans","(677)-990-7851","4ECC67","New Zealand")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("44060ac912","borka.lapcevic@example.com","tower","Borka","Lapčević","019-4240-540","A418B1","Serbia")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("fb466640c6","sarah.morin@example.com","vince","Sarah","Morin","076 806 60 68","F0E6D3","Switzerland")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("08503921c4","taha.grue@example.com","annie","Taha","Grue","28089582","BF0167","Norway")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("a862df0a02","lyubomisl.gakman@example.com","danny","Lyubomisl","Gakman","(099) K98-6321","B9C976","Ukraine")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("eae03374ca","nichlas.kolberg@example.com","torino","Nichlas","Kolberg","30472414","FC6F9A","Norway")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("b73c16af64","anja.ognjanovic@example.com","eduard","Anja","Ognjanović","025-9165-854","654C84","Serbia")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("ecd8eea81c","joshua.patel@example.com","cheese1","Joshua","Patel","(779)-050-1638","7D5131","New Zealand")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("d2ff0630ed","pearl.ortiz@example.com","aceace","Pearl","Ortiz","04-8618-4641","B1E495","Australia")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("7a83d34736","jeremiah.lane@example.com","pang","Jeremiah","Lane","071-228-8356","52C9C6","Ireland")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("c95f3746fc","clement.leroux@example.com","brenda","Clément","Leroux","04-77-64-72-19","9E72A5","France")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("b133b45482","monali.shroff@example.com","2112","Monali","Shroff","7848147030",428141,"India")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("f3351ff110","wiebe.redeker@example.com","michaela","Wiebe","Redeker","(088) 6518314","84ED78","Netherlands")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("e81c13f108","milena.weinhold@example.com","versace","Milena","Weinhold","0103-8317490","C9E18D","Germany")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("530d492930","stanko.ivanisevic@example.com","cindy1","Stanko","Ivanišević","021-4725-694","CA1147","Serbia")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("7bffbfab60","diane.garrett@example.com","nuclear","Diane","Garrett","01426 514517","60B1AA","United Kingdom")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("f5c29a78ce","glenda.flores@example.com","sluggo","Glenda","Flores","07-9693-4929","BD4681","Australia")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("68ac6c936a","amr@example.com","amr","Amr","Yasser","079 807 52 69","371779","Egypt")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("34aac9af74","begad@example.com","begad","Begad","Wael","8500724459","9F35A7","Egypt")
-insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("34e270961f","marwan@example.com","marwan","Marwan","Khaled","05-17-62-26-94","6B7C65","Egypt")
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("4ea4503c00","ludvig.skogland@example.com",sha1("wisdom"),"Ludvig","Skogland","54062134","56261A","Norway");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("9f3a0498a1","adonias.rezende@example.com",sha1("white1"),"Adónias","Rezende","(90) 6707-4439","8B38CE","Brazil");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("00b94dd08b","maiara.novaes@example.com",sha1("goose"),"Maiara","Novaes","(93) 4922-2826","DA8C34","Brazil");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("1c2d3879f0","nym.hmdy@example.com",sha1("deutsch"),"نيما","احمدی","081-90216610","04ACD2","Iran");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("ee18544450","gabriel.sanchez@example.com",sha1("6666"),"Gabriel","Sanchez","079 315 08 38","61F0E6","Switzerland");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("9365cd6795","lino.rey@example.com",sha1("thursday"),"Lino","Rey","04-41-47-83-20","7C40DA","France");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("991aca17ad","iina.salminen@example.com",sha1("lightnin"),"Iina","Salminen","03-180-255","180B6D","Finland");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("45ee5cbb81","muharrem.kuntze@example.com",sha1("limewire"),"Muharrem","Kuntze","0941-6289656","0E5823","Germany");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("553df7d8e7","spasoje.jelacic@example.com",sha1("lonely"),"Spasoje","Jelačić","036-0071-315","0E21CE","Serbia");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("c9a4c3097b","amalia.rosvold@example.com",sha1("carrera"),"Amalia","Rosvold","35896131","1EBACC","Norway");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("6637fef415","santiago.zamora@example.com",sha1("magenta"),"Santiago","Zamora","(693) 483 9251","73858E","Mexico");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("9437b1fd3a","joe.jones@example.com",sha1("babyface"),"Joe","Jones","015242 55329","816786","United Kingdom");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("0795853c01","awyn.nkwnzr@example.com",sha1("arsenal1"),"آوین","نكو نظر","025-44209724","D4816B","Iran");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("bcc364b159","tihomir.dokic@example.com",sha1("doobie"),"Tihomir","Dokić","036-3250-265","A2F70E","Serbia");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("021457c1dc","charlie.lam@example.com",sha1("chelle"),"Charlie","Lam","N69 S04-9047","146594","Canada");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("4db2ad2060","kevin.gibson@example.com",sha1("stefanie"),"Kevin","Gibson","(667) 207-6272","2D0D48","United States");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("fcf7b3b402","mikael.lehtinen@example.com",sha1("freeuser"),"Mikael","Lehtinen","07-600-275","6C4756","Finland");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("856ea5abc9","esmeralda.olmos@example.com",sha1("515151"),"Esmeralda","Olmos","(604) 066 2715","AEB2D3","Mexico");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("1207014c0c","vilma.latvala@example.com",sha1("qqqq"),"Vilma","Latvala","04-532-009","B2B3ED","Finland");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("cd689f0e84","nina.meunier@example.com",sha1("alan"),"Nina","Meunier","05-04-93-54-86","E6A3A1","France");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("3384278395","azra.blanchard@example.com",sha1("namaste"),"Azra","Blanchard","077 774 94 35","EC57E8","Switzerland");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("f997668291","victoire.sanchez@example.com",sha1("bimmer"),"Victoire","Sanchez","04-81-80-80-49","854088","France");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("527ad9570d","alberto.calderon@example.com",sha1("simon1"),"Alberto","Calderón","(604) 491 7211","7CB9FB","Mexico");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("e82fe53920","teresa.stevens@example.com",sha1("sailing"),"Teresa","Stevens","00-4511-4211","8CE30B","Australia");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("b7a79fe847","brice.moura@example.com",sha1("wildone"),"Brice","Moura","(00) 4062-1581","184FD4","Brazil");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("2ea8998967","gema.moya@example.com",sha1("bike"),"Gema","Moya","918-162-640","C8E2D1","Spain");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("3c68989ffc","villads.pedersen@example.com",sha1("hope"),"Villads","Pedersen","67612467","E26BBE","Denmark");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("41a46e5f39","jared.kelly@example.com",sha1("yeah"),"Jared","Kelly","031-089-5575","10DB51","Ireland");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("ccf3a4fbf3","lorenzo.vicente@example.com",sha1("blake1"),"Lorenzo","Vicente","967-589-198","7A793A","Spain");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("77ab40befa","vsevlad.onopenko@example.com",sha1("maxim"),"Vsevlad","Onopenko","(066) F07-1512","DA1DD9","Ukraine");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("ecb368b1b2","johnni.black@example.com",sha1("cross"),"Johnni","Black","(346) 614-2934","9BD189","United States");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("0233602618","jessica.reid@example.com",sha1("welder"),"Jessica","Reid","08-3738-2506","DDBA8C","Australia");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("1864211ab8","gregorio.parra@example.com",sha1("bird"),"Gregorio","Parra","976-975-692","566B5E","Spain");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("0f58ad3660","addison.brar@example.com",sha1("billybob"),"Addison","Brar","H64 O35-4057","CD27BA","Canada");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("ab211e29d5","lauren.jennings@example.com",sha1("outback"),"Lauren","Jennings","071-115-2469","124CAC","Ireland");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("7ced62a102","clement.giraud@example.com",sha1("holly1"),"Clément","Giraud","02-29-67-40-63","40CFA8","France");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("5db67461ff","arnoldo.valencia@example.com",sha1("nutter"),"Arnoldo","Valencia","(651) 725 7043","767A5B","Mexico");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("713d19baec","ryan.williamson@example.com",sha1("kirsty"),"Ryan","Williamson","016977 9382","5460A0","United Kingdom");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("e67aef7f94","hildegund.reinsch@example.com",sha1("matthews"),"Hildegund","Reinsch","0607-9111362","CBA108","Germany");
+insert into customer(customer_id,email,password,fname,lname,phone_no,license_no,region) values("365caca63b","jens.roger@example.com",sha1("100000"),"Jens","Roger","077 045 96 22","6705D8","Switzerland");

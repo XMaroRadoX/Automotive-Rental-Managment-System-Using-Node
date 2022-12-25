@@ -8,116 +8,117 @@ use system;
 
 CREATE TABLE
     customer(
-        id char(10),
+        customer_id char(10),
         email varchar(320) UNIQUE,
         password varchar(128),
+        phone_no CHAR(32) UNIQUE,
         fname varchar(64),
         lname varchar(64),
-        phone_no int,
         license_no varchar(16) UNIQUE,
         region varchar(64),
-        PRIMARY KEY(id)
+        PRIMARY KEY(customer_id)
     );
 
 CREATE TABLE
     favourites(
         customer_id char(10),
         car_id char(10),
-        PRIMARY KEY(id, car_id)
+        PRIMARY KEY(customer_id, car_id)
     );
 
 CREATE TABLE
     car(
-        -- car
-        id char(10),
-        brand varchar(64),
+        car_id char(10),
+        brand varchar(32),
         model varchar(32),
         type varchar(16),
-        color varchar(32),
+        color varchar(16),
         year int,
         seating int,
-        powertrain varchar(64),
-        transmission varchar(40),
+        powertrain varchar(32),
+        transmission varchar(16),
         rate int,
-        status varchar(64),
-        -- not mentioned in sqlv2
-        plate_no int UNIQUE,
+        status varchar(16),
+        plate_no VARCHAR(16) UNIQUE,
         region varchar(64),
         PRIMARY KEY(car_id)
     );
 
 CREATE TABLE
-    reservation(
-        reservation_id int,
-        drop_place varchar(64),
-        drop_date date,
-        date date,
-        pick_place varchar(64),
-        pick_date date,
-        return_date date,
+    reservations(
+        res_id CHAR(10),
         car_id char(10),
         customer_id char(10),
-        PRIMARY KEY(reservation_id)
+        date date,
+        drop_place varchar(64),
+        drop_date date,
+        pick_place varchar(64),
+        pick_date date,
+        res_status varchar(16),
+        PRIMARY KEY(
+            res_id,
+            customer_id,
+            car_id
+        )
     );
 
 CREATE TABLE
     payments(
-        method varchar(32),
-        pick_date date,
-        return_date date,
-        drop_date date,
-        status varchar(64),
-        date date,
-        pay_date date,
-        reservation_id int,
+        res_id CHAR(10),
         car_id char(10),
         customer_id char(10),
+        return_date date,
+        method varchar(32),
+        pay_status varchar(64),
+        total int,
+        pay_date date,
+        period int,
         PRIMARY KEY(
-            reservation_id,
+            res_id,
             customer_id,
             car_id
         )
     );
 
 CREATE TABLE 
-    day_report(
-        day date,
+    history(
+        date date,
         car_id char(10),
-        status varchar(64),
+        status varchar(16),
         PRIMARY KEY(
-            day,
+            date,
             car_id
         )
     );    
 
 
-ALTER TABLE reservation
+ALTER TABLE reservations
 ADD
-    FOREIGN KEY (car_id) REFERENCES car (id);
+    FOREIGN KEY (car_id) REFERENCES car (car_id);
 
-ALTER TABLE reservation
+ALTER TABLE reservations
 ADD
-    FOREIGN KEY (customer_id) REFERENCES customer (id);
-
-ALTER TABLE payments
-ADD
-    FOREIGN KEY (id) REFERENCES customer (id);
+    FOREIGN KEY (customer_id) REFERENCES customer (customer_id);
 
 ALTER TABLE payments
 ADD
-    FOREIGN KEY (car_id) REFERENCES car (id);
+    FOREIGN KEY (customer_id) REFERENCES reservations (customer_id);
 
 ALTER TABLE payments
 ADD
-    FOREIGN KEY (reservation_id) REFERENCES reservation (reservation_id);
+    FOREIGN KEY (car_id) REFERENCES reservations (car_id);
+
+ALTER TABLE payments
+ADD
+    FOREIGN KEY (res_id) REFERENCES reservations (res_id);
 
 ALTER TABLE favourites
 ADD
-    FOREIGN KEY (customer_id) REFERENCES customer (id);
+    FOREIGN KEY (customer_id) REFERENCES customer (customer_id);
 
 ALTER TABLE favourites
 ADD
-    FOREIGN KEY (car_id) REFERENCES car (id);
-ALTER TABLE day_report
+    FOREIGN KEY (car_id) REFERENCES car (car_id);
+ALTER TABLE history
 ADD
-    FOREIGN KEY (car_id) REFERENCES car (id);
+    FOREIGN KEY (car_id) REFERENCES car (car_id);

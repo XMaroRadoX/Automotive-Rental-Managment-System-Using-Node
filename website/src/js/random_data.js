@@ -43,8 +43,9 @@ const region = [
   "Brazil",
   "Argentina",
 ];
+
 const attrs = [
-  "id",
+  "car_id",
   "brand",
   "model",
   "type",
@@ -60,7 +61,7 @@ const attrs = [
 ];
 
 const custs = [
-  "id",
+  "customer_id",
   "email",
   "password",
   "fname",
@@ -76,16 +77,20 @@ const generateSQL = function (table, attrs, data) {
   attrs.forEach((at) => {
     // if()
     let str;
-    if (!isFinite(data[at]) || at === "phone_no" || at === "plate_no") {
-      str = `"${data[at]}"`;
-    } else {
+    if (at === "year" || at === "rate" || at === "seating") {
       str = data[at];
+    } else {
+      str = `${at === "password" ? "sha1(" : ""}"${data[at]}"${
+        at === "password" ? ")" : ""
+      }`;
     }
 
     values.push(str);
   });
 
-  return `insert into ${table}(${attrs.join(",")}) values(${values.join(",")})`;
+  return `insert into ${table}(${attrs.join(",")}) values(${values.join(
+    ","
+  )});`;
 };
 
 const getID = new Promise((resolve, reject) => {
@@ -119,7 +124,7 @@ const user = async (n) => {
     const users = [];
     await data.forEach((user, i) => {
       users.push({
-        id: id[i].slice(0, 10),
+        customer_id: id[i].slice(0, 10),
         fname: user.name.first,
         lname: user.name.last,
         email: user.email,
@@ -139,21 +144,7 @@ const user = async (n) => {
 // ####################### CAR DATA GENERATION ####################
 const transmissions = ["manual", "automatic", "cvt"];
 const power = ["fuel", "gas", "electric"];
-const colors = [
-  "white",
-  "black",
-  "gray",
-  "silver",
-  "blue",
-  "red",
-  "brown",
-  "green",
-  "orange",
-  "beige",
-  "purple",
-  "gold",
-  "yellow",
-];
+const colors = ["white", "black", "silver"];
 const types = [
   "micro",
   "sedan",
@@ -565,7 +556,7 @@ const car = async (n) => {
     const car =
       brand.families[Math.floor(Math.random() * brand.families.length)];
     cars_specs.push({
-      id: ids[i].slice(0, 10),
+      car_id: ids[i].slice(0, 10),
       brand: brand.brand,
       model: car.model,
       type: car.type,
@@ -588,7 +579,7 @@ const car = async (n) => {
 
 (async function () {
   let queries = "";
-  await car(40).then((r) =>
+  await car(20).then((r) =>
     r.forEach((user) => (queries += generateSQL("car", attrs, user) + "\n"))
   );
 
