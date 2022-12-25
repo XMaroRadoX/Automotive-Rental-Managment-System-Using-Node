@@ -55,8 +55,8 @@ CREATE TABLE
         pick_place varchar(64),
         pick_date date,
         return_date date,
-        car_id int,
-        id int,
+        car_id char(10),
+        customer_id char(10),
         PRIMARY KEY(reservation_id)
     );
 
@@ -70,18 +70,26 @@ CREATE TABLE
         date date,
         pay_date date,
         reservation_id int,
-        car_id int,
-        id int,
+        car_id char(10),
+        customer_id char(10),
         PRIMARY KEY(
             reservation_id,
-            id,
+            customer_id,
             car_id
         )
     );
 
-ALTER TABLE car_specs
-ADD
-    FOREIGN KEY (car_id) REFERENCES car (id);
+CREATE TABLE 
+    day_report(
+        day date,
+        car_id char(10),
+        status varchar(64),
+        PRIMARY KEY(
+            day,
+            car_id
+        )
+    );    
+
 
 ALTER TABLE reservation
 ADD
@@ -89,7 +97,7 @@ ADD
 
 ALTER TABLE reservation
 ADD
-    FOREIGN KEY (id) REFERENCES customer (id);
+    FOREIGN KEY (customer_id) REFERENCES customer (id);
 
 ALTER TABLE payments
 ADD
@@ -108,5 +116,8 @@ ADD
     FOREIGN KEY (customer_id) REFERENCES customer (id);
 
 ALTER TABLE favourites
+ADD
+    FOREIGN KEY (car_id) REFERENCES car (id);
+ALTER TABLE day_report
 ADD
     FOREIGN KEY (car_id) REFERENCES car (id);

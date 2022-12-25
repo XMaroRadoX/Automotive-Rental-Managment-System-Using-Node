@@ -1,3 +1,4 @@
+
 insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("addce702c3","betsy.verhaag@example.com","rainman","Betsy","Verhaag","(0861) 292026","70EF94","Netherlands")
 insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("7118a430b7","bekir.weidner@example.com","interacial","Bekir","Weidner","0092-4864335","0FB9B5","Germany")
 insert into customer(id,email,password,fname,lname,phone_no,license_no,region) values("17c295f1ab","alfredo.brown@example.com","airwolf","Alfredo","Brown","071-225-7930","C1C0AD","Ireland")
