@@ -796,7 +796,8 @@ input[type="range"]:focus::-webkit-slider-thumb {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.2rem;
-  padding: 1.6rem 0;
+  width: 100%;
+  padding: 1.6rem 1.6rem;
   font-size: 1.6rem;
 }
 

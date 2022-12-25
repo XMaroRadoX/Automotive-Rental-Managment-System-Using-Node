@@ -30,6 +30,19 @@ const cont = async () => {
 };
 
 // ###################### USER DATA GENERATION ##################
+const region = [
+  "Egypt",
+  "USA",
+  "Germany",
+  "Italy",
+  "Spain",
+  "France",
+  "Algeria",
+  "Japan",
+  "China",
+  "Brazil",
+  "Argentina",
+];
 const attrs = [
   "id",
   "brand",
@@ -41,6 +54,8 @@ const attrs = [
   "powertrain",
   "transmission",
   "rate",
+  "plate_no",
+  "region",
   "status",
 ];
 
@@ -61,7 +76,7 @@ const generateSQL = function (table, attrs, data) {
   attrs.forEach((at) => {
     // if()
     let str;
-    if (!isFinite(data[at]) || at === "phone_no") {
+    if (!isFinite(data[at]) || at === "phone_no" || at === "plate_no") {
       str = `"${data[at]}"`;
     } else {
       str = data[at];
@@ -120,17 +135,6 @@ const user = async (n) => {
     console.log(err);
   }
 };
-
-(async function () {
-  let queries = "";
-  await user(40).then((r) =>
-    r.forEach(
-      (user) => (queries += generateSQL("customer", custs, user) + "\n")
-    )
-  );
-
-  console.log(queries);
-})();
 
 // ####################### CAR DATA GENERATION ####################
 const transmissions = ["manual", "automatic", "cvt"];
@@ -571,14 +575,25 @@ const car = async (n) => {
       powertrain: car.powertrain,
       transmission: car.transmission,
       rate: car.rate,
+      plate_no: ids[i].slice(11, 16),
+      region: region[Math.floor(Math.random() * region.length)],
       status: "active",
     });
-    console.log(cars_specs);
+    // console.log(cars_specs);
     // console.log(generateSQL("cars", attrs, cars_specs[index]));
   }
 
   return cars_specs;
 };
+
+(async function () {
+  let queries = "";
+  await car(40).then((r) =>
+    r.forEach((user) => (queries += generateSQL("car", attrs, user) + "\n"))
+  );
+
+  console.log(queries);
+})();
 
 // console.log(car());
 

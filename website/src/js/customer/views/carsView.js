@@ -9,6 +9,7 @@ class CarsView {
   #carouselContainer = document.querySelector(".carousel-inner");
   #error = document.querySelector(".error-message");
   #message = this.#error.querySelector(".message");
+  payContainer = document.querySelector(".payment-container");
 
   modal = false;
   openCard;
@@ -163,7 +164,10 @@ class CarsView {
               <button class="region-label" data-bs-toggle="tooltip"
                 data-bs-placement="top"
                 data-bs-custom-class="custom-tooltip"
-                data-bs-title="${car.region}" 
+                data-bs-title="${   car.region.length < 4
+                    ? car.region.toUpperCase()
+                    : car.region[0].toUpperCase() +
+                      car.region.slice(1).toLowerCase()}" 
                 >
                 <ion-icon 
                  
@@ -425,6 +429,85 @@ class CarsView {
                     alt="..."
                   />
                 </div>`;
+  }
+
+  renderPayments(data) {
+    this.payContainer.innerHTML = "";
+
+    data.forEach((payment) => {
+      let brand = payment.brand;
+      brand = brand
+        .split(" ")
+        .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
+        .join(" ");
+
+      if (brand.length < 4) brand = brand.toUpperCase();
+
+      const html = `
+    <div class="payment ${payment.status ? "paid" : ""}" data-order-id="${
+        payment.orderId
+      }" data-car-id="${payment.carId}">
+        <div class="pay-car">${brand + " " + payment.model.toUpperCase()}</div>
+        <div class="pay-rate"><span class="pay-sub">rate/day</span>$${
+          payment.rate
+        }</div>
+
+        <div class="pay-status">
+          <ion-icon class="pay-icon ${
+            payment.status ? "hide" : ""
+          }" name="close-outline"></ion-icon>
+          <ion-icon
+            class="pay-icon pay-check ${payment.status ? "" : "hide"}"
+            name="checkmark-outline"
+          ></ion-icon>
+        </div>
+
+        <div class="pay-date">
+          <span class="pay-sub">Order number</span> ${payment.orderId}
+        </div>
+        <div class="pay-total"><span class="pay-sub">Total ${
+          payment.status ? `(${payment.method})` : ""
+        }</span>$${payment.payment}</div>
+
+        <div class="pay-footer">
+          <div class="pay-date">
+            <span class="pay-sub">Pick-up Date</span>${
+              payment.pickup.split("T")[0]
+            }
+          </div>
+          <div class="pay-date">
+            <span class="pay-sub">Drop-off Date</span>${
+              payment.drop.split("T")[0]
+            }
+          </div>
+          <div class="pay-date">
+            <span class="pay-sub">Return Date</span>${
+              payment.return.split("T")[0]
+            }
+          </div>
+          <div class="pay-date">
+            <span class="pay-sub">payment Date</span>${
+              payment.payDate ? `${payment.payDate.split("T")[0]}` : "-"
+            }
+          </div>
+          <div class="pay-date">
+            <span class="pay-sub">Duration</span>${payment.duration}
+            <span class="pay-sub">days</span>
+          </div>
+        </div>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#pay" class="btn btn-primary btn-pay ${
+          payment.status ? "hide" : ""
+        }">pay</button>
+        <button type="button" class="btn btn-primary btn-paid disabled ${
+          payment.status ? "" : "hide"
+        }">
+          paid
+        </button>
+      </div>
+      `;
+
+      this.payContainer.insertAdjacentHTML("beforeend", html);
+    });
   }
 }
 

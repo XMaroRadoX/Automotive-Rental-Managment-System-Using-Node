@@ -67,7 +67,7 @@ const handleForm = function () {
     [...formData.entries()].forEach(
       (entry) => (reserveData[entry[0]] = entry[1])
     );
-    reserveData["carId"] = activeCar.carId;
+    reserveData.carId = activeCar.carId;
 
     info.classList.add("z-n");
     showConfirmation(
@@ -394,91 +394,22 @@ const renderPayments = async function () {
   await model.getPayments();
   if (!model.state.payments) return;
 
-  payContainer.innerHTML = "";
-
-  model.state.payments.forEach((payment) => {
-    let brand = payment.brand;
-    brand = brand
-      .split(" ")
-      .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
-      .join(" ");
-
-    if (brand.length < 4) brand = brand.toUpperCase();
-
-    const html = `
-    <div class="payment ${payment.status ? "paid" : ""}" data-order-id="${
-      payment.orderId
-    }">
-        <div class="pay-car">${brand + " " + payment.model.toUpperCase()}</div>
-        <div class="pay-rate"><span class="pay-sub">rate/day</span>$${
-          payment.rate
-        }</div>
-
-        <div class="pay-status">
-          <ion-icon class="pay-icon ${
-            payment.status ? "hide" : ""
-          }" name="close-outline"></ion-icon>
-          <ion-icon
-            class="pay-icon pay-check ${payment.status ? "" : "hide"}"
-            name="checkmark-outline"
-          ></ion-icon>
-        </div>
-
-        <div class="pay-date">
-          <span class="pay-sub">Order number</span> ${payment.orderId}
-        </div>
-        <div class="pay-total"><span class="pay-sub">Total ${
-          payment.status ? `(${payment.method})` : ""
-        }</span>$${payment.payment}</div>
-
-        <div class="pay-footer">
-          <div class="pay-date">
-            <span class="pay-sub">Pick-up Date</span>${
-              payment.pickup.split("T")[0]
-            }
-          </div>
-          <div class="pay-date">
-            <span class="pay-sub">Drop-off Date</span>${
-              payment.drop.split("T")[0]
-            }
-          </div>
-          <div class="pay-date">
-            <span class="pay-sub">Return Date</span>${
-              payment.return.split("T")[0]
-            }
-          </div>
-          <div class="pay-date">
-            <span class="pay-sub">payment Date</span>${
-              payment.payDate ? `${payment.payDate.split("T")[0]}` : "-"
-            }
-          </div>
-          <div class="pay-date">
-            <span class="pay-sub">Duration</span>${payment.duration}
-            <span class="pay-sub">days</span>
-          </div>
-        </div>
-        <button type="button" data-bs-toggle="modal" data-bs-target="#pay" class="btn btn-primary btn-pay ${
-          payment.status ? "hide" : ""
-        }">pay</button>
-        <button type="button" class="btn btn-primary btn-paid disabled ${
-          payment.status ? "" : "hide"
-        }">
-          paid
-        </button>
-      </div>
-      `;
-
-    payContainer.insertAdjacentHTML("beforeend", html);
-  });
+  carsView.renderPayments(model.state.payments);
 
   payContainer.querySelectorAll(".btn-pay").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      activePayment = btn.closest(".payment").dataset.orderId;
-    });
+    const pay = btn.closest(".payment");
+    const order = pay.dataset.orderId;
+    const car = pay.dataset.carId;
+
+    btn.addEventListener("click", () =>
+      document
+        .querySelector(".btn-submit-pay")
+        .addEventListener("click", paymentHandler.bind(null, order, car))
+    );
   });
 };
 
-const paymentHandler = async function () {
+const paymentHandler = async function (order, car) {
   const method = document.querySelector("#credit-card").checked
     ? "credit card"
     : "cash";
@@ -489,9 +420,10 @@ const paymentHandler = async function () {
     `Do you want to confirm paying for this order by ${method}?`,
     "confirm"
   );
+
   let res = await confirm.then((ev) => true).catch((e) => false);
   if (res) {
-    res = await model.makePayment(activePayment, method);
+    res = await model.makePayment(order, car, method);
     if (res) {
       showAlert("Payment was completed successfully");
       $("#pay").modal("hide");

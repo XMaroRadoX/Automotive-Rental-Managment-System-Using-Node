@@ -19,7 +19,6 @@ export const state = {
     range: [],
     year: 0,
   },
-  userLimit: 3,
 };
 
 export const getCountries = async () => {
@@ -50,7 +49,7 @@ export const getCountries = async () => {
 
 export const adminGetData = async () => {
   try {
-    const res = await fetch(`${SERVER_URL}/admin`);
+    const res = await fetch(`${SERVER_URL}/adminData`);
     if (!res.ok) throw new Error();
 
     const data = await res.json();
@@ -253,7 +252,7 @@ export const addCar = async function (data) {
 
 export const getData = async () => {
   try {
-    const res = await fetch(`${SERVER_URL}/cars`);
+    const res = await fetch(`${SERVER_URL}/data`);
     const data = await res.json();
 
     if (!res.ok) throw new Error();
@@ -269,6 +268,7 @@ export const getData = async () => {
     sortCars("reserved");
     sortCars("rented");
     sortCars();
+    return true;
   } catch (e) {
     console.error(e);
     return false;
@@ -293,6 +293,7 @@ export const addFavorite = async (id) => {
 
     state.favourites.push(car);
     sortCars();
+
     return true;
   } catch (e) {
     console.log(e);
@@ -315,6 +316,7 @@ export const removeFavorite = async (id) => {
     const car = state.favourites.findIndex((c) => c.carId === id);
     state.favourites.splice(car, 1);
     sortCars();
+
     return true;
   } catch (e) {
     console.log(e);
@@ -323,18 +325,20 @@ export const removeFavorite = async (id) => {
 };
 
 export const pickCar = async function (id) {
+  const index = state.reserved.findIndex((c) => c.carId === id);
+  if (index == -1) return;
+
   try {
     const res = await fetch(`${SERVER_URL}/pickCar`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ order: state.reserved[index].resId, id }),
     });
+
     if (!res.ok) throw new Error();
 
-    const index = state.reserved.findIndex((c) => c.carId === id);
-    if (index == -1) return;
     state.reserved[index].status = "rented";
     state.rented.push(state.reserved[index]);
     state.reserved.splice(index, 1);
@@ -348,21 +352,29 @@ export const pickCar = async function (id) {
 };
 
 export const revokeCar = async function (id) {
+  const index = state.reserved.findIndex((c) => c.carId === id);
+  if (index == -1) return;
+
   try {
     const res = await fetch(`${SERVER_URL}/revokeCar`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ order: state.reserved[index].resId, id }),
     });
 
     if (!res.ok) throw new Error();
 
-    const index = state.reserved.findIndex((c) => c.carId === id);
-    if (index == -1) return;
-
+    // clear reserve-info
     state.reserved[index].status = "active";
+    state.reserved[index].resId = "";
+    state.reserved[index].pickup = "";
+    state.reserved[index].drop = "";
+    state.reserved[index].date = "";
+    state.reserved[index].custId = "";
+    state.reserved[index].custName = "";
+
     state.cars.push(state.reserved[index]);
     state.reserved.splice(index, 1);
     sortCars("all");
@@ -375,61 +387,36 @@ export const revokeCar = async function (id) {
   }
 };
 
-export const reserveCar = async function (data, flag) {
-  try {
-    if (state.userLimit === 0) throw new Error();
-
-    const res = await fetch(`${SERVER_URL}/reserveCar`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    const index = state.cars.findIndex((c) => c.carId === data.carId);
-    if (index == -1) return;
-
-    let favIndex;
-    if (flag)
-      favIndex = state.favourites.findIndex((c) => c.carId === data.carId);
-
-    state.cars[index].status = "reserved";
-    state.reserved.push(state.cars[index]);
-
-    sortCars("all");
-    sortCars("reserved");
-
-    if (favIndex > -1) {
-      state.favourites.splice(favIndex, 1);
-      state.favourites.push(state.cars[index]);
-      sortCars();
-    }
-
-    state.cars.splice(index, 1);
-    state.userLimit--;
-
-    return true;
-  } catch (e) {
-    console.log(e);
-    return false;
-  }
-};
-
 export const returnCar = async function (id) {
+  const index = state.rented.findIndex((c) => c.carId === id);
+  if (index == -1) return;
+  const date = new Date();
+
   try {
     const res = await fetch(`${SERVER_URL}/returnCar`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({
+        order: state.rented[index].resId,
+        id,
+        date: `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`,
+      }),
     });
 
-    const index = state.rented.findIndex((c) => c.carId === id);
-    if (index == -1) return;
+    if (!res.ok) throw new Error();
+
     state.rented[index].status = "active";
+    state.rented[index].resId = "";
+    state.rented[index].pickup = "";
+    state.rented[index].drop = "";
+    state.rented[index].date = "";
+    state.rented[index].custId = "";
+    state.rented[index].custName = "";
+
     state.cars.push(state.rented[index]);
+    console.log(state.cars);
     state.rented.splice(index, 1);
 
     sortCars("all");
@@ -441,11 +428,64 @@ export const returnCar = async function (id) {
   }
 };
 
+export const reserveCar = async function (data, flag) {
+  const index = state.cars.findIndex((c) => c.carId === data.carId);
+  if (index == -1) return;
+
+  const favIndex = state.favourites.findIndex((c) => c.carId === data.carId);
+  const date = new Date();
+
+  data.date = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+
+  try {
+    const res = await fetch(`${SERVER_URL}/reserveCar`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        data,
+      }),
+    });
+
+    if (!res.ok) throw new Error();
+
+    const resId = await res.json();
+
+    state.cars[index].status = "reserved";
+    state.cars[index].pickup = data.pick_date;
+    state.cars[index].drop = data.drop_date;
+    state.cars[index].pickLocation = data.pick_place;
+    state.cars[index].dropLocation = data.drop_place;
+    state.cars[index].date = data.date;
+    state.cars[index].resId = resId;
+
+    state.reserved.push(state.cars[index]);
+
+    sortCars("all");
+    sortCars("reserved");
+
+    if (flag && favIndex > -1) {
+      state.favourites.splice(favIndex, 1);
+      state.favourites.push(state.cars[index]);
+      sortCars();
+    }
+
+    state.cars.splice(index, 1);
+
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 export const getPayments = async function () {
   try {
     const res = await fetch(`${SERVER_URL}/payments`);
-    const data = await res.json();
+    if (!res.ok) throw new Error();
 
+    const data = await res.json();
     state.payments = data;
     return true;
   } catch (e) {
@@ -454,15 +494,17 @@ export const getPayments = async function () {
   }
 };
 
-export const makePayment = async function (id, method) {
+export const makePayment = async function (order, car, method) {
   try {
     const res = await fetch(`${SERVER_URL}/pay`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ id, method }),
+      body: JSON.stringify({ order, car, method }),
     });
+    if (!res.ok) throw new Error();
+
     return true;
   } catch (e) {
     console.log(e);
@@ -508,6 +550,7 @@ export const signOut = async function () {
       method: "POST",
     });
     if (!res.ok) throw new Error();
+    window.location = `${SERVER_URL}/`;
 
     return true;
   } catch (e) {

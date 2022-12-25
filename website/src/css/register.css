@@ -7,7 +7,13 @@
 } */
 
 .form-control {
-  border: 1px solid #ced4da;
+  border: 0.1rem solid #ced4da;
+  border-collapse: collapse;
+  box-shadow: 0 0 0 0.1rem transparent;
+}
+
+.form-control:focus {
+  border: 0.1rem solid #ced4da;
 }
 
 .form-container {
