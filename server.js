@@ -605,7 +605,7 @@ app.post("/returnCar", function (request, response) {
   const order = request.body.order;
   const date = request.body.date; // return date
 
-  // TODO CONNECT TO DB SET CAR STATUS TO ACTIVE, CREATE THE PAYMENT AND INCREASE USER LIMIT
+  // TODO CONNECT TO DB SET CAR STATUS TO ACTIVE, CREATE THE PAYMENT,UPDATE ORDER STATUS AND INCREASE USER LIMIT
   console.log("return request", id, order, date);
 
   response.sendStatus(200);
