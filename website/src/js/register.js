@@ -1,7 +1,7 @@
 "use strict";
 
-import * as model from "./model.js";
 import { SERVER_URL } from "./config.js";
+import * as model from "./model.js";
 
 const form = document.querySelector(".form");
 const alert = document.querySelector(".alert");

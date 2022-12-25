@@ -297,6 +297,17 @@ const path = require("path");
 const { v4: uuid } = require("uuid");
 require("dotenv").config();
 
+const connection = mysql.createConnection({
+  host: process.env.host,
+  user: process.env.user,
+  database: process.env.database,
+});
+
+connection.connect((err) => {
+  if (err) throw err;
+  console.log("Connected!");
+});
+
 const getId = function () {
   return uuid().split("-").join("").slice(0, 10);
 };
@@ -499,22 +510,35 @@ app.post("/register", function (request, response) {
 
 app.post("/signIn", function (request, response) {
   const data = request.body;
+  console.log(data);
   const query = `
-    select email,password,id
-    from customer
-    where email = "${data.email}" and password = "${data.password}"
+    select fname,lname,customer_id from customer where email = "${data.email}" and \`password\` = sha1("${data.password}")
   `;
 
-  try {
-    // TODO CONNECT TO DB AND SEARCH FOR ACCOUNT
-    // if found
-    // request.session.loggedin = true;
-    // request.session.userId = customer_id;
-    // request.session.limit = limit;
-    response.sendStatus(200);
-  } catch (e) {
-    response.sendStatus(404);
-  }
+  // TODO CONNECT TO DB AND SEARCH FOR ACCOUNT AND GET LIMIT
+  connection.query(query, (err, rows) => {
+    try {
+      if (err) throw err;
+      request.session.loggedin = true;
+      request.session.userId = rows[0].customer_id;
+      request.session.name = rows[0].fname + " " + rows[0].lname;
+
+      request.session.limit = 3;
+
+      console.log(request.session);
+      response.sendStatus(200);
+    } catch (error) {
+      console.log(error);
+      response.sendStatus(404);
+    }
+  });
+
+  // console.log(rows);
+
+  // if found
+  // request.session.loggedin = true;
+  // request.session.userId = customer_id;
+  // request.session.limit = limit;
 });
 
 app.post("/signOut", function (request, response) {
