@@ -23,6 +23,8 @@ class TableView {
 
   render(data, head, active = "cars") {
     const frag = document.createDocumentFragment();
+    const thead = document.createElement("thead");
+    const tbody = document.createElement("tbody");
     const tr = document.createElement("tr");
     this.#hideError();
     this.#table.innerHTML = "";
@@ -36,7 +38,7 @@ class TableView {
       tr.classList = "table-row table-head";
       tr.innerHTML = head;
 
-      frag.appendChild(tr);
+      thead.appendChild(tr);
 
       if (active === "cars")
         if (data)
@@ -46,7 +48,7 @@ class TableView {
               "afterbegin",
               this.#generateCarHTML(car, i + 1)
             );
-            frag.appendChild(div);
+            tbody.appendChild(div);
           });
 
       if (active === "status")
@@ -57,7 +59,7 @@ class TableView {
               "afterbegin",
               this.#generateStatusHTML(car, i + 1)
             );
-            frag.appendChild(div);
+            tbody.appendChild(div);
           });
 
       if (active === "customers")
@@ -68,7 +70,7 @@ class TableView {
               "afterbegin",
               this.#generateCustomerHTML(customer, i + 1)
             );
-            frag.appendChild(div);
+            tbody.appendChild(div);
           });
 
       if (active === "reservations")
@@ -79,7 +81,7 @@ class TableView {
               "afterbegin",
               this.#generateReservationsHTML(car, i + 1)
             );
-            frag.appendChild(div);
+            tbody.appendChild(div);
           });
 
       if (active === "payments")
@@ -90,10 +92,10 @@ class TableView {
               "afterbegin",
               this.#generatePaymentsHTML(pay, i + 1)
             );
-            frag.appendChild(div);
+            tbody.appendChild(div);
           });
-
-      this.#table.appendChild(frag);
+      this.#table.appendChild(thead);
+      this.#table.appendChild(tbody);
     } else {
       this.#renderError();
       this.#num.classList.add("hide");
@@ -488,6 +490,7 @@ class TableView {
     this.#num.classList.add("hide");
     this.#addContainer.innerHTML = `
      <div class="customer-title">
+
             Enter car info <span class="text-sub">(case insensitive)</span>
           </div>
           <form class="car-form needs-validation" novalidate>
