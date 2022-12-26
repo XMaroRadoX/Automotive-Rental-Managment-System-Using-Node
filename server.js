@@ -301,6 +301,7 @@ const connection = mysql.createConnection({
   host: process.env.host,
   user: process.env.user,
   database: process.env.database,
+  password: process.env.password,
 });
 
 connection.connect((err) => {
@@ -512,7 +513,7 @@ app.post("/signIn", function (request, response) {
   const data = request.body;
   console.log(data);
   const query = `
-    select fname,lname,customer_id from customer where email = "${data.email}" and \`password\` = sha1("${data.password}")
+    select fname,customer_id from customer where email = "${data.email}" and \`password\` = sha1("${data.password}")
   `;
 
   // TODO CONNECT TO DB AND SEARCH FOR ACCOUNT AND GET LIMIT
@@ -521,7 +522,7 @@ app.post("/signIn", function (request, response) {
       if (err) throw err;
       request.session.loggedin = true;
       request.session.userId = rows[0].customer_id;
-      request.session.name = rows[0].fname + " " + rows[0].lname;
+      request.session.name = rows[0].fname;
 
       request.session.limit = 3;
 

@@ -1,6 +1,5 @@
 "use strict";
 
-import { favouriteHandler } from "../controller.js";
 class CarsView {
   #cars = document.querySelector(".cars");
   #viewTitle = document.querySelector(".view-title");
@@ -67,10 +66,6 @@ class CarsView {
       card.addEventListener("mouseout", this.#toggleCard.bind(this, card));
     });
 
-    document.querySelectorAll(".btn-fav").forEach((btn) => {
-      btn.addEventListener("click", favouriteHandler.bind(btn));
-    });
-
     document
       .querySelectorAll(".btn-close-modal")
       .forEach((btn) =>
@@ -78,7 +73,7 @@ class CarsView {
       );
   }
 
-  render(data, favs, favFlag = false) {
+  render(data) {
     const frag = document.createDocumentFragment();
     this.#hideError();
     this.#cars.innerHTML = "";
@@ -87,14 +82,7 @@ class CarsView {
       data.forEach((car) => {
         const div = document.createElement("div");
         div.classList = "card-container";
-        div.insertAdjacentHTML(
-          "afterbegin",
-          this.#generateHTML(
-            car,
-            favs.filter((fCar) => fCar.carId == car.carId).length > 0,
-            favFlag
-          )
-        );
+        div.insertAdjacentHTML("afterbegin", this.#generateHTML(car));
         frag.appendChild(div);
       });
       this.#cars.appendChild(frag);
@@ -109,7 +97,7 @@ class CarsView {
       });
   }
 
-  #generateHTML(car, flag, favFlag) {
+  #generateHTML(car) {
     let brand = car.brand;
     brand = brand
       .split(" ")
@@ -118,29 +106,12 @@ class CarsView {
 
     if (brand.length < 4) brand = brand.toUpperCase();
 
-    let btn =
-      favFlag &&
-      (car.status === "rented"
-        ? "rented"
-        : car.status === "reserved"
-        ? "reserved"
-        : car.status === "oos"
-        ? "out of service"
-        : "");
-
-    if (!btn) btn = "view";
     //prettier-ignore
     return `
         <div class = "card" data-car-id ="${car.carId}" data-region="${car.region}">
             <div class="card-header">
               <h3 class="car-brand">${brand} ${car.model.toUpperCase()}</h3>
-              <button class="btn-fav">
-                <ion-icon class ="fav-icon fav-outer" name="heart-outline">
-                </ion-icon>
-                <ion-icon class ="fav-icon fav-inner ${
-                  flag ? "fav-active" : ""
-                }" name="heart"></ion-icon>
-              </button>
+              <div></div>
 
               <span class="car-type">${
                 car.type[0].toUpperCase() + car.type.slice(1).toLowerCase()
@@ -182,16 +153,16 @@ class CarsView {
               </div>
               
               <button
-               class="btn btn-primary btn-view hidden mt-4 ${btn === 'view'? "": "disabled"}"
+               class="btn btn-primary btn-view hidden mt-4"
                data-bs-toggle="modal"
                data-bs-target="#car-info"
-              >${btn}</button>
+              >view</button>
             </div>
           </div>
   `;
   }
 
-  renderCarView(car, active, location) {
+  renderCarView(car) {
     let brand = car.brand;
     brand = brand
       .split(" ")
@@ -202,12 +173,8 @@ class CarsView {
     this.#viewTitle.textContent = brand + " " + car.model.toUpperCase();
     this.#carouselContainer.innerHTML = this.#generateCarouselHTML(car);
     this.#infoContainer.innerHTML = this.#generateInfoHTML(car, brand);
-    if (car.status === "rented" || car.status === "reserved") {
-      if (this.#infoContainer.classList.contains("gap"))
-        this.#infoContainer.classList.remove("gap");
-    } else this.#infoContainer.classList.add("gap");
     //prettier-ignore
-    this.#footerContainer.innerHTML = this.#generateFooterHTML(active,location);
+    this.#footerContainer.innerHTML = this.#generateFooterHTML();
   }
 
   #generateInfoHTML(car, brand) {
@@ -352,35 +319,10 @@ class CarsView {
     `;
   }
 
-  #generateFooterHTML(active) {
-    let type;
-
-    if (active === "home" || active === "favourites") type = "reserve";
-
-    if (active === "reserved") type = "pick-up";
-
-    if (active === "rented") type = "return";
-
-    // get location for favourites
-
+  #generateFooterHTML() {
     let html = `
-            <button 
-            ${
-              type === "reserve"
-                ? `form="action"
-                   type="submit"
-                   `
-                : ""
-            } 
-
-            type="button" class="btn btn-primary btn-${type}">${type}</button>`;
-
-    if (type === "pick-up")
-      return (
-        ` <button type="button"  class="btn btn-outline-primary btn-revoke">revoke</button>` +
-        " " +
-        html
-      );
+            <button  
+            type="button" class="btn btn-primary btn-reserve disabled">Sign to reserve</button>`;
 
     return html;
   }

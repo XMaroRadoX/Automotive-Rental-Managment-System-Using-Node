@@ -135,7 +135,7 @@ const showConfirmation = function (title, message, action) {
   $("#confirm-modal").modal("show");
 };
 
-const showAlert = async function (message, flag = true) {
+const showAlert = function (message, flag = true) {
   alert.textContent = message;
   alert.classList.toggle("alert-hide");
   alert.classList.toggle(`${flag ? "alert-success" : "alert-danger"}`);

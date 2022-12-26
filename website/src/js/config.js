@@ -62,6 +62,7 @@ export const STATUS_HEAD = `
             <th class="table-field">status</th>
             <th class="table-field">info</th>
           `;
+
 export const PAYMENTS_HEAD = `
             <th class="table-field">#</th>
             <th class="table-field">Date</th>
