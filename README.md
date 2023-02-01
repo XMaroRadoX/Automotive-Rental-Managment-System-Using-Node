@@ -56,9 +56,9 @@ ERD model Mapping
 
 | File Name | Description                                                                                      |
 |-----------|--------------------------------------------------------------------------------------------------|
-| [Src](https://github.com/XMaroRadoX/Car-Rental-System/tree/main/website/src) | Contains Source code of the project           |
-| [db](https://github.com/XMaroRadoX/Car-Rental-System/tree/main/website/db)   | Contians database configuration and sample data|
-| [package.json](https://github.com/XMaroRadoX/Car-Rental-System/blob/main/package.json)| contains the metadata information about the project and its dependencies. |
+| [Src](https://github.com/XMaroRadoX/automotive-rental-managment-system-using-node/tree/main/website/src) | Contains Source code of the project           |
+| [db](https://github.com/XMaroRadoX/automotive-rental-managment-system-using-node/tree/main/website/db)   | Contians database configuration and sample data|
+| [package.json](https://github.com/XMaroRadoX/automotive-rental-managment-system-using-node/blob/main/package.json)| contains the metadata information about the project and its dependencies. |
 
 ### Pre-requisites :screwdriver:
 
