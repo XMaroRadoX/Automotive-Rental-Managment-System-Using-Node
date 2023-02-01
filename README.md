@@ -44,7 +44,7 @@ Admin cars page
 ERD model
 </p>
  <p align="center" width="100%">
-<img src="design/erd_model.png">
+<img src="design/mapping.png">
 </p>
 <p align="center" width="100%">
 ERD model Mapping
