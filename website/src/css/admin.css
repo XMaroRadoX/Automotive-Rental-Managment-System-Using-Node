@@ -49,7 +49,7 @@ table thead {
   position: sticky;
   top: 0;
   width: 100%;
-  z-index: 30;
+  z-index: 16;
 }
 
 .table-container::before {
@@ -133,12 +133,16 @@ table thead {
   width: 100%;
 }
 
+.table-head {
+  text-transform: uppercase;
+}
+
 .table-field {
   width: auto;
   font-family: inherit;
   font-size: 1.4rem;
   font-weight: 500;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   text-align: left;
   padding: 0.8rem;
   text-align: center;
@@ -171,6 +175,9 @@ table thead {
   padding: 1.4 0.8rem;
   width: 90%;
   font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-delete {
@@ -335,6 +342,7 @@ table thead {
 
 .add-container .customer-title {
   margin-bottom: 0;
+  margin-top: 2rem;
 }
 
 .car-form {
@@ -385,4 +393,13 @@ table thead {
 
 .plateNo {
   border-radius: 9px;
+}
+
+.add-footer {
+  font-size: 1.4rem;
+}
+
+.form-control:focus {
+  border-color: var(--tint-primary);
+  box-shadow: var(--tint-primary);
 }

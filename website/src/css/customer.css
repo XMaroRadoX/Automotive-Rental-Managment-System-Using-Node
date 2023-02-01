@@ -27,6 +27,9 @@
   border-bottom: 1px solid #9197ae39;
   font-size: 1.8rem;
   padding: 1.2rem 4.8rem;
+  position: sticky;
+  top: 0;
+  z-index: 19;
 }
 .navbar .container-fluid {
   gap: 4.8rem;
@@ -101,6 +104,8 @@
   background-color: yellow;
   grid-template-columns: repeat(4, 1fr);
   column-gap: 1.6rem;
+  row-gap: 2.4rem;
+
   background-color: var(--white-main);
 }
 
@@ -128,11 +133,15 @@
 .card-active {
   position: absolute;
   transform: scale(1.1);
-  z-index: 15;
+  z-index: 17;
   height: auto;
   box-shadow: 0 0rem 4.8rem rgb(0 0 0 / 15%);
   transition: all 0.3s;
   border: 1px solid var(--tint-shadow);
+}
+
+.card-active .btn-fav {
+  z-index: 18;
 }
 
 .card-title {
@@ -175,7 +184,7 @@
 }
 
 .car-brand {
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 700;
 }
 
@@ -400,4 +409,16 @@
 
 .gap {
   column-gap: 6.4rem;
+}
+
+.btn.btn-signout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcome {
+  margin-right: 1.2rem;
+  text-align: right;
+  font-weight: 600;
 }

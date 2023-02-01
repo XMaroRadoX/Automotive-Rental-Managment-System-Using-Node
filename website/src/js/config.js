@@ -27,18 +27,14 @@ export const CUSTOMER_HEAD = `
             <th class="table-field">region</th>
             <th class="table-field">phone number</th>
             <th class="table-field">license number</th>
-            <th class="table-field">reserved/rented</th>
-            <th class="table-field">debt</th>
-            <th class="table-field">transactions</th>
             <th class="table-field">actions</th>
           `;
 
 export const RESERVATIONS_HEAD = `
             <th class="table-field">#</th>
-            <th class="table-field">order number</th>
+            <th class="table-field">res. number</th>
             <th class="table-field">car id</th>
-            <th class="table-field">customer id</th>
-            <th class="table-field">customer name</th>
+            <th class="table-field">cust. id</th>
             <th class="table-field">brand</th>
             <th class="table-field">model</th>
             <th class="table-field">plate Number</th>
@@ -47,6 +43,7 @@ export const RESERVATIONS_HEAD = `
             <th class="table-field">pick-up date</th>
             <th class="table-field">drop-off date</th>
             <th class="table-field">order date</th>
+            <th class="table-field">car status</th>
             <th class="table-field">status</th>
             <th class="table-field">Info</th>
           `;

@@ -18,7 +18,7 @@ class SearchView {
               <input
                 type="text"
                 class="form-control"
-                id="resId"
+                id="res_id"
                 aria-describedby="res-id"
                 placeholder="12345"
               />
@@ -29,7 +29,7 @@ class SearchView {
               <input
                 type="text"
                 class="form-control"
-                id="carId"
+                id="car_id"
                 aria-describedby="car-id"
                 placeholder="12345"
               />
@@ -40,20 +40,20 @@ class SearchView {
               <input
                 type="text"
                 class="form-control"
-                id="custId"
+                id="customer_id"
                 aria-describedby="cust-id"
                 placeholder="12345"
               />
             </div>
 
             <div class="input-group">
-              <span class="input-group-text" id="cust-name">Customer Name</span>
+              <span class="input-group-text" id="cust-name">Reservation status</span>
               <input
                 type="text"
                 class="form-control"
-                id="custName"
+                id="res_status"
                 aria-describedby="cust-name"
-                placeholder="12345"
+                placeholder="active"
               />
             </div>
 
@@ -62,7 +62,7 @@ class SearchView {
               <input
                 type="text"
                 class="form-control"
-                id="plateNo"
+                id="plate_no"
                 aria-describedby="plate-id"
                 placeholder="5E4333"
               />
@@ -75,7 +75,7 @@ class SearchView {
               <input
                 type="date"
                 class="form-control"
-                id="pickup"
+                id="pick_date"
                 aria-describedby="pick-date"
               />
             </div>
@@ -85,7 +85,7 @@ class SearchView {
               <input
                 type="date"
                 class="form-control"
-                id="drop"
+                id="drop_date"
                 aria-describedby="drop-date"
               />
             </div>
@@ -131,6 +131,41 @@ class SearchView {
     `;
   }
 
+  //  <div class="input-group ">
+  //           <span class="input-group-text" id="res/ren">Reserved/Rented</span>
+  //           <input
+  //             type="number"
+  //             class="form-control"
+  //             id="ncars"
+  //             aria-describedby="res/ren"
+  //             placeholder="5"
+  //           />
+  //         </div>
+
+  //         <div class="input-group ">
+  //           <span class="input-group-text" id="debt-no">Debt</span>
+  //           <input
+  //             type="number"
+  //             class="form-control"
+  //             id="debt"
+  //             aria-describedby="debt-no"
+  //             placeholder="5"
+  //           />
+  //         </div>
+
+  //         <div class="input-group ">
+  //           <span class="input-group-text" id="transactions-no"
+  //             >Transactions</span
+  //           >
+  //           <input
+  //             type="number"
+  //             class="form-control"
+  //             id="transactions"
+  //             aria-describedby="transactions-no"
+  //             placeholder="5"
+  //           />
+  //         </div>
+
   renderCustomerSearch() {
     this.searchContainer.innerHTML = `
     <div class="customer-filter">
@@ -144,7 +179,7 @@ class SearchView {
               <input
                 type="text"
                 class="form-control"
-                id="id"
+                id="customer_id"
                 aria-describedby="cust-id"
                 placeholder="123456789"
               />
@@ -199,7 +234,7 @@ class SearchView {
               <input
                 type="text"
                 class="form-control"
-                id="phone-no"
+                id="phone_no"
                 aria-describedby="phone"
                 placeholder="012-893-960-52"
               />
@@ -212,46 +247,12 @@ class SearchView {
               <input
                 type="text"
                 class="form-control"
-                id="license"
+                id="license_no"
                 aria-describedby="license-no"
                 placeholder="5e4322"
               />
             </div>
 
-            <div class="input-group ">
-              <span class="input-group-text" id="res/ren">Reserved/Rented</span>
-              <input
-                type="number"
-                class="form-control"
-                id="ncars"
-                aria-describedby="res/ren"
-                placeholder="5"
-              />
-            </div>
-
-            <div class="input-group ">
-              <span class="input-group-text" id="debt-no">Debt</span>
-              <input
-                type="number"
-                class="form-control"
-                id="debt"
-                aria-describedby="debt-no"
-                placeholder="5"
-              />
-            </div>
-
-            <div class="input-group ">
-              <span class="input-group-text" id="transactions-no"
-                >Transactions</span
-              >
-              <input
-                type="number"
-                class="form-control"
-                id="transactions"
-                aria-describedby="transactions-no"
-                placeholder="5"
-              />
-            </div>
 
             <button
               type="button"
@@ -380,19 +381,31 @@ class SearchView {
           
           <div class="car-search mt-4">
             <div class="car-filter-text">
-              Search by plate number <span class="text-sub">(case insensitive)</span>
+              Search by <span class="text-sub">(case insensitive)</span>
             </div>
 
             <div class="input-group">
+             <span class="input-group-text" id="plate-no">Plate Number</span>
               <input
                 type="test"
                 class="form-control plateNo"
                 placeholder="54E222"
-                id="plateNo"
+                id="plate_no"
                 aria-describedby="plate-no"
               />
             </div>
     
+              <div class="input-group">
+             <span class="input-group-text" id="car-id">Car ID</span>
+              <input
+                type="test"
+                class="form-control plateNo"
+                placeholder="54E222"
+                id="car_id"
+                aria-describedby="car-id"
+              />
+            </div>
+
             <div class="ms-5">
             <button
               type="button"

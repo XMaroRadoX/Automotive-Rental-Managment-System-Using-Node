@@ -22,7 +22,6 @@ class TableView {
   }
 
   render(data, head, active = "cars") {
-    const frag = document.createDocumentFragment();
     const thead = document.createElement("thead");
     const tbody = document.createElement("tbody");
     const tr = document.createElement("tr");
@@ -41,7 +40,7 @@ class TableView {
       thead.appendChild(tr);
 
       if (active === "cars")
-        if (data)
+        if (data.length > 0)
           data.forEach((car, i) => {
             const div = document.createElement("tr");
             div.insertAdjacentHTML(
@@ -52,7 +51,7 @@ class TableView {
           });
 
       if (active === "status")
-        if (data)
+        if (data.length > 0)
           data.forEach((car, i) => {
             const div = document.createElement("tr");
             div.insertAdjacentHTML(
@@ -63,7 +62,7 @@ class TableView {
           });
 
       if (active === "customers")
-        if (data)
+        if (data.length > 0)
           data.forEach((customer, i) => {
             const div = document.createElement("tr");
             div.insertAdjacentHTML(
@@ -74,7 +73,7 @@ class TableView {
           });
 
       if (active === "reservations")
-        if (data)
+        if (data.length > 0)
           data.forEach((car, i) => {
             const div = document.createElement("tr");
             div.insertAdjacentHTML(
@@ -85,7 +84,7 @@ class TableView {
           });
 
       if (active === "payments")
-        if (data)
+        if (data.length > 0)
           data.forEach((pay, i) => {
             const div = document.createElement("tr");
             div.insertAdjacentHTML(
@@ -128,7 +127,7 @@ class TableView {
     return `
         <tr class="table-row"">
             <td class="table-field">${i}</td>
-            <td class="table-field">${pay.date}</td>
+            <td class="table-field">${pay?.date?.split('T')[0]}</td>
             <td class="table-field">${pay.number}</td>
             <td class="table-field">${pay.total}</td>
           </tr>
@@ -148,17 +147,17 @@ class TableView {
     return `
         <tr class="table-row"">
             <td class="table-field">${i}</td>
-            <td class="table-field">${car.carId}</td>
+            <td class="table-field">${car.car_id}</td>
             <td class="table-field">${brand}</td>
             <td class="table-field">${car.model.toUpperCase()}</td>
-            <td class="table-field">${car.plateNo}</td>
-            <td class="table-field">${car.region}</td>
+            <td class="table-field">${car.plate_no.toUpperCase()}</td>
+            <td class="table-field">${car.region.length<4? car.region.toUpperCase():car.region[0].toUpperCase() + car.region.slice(1).toLowerCase()}</td>
             <td class="table-field">${car.rate}</td>
-            <td class="table-field">${car.status}</td>
+            <td class="table-field">${car.status.length<4?car.status.toUpperCase():car.status[0].toUpperCase() + car.status.slice(1).toLowerCase()}</td>
                <td class="table-field">
               <button
                 class="btn btn-primary btn-view mx-auto"
-                data-car-id="${car.carId}"
+                data-car-id="${car.car_id}"
                 data-bs-toggle="modal"
                 data-bs-target="#car-info"
               >
@@ -174,20 +173,18 @@ class TableView {
     return `
         <tr class="table-row"">
             <td class="table-field">${i}</td>
-            <td class="table-field">${customer.id}</td>
+            <td class="table-field">${customer.customer_id}</td>
             <td class="table-field">${customer.fname[0].toUpperCase() + customer.fname.slice(1).toLowerCase()}</td>
             <td class="table-field">${customer.lname[0].toUpperCase() + customer.lname.slice(1).toLowerCase()}</td>
             <td class="table-field">${customer.email.toLowerCase()}</td>
             <td class="table-field">${customer.region[0].toUpperCase() + customer.region.slice(1).toLowerCase()}</td>
             <td class="table-field">${customer.phone_no}</td>
-            <td class="table-field">${customer.license}</td>
-            <td class="table-field">${customer.ncars}</td>
-            <td class="table-field">${customer.debt}</td>
-            <td class="table-field">${customer.transactions}</td>
+            <td class="table-field">${customer.license_no}</td>
+       
             <td class="table-field">
               <button
                 class="btn btn-primary btn-delete mx-auto"
-                data-customer-id="${customer.id}"
+                data-customer-id="${customer.customer_id}"
               >
                 delete
               </button>
@@ -208,23 +205,25 @@ class TableView {
     return `
         <tr class="table-row"">
             <td class="table-field">${i}</td>
-            <td class="table-field">${car.resId}</td>
-            <td class="table-field">${car.carId}</td>
-            <td class="table-field">${car.custId}</td>
-            <td class="table-field">${car.custName}</td>
+            <td class="table-field">${car.res_id}</td>
+            <td class="table-field">${car.car_id}</td>
+            <td class="table-field">${car.customer_id}</td>
             <td class="table-field">${brand}</td>
             <td class="table-field">${car.model.toUpperCase()}</td>
-            <td class="table-field">${car.plateNo}</td>
+            <td class="table-field">${car.plate_no.toUpperCase()}</td>
             <td class="table-field">${car.region}</td>
             <td class="table-field">${car.rate}</td>
-            <td class="table-field">${car.pickup.split("T")[0]}</td>
-            <td class="table-field">${car.drop.split("T")[0]}</td>
+            <td class="table-field">${car.pick_date.split("T")[0]}</td>
+            <td class="table-field">${car.drop_date.split("T")[0]}</td>
             <td class="table-field">${car.date.split("T")[0]}</td>
-            <td class="table-field">${car.status}</td>
+            <td class="table-field">${car.status[0].toUpperCase() + car.status.slice(1).toLowerCase()}</td>
+            <td class="table-field">${car.res_status[0].toUpperCase() + car.res_status.slice(1).toLowerCase()}</td>
             <td class="table-field">
               <button
                 class="btn btn-primary btn-view mx-auto"
-                data-car-id="${car.carId}"
+                data-car-id="${car.car_id}"
+                data-res-id="${car.res_id}"
+                data-cust-id="${car.customer_id}"
                 data-bs-toggle="modal"
                 data-bs-target="#car-info"
               >
@@ -248,23 +247,27 @@ class TableView {
     return `
         <tr class="table-row"">
             <td class="table-field">${i}</td>
-            <td class="table-field">${car.carId}</td>
+            <td class="table-field">${car.car_id}</td>
             <td class="table-field">${brand}</td>
             <td class="table-field">${car.model.toUpperCase()}</td>
-            <td class="table-field">${car.plateNo}</td>
-            <td class="table-field">${car.type[0].toUpperCase() + car.type.slice(1).toLowerCase()}</td>
+            <td class="table-field">${car.plate_no.toUpperCase()}</td>
+            <td class="table-field">${
+              car.type[0].toUpperCase() + car.type.slice(1).toLowerCase()
+            }</td>
             <td class="table-field">${car.year}</td>
             <td class="table-field">${car.seating}</td>
-            <td class="table-field">${car.transmission}</td>
+            <td class="table-field">${car.transmission[0].toUpperCase() + car.transmission.slice(1).toLowerCase()}</td>
             <td class="table-field">${car.rate}</td>
             <td class="table-field">${car.region}</td>
-            <td class="table-field">${car.powertrain}</td>
-            <td class="table-field">${car.color}</td>
-            <td class="table-field">${car.status}</td>
+            <td class="table-field">${car.powertrain[0].toUpperCase() + car.powertrain.slice(1).toLowerCase()}</td>
+            <td class="table-field">${car.color[0].toUpperCase() + car.color.slice(1).toLowerCase()}</td>
+            <td class="table-field">${car.status.length<4?car.status.toUpperCase():car.status[0].toUpperCase() + car.status.slice(1).toLowerCase()}</td>
             <td class="table-field">
               <button
                 class="btn btn-primary btn-view mx-auto"
-                data-car-id="${car.carId}"
+                data-car-id="${car.car_id}"
+                data-res-id="${car.res_id}"
+                data-cust-id="${car.customer_id}"
                 data-bs-toggle="modal"
                 data-bs-target="#car-info"
               >
@@ -368,7 +371,7 @@ class TableView {
                 <div class="info-icon">
                   <ion-icon name="car-sport"></ion-icon>
                 </div>
-                <div class="info-text">${car.plateNo}</div>
+                <div class="info-text">${car.plate_no}</div>
               </div>
 
               <div class="field 
@@ -401,15 +404,15 @@ class TableView {
                   <div class="info-icon me-3">
                     <ion-icon name="calendar"></ion-icon>
                   </div>
-                  <div class="info-text me-2"><span class="text-sub">pick-up date</span>${car.pickup.split("T")[0]}</div>
-                  <div class="info-text"><span class="text-sub">drop-off date</span>${car.drop.split("T")[0]}</div>
+                  <div class="info-text me-2"><span class="text-sub">pick-up date</span>${car.pick_date.split('T')[0]}</div>
+                  <div class="info-text"><span class="text-sub">drop-off date</span>${car.drop_date.split('T')[0]}</div>
                 </div>
 
                 <div class="field info-order">
                   <div class="info-icon me-3">
                     <ion-icon name="cube"></ion-icon>
                   </div>
-                  <div class="info-text me-2"><span class="text-sub">reservation number</span>${car.resId}</div>
+                  <div class="info-text me-2"><span class="text-sub">reservation number</span>${car.res_id}</div>
                 </div>
               `
                    : ""
@@ -490,7 +493,6 @@ class TableView {
     this.#num.classList.add("hide");
     this.#addContainer.innerHTML = `
      <div class="customer-title">
-
             Enter car info <span class="text-sub">(case insensitive)</span>
           </div>
           <form class="car-form needs-validation" novalidate>
@@ -540,6 +542,21 @@ class TableView {
             </div>
 
             <div class="input-group">
+              <span class="input-group-text" id="model-addon">Color</span>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="black"
+                name="color"
+                aria-describedby="model-addon"
+                required
+              />
+              <div class="invalid-feedback">
+                Please provide a valid color.
+              </div>
+            </div>
+
+            <div class="input-group">
               <span class="input-group-text" id="plate-addon"
                 >Plate Number</span
               >
@@ -547,7 +564,7 @@ class TableView {
                 type="text"
                 class="form-control"
                 placeholder="5e4322"
-                name="plateNo"
+                name="plate_no"
                 aria-describedby="plate-addon"
                 required
               />
@@ -609,9 +626,11 @@ class TableView {
             <div class="input-group">
               <span class="input-group-text" id="rate-addon">Rate/Day</span>
               <input
-                type="text"
+                type="number"
                 class="form-control rate"
                 placeholder="1200"
+                min = "0"
+                max ="8000"
                 name="rate"
                 aria-describedby="rate-addon"
                 required
@@ -648,6 +667,13 @@ class TableView {
 
             <button type="submit" class="btn btn-primary mt-5">submit</button>
           </form>
+          <div class="add-footer mt-3">
+          Refer to this 
+          <a target="_blank" href ="https://suite.imagin.studio/?&customer=egalexandria-university-faculty-of-engineering">link</a> for cars information
+          </div>
+          <div class="add-footer">
+          Note: Some cars may not have the chosen color in its image after adding due to lack of models
+          </div>
     `;
   }
 

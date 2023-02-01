@@ -34,7 +34,7 @@ const init = async () => {
     );
 
   document
-    .querySelector(".btn-singIn")
+    .querySelector(".btn-signIn")
     .addEventListener("click", () => (window.location = `${SERVER_URL}/logIn`));
   handleView();
 };
@@ -58,7 +58,7 @@ const handleView = function () {
     btn.addEventListener("click", () => {
       carsView.setModal();
 
-      activeCar = getActiveData().filter((c) => c.carId === id)[0];
+      activeCar = getActiveData().filter((c) => c.car_id === id)[0];
 
       carsView.renderCarView(activeCar);
 
@@ -106,7 +106,7 @@ const filter = function () {
 
     if (filter[0] === "region" && filter[1] && filter[1] != "-") {
       queryRes.push(
-        ...data.filter((car) => car.cca2 === filter[1].toLowerCase())
+        ...data.filter((car) => car.cca2 === filter[1].toUpperCase())
       );
 
       if (flag) result = result.filter((value) => queryRes.includes(value));

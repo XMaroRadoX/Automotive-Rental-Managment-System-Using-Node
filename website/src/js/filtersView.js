@@ -73,6 +73,12 @@ class FilterView {
   }
 
   #renderFilterContainer() {
+    document.querySelector(".filters")?.remove();
+    this.#container
+      .querySelector(".sidebar-container")
+      .querySelector(".sub-heading")
+      ?.remove();
+
     //prettier-ignore
     const html = `
         <h2 class="sub-heading">Filter by</h2>

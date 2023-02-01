@@ -1,6 +1,7 @@
 "use strict";
 
 import { favouriteHandler } from "../controller.js";
+
 class CarsView {
   #cars = document.querySelector(".cars");
   #viewTitle = document.querySelector(".view-title");
@@ -91,7 +92,7 @@ class CarsView {
           "afterbegin",
           this.#generateHTML(
             car,
-            favs.filter((fCar) => fCar.carId == car.carId).length > 0,
+            favs.some((fCar) => fCar.car_id === car.car_id),
             favFlag
           )
         );
@@ -129,9 +130,10 @@ class CarsView {
         : "");
 
     if (!btn) btn = "view";
+
     //prettier-ignore
     return `
-        <div class = "card" data-car-id ="${car.carId}" data-region="${car.region}">
+        <div class = "card" data-car-id ="${car.car_id}" data-region="${car.region}">
             <div class="card-header">
               <h3 class="car-brand">${brand} ${car.model.toUpperCase()}</h3>
               <button class="btn-fav">
@@ -142,7 +144,7 @@ class CarsView {
                 }" name="heart"></ion-icon>
               </button>
 
-              <span class="car-type">${
+              <span class="car-type">${ car.type.length <4?car.type.toUpperCase():
                 car.type[0].toUpperCase() + car.type.slice(1).toLowerCase()
               }</span>
             </div>
@@ -185,6 +187,7 @@ class CarsView {
                class="btn btn-primary btn-view hidden mt-4 ${btn === 'view'? "": "disabled"}"
                data-bs-toggle="modal"
                data-bs-target="#car-info"
+               ${car.status === 'rented'||car.status === 'reserved'?`data-res-id=${car.res_id}`:""}
               >${btn}</button>
             </div>
           </div>
@@ -303,7 +306,7 @@ class CarsView {
                 <div class="info-icon">
                   <ion-icon name="car-sport"></ion-icon>
                 </div>
-                <div class="info-text">${car.plateNo}</div>
+                <div class="info-text">${car.plate_no.toUpperCase()}</div>
               </div>
 
               <div class="field 
@@ -336,15 +339,15 @@ class CarsView {
                   <div class="info-icon me-3">
                     <ion-icon name="calendar"></ion-icon>
                   </div>
-                  <div class="info-text me-2"><span class="pay-sub">pick-up date</span>${car.pickup.split("T")[0]}</div>
-                  <div class="info-text"><span class="pay-sub">drop-off date</span>${car.drop.split("T")[0]}</div>
+                  <div class="info-text me-2"><span class="pay-sub">pick-up date</span>${car.pick_date.split("T")[0]}</div>
+                  <div class="info-text"><span class="pay-sub">drop-off date</span>${car.drop_date.split("T")[0]}</div>
                 </div>
 
                 <div class="field info-order">
                   <div class="info-icon me-3">
                     <ion-icon name="cube"></ion-icon>
                   </div>
-                  <div class="info-text me-2"><span class="pay-sub">reservation number</span>${car.resId}</div>
+                  <div class="info-text me-2"><span class="pay-sub">reservation number</span>${car.res_id}</div>
                 </div>
               `
                    : ""
@@ -443,10 +446,11 @@ class CarsView {
 
       if (brand.length < 4) brand = brand.toUpperCase();
 
+      //prettier-ignore
       const html = `
-    <div class="payment ${payment.status ? "paid" : ""}" data-order-id="${
-        payment.orderId
-      }" data-car-id="${payment.carId}">
+    <div class="payment ${payment.pay_status === "paid" ? "paid" : ""}" data-order-id="${
+        payment.res_id
+      }" data-car-id="${payment.car_id}">
         <div class="pay-car">${brand + " " + payment.model.toUpperCase()}</div>
         <div class="pay-rate"><span class="pay-sub">rate/day</span>$${
           payment.rate
@@ -454,52 +458,52 @@ class CarsView {
 
         <div class="pay-status">
           <ion-icon class="pay-icon ${
-            payment.status ? "hide" : ""
+            payment.pay_status === "paid" ? "hide" : ""
           }" name="close-outline"></ion-icon>
           <ion-icon
-            class="pay-icon pay-check ${payment.status ? "" : "hide"}"
+            class="pay-icon pay-check ${payment.pay_status === "paid" ? "" : "hide"}"
             name="checkmark-outline"
           ></ion-icon>
         </div>
 
         <div class="pay-date">
-          <span class="pay-sub">Order number</span> ${payment.orderId}
+          <span class="pay-sub">Order number</span> ${payment.res_id}
         </div>
         <div class="pay-total"><span class="pay-sub">Total ${
-          payment.status ? `(${payment.method})` : ""
-        }</span>$${payment.payment}</div>
+          payment.pay_status === "paid"? `(${payment.method})` : ""
+        }</span>$${payment.total}</div>
 
         <div class="pay-footer">
           <div class="pay-date">
             <span class="pay-sub">Pick-up Date</span>${
-              payment.pickup.split("T")[0]
+              payment.pick_date.split("T")[0]
             }
           </div>
           <div class="pay-date">
             <span class="pay-sub">Drop-off Date</span>${
-              payment.drop.split("T")[0]
+              payment.drop_date.split("T")[0]
             }
           </div>
           <div class="pay-date">
             <span class="pay-sub">Return Date</span>${
-              payment.return.split("T")[0]
+              payment.return_date.split("T")[0]
             }
           </div>
           <div class="pay-date">
             <span class="pay-sub">payment Date</span>${
-              payment.payDate ? `${payment.payDate.split("T")[0]}` : "-"
+              payment.pay_date ? `${payment.pay_date.split("T")[0]}` : "-"
             }
           </div>
           <div class="pay-date">
-            <span class="pay-sub">Duration</span>${payment.duration}
-            <span class="pay-sub">days</span>
+            <span class="pay-sub">Duration</span>${payment.period}
+            <span class="pay-sub">day${payment.period>1?'s':""}</span>
           </div>
         </div>
         <button type="button" data-bs-toggle="modal" data-bs-target="#pay" class="btn btn-primary btn-pay ${
-          payment.status ? "hide" : ""
+          payment.pay_status === "paid" ? "hide" : ""
         }">pay</button>
         <button type="button" class="btn btn-primary btn-paid disabled ${
-          payment.status ? "" : "hide"
+          payment.pay_status === "paid" ? "" : "hide"
         }">
           paid
         </button>

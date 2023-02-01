@@ -44,7 +44,7 @@ const showAlert = async function (message, flag = true) {
       return;
     }
 
-    window.location = `${SERVER_URL}/home`;
+    window.location = `${SERVER_URL}/`;
   });
 })();
 
