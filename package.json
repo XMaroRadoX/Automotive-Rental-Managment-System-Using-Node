@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@popperjs/core": "^2.11.6",
+    "@popperjs/core": "^2.11.8",
     "body-parser": "^1.20.1",
     "cookie-parser": "^1.4.6",
     "core-js": "^3.26.1",
